@@ -1,0 +1,21 @@
+sudo apt-get install bison flex indent
+rm -fr dstemp
+tar xvf .downloads/disksim-4.0.tar
+mv disksim-4.0 dstemp
+cd dstemp
+cp -dir ../.downloads/ssd-add-on/ssdmodel ./
+rm -fr SSD\ Extension\ for\ DiskSim\ Simulation\ Environment\ EULA\ for\ CPT\ \(2008-10-06\).txt
+patch -p1 < ssdmodel/ssd-patch
+patch -p1 < ../.downloads/make-patch
+cp -dir ../.downloads/test ./
+chmod 777 ./test/run
+make
+cd ssdmodel/valid
+chmod 777 runvalid
+echo "
+***************************************************
+Installation and patch is done.
+Testing validity using \"./ssdmodel/valid/runvalid\".
+***************************************************
+"
+./runvalid
