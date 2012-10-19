@@ -1,0 +1,69 @@
+--- dstemp/Makefile	2012-10-18 18:55:33.000000000 +0900
++++ dstemp.new/Makefile	2012-10-18 18:51:04.000000000 +0900
+@@ -33,7 +33,9 @@
+ 
+ SUBDIRS=libddbg libparam diskmodel memsmodel ssdmodel src
+ 
+-all: 	
++all:
++	rm -fr src/disksim
++	rm -fr ssdmodel/*.o
+ 	$(MAKE) -C libddbg
+ 	$(MAKE) -C libparam
+ 	$(MAKE) -C diskmodel
+@@ -71,3 +73,30 @@
+ 	$(MAKE) -C src/modules distclean
+ 	$(MAKE) -C libparam distclean
+ 	$(MAKE) -C libddbg distclean
++    
++t:
++	src/disksim ssdmodel/valid/ssd-iozone.parv ssdmodel/valid/ssd-iozone.outv ascii ssdmodel/valid/ssd-iozone-aligned2-100K.trace 0
++
++tc:
++	make
++	@echo -e "\n\
++	*****\n\
++	Made.\n\
++	*****\n"
++	src/disksim ssdmodel/valid/ssd-iozone.parv ssdmodel/valid/ssd-iozone.outv ascii ssdmodel/valid/ssd-iozone-aligned2-100K.trace 0
++
++tg:
++	@echo -e "\n\
++	*********\n\
++	GDB open.\n\
++	*********\n"
++	gdb --args src/disksim ssdmodel/valid/ssd-iozone.parv ssdmodel/valid/ssd-iozone.outv ascii ssdmodel/valid/ssd-iozone-aligned2-100K.trace 0
++    
++tcg:
++	make
++	@echo -e "\n\
++	*********\n\
++	Made.\n\
++	GDB open.\n\
++	*********\n"
++	gdb --args src/disksim ssdmodel/valid/ssd-iozone.parv ssdmodel/valid/ssd-iozone.outv ascii ssdmodel/valid/ssd-iozone-aligned2-100K.trace 0
+--- dstemp/src/Makefile	2012-10-18 18:55:33.000000000 +0900
++++ dstemp.new/src/Makefile	2012-10-18 15:59:06.000000000 +0900
+@@ -32,9 +32,9 @@
+ 
+ include .paths
+ 
+-LDFLAGS = -lm -L. -ldisksim $(DISKMODEL_LDFLAGS) $(MEMSMODEL_LDFLAGS) \
++LDFLAGS = -ldisksim $(DISKMODEL_LDFLAGS) $(MEMSMODEL_LDFLAGS) \
+                             $(SSDMODEL_LDFLAGS) \
+-                            $(LIBPARAM_LDFLAGS) $(LIBDDBG_LDFLAGS) 
++                            $(LIBPARAM_LDFLAGS) $(LIBDDBG_LDFLAGS) -lm -L. 
+ 
+ HP_FAST_OFLAGS = +O4
+ NCR_FAST_OFLAGS = -O4 -Hoff=BEHAVED 
+--- dstemp/memsmodel/Makefile	2008-05-12 06:30:54.000000000 +0900
++++ dstemp.new/memsmodel/Makefile	2012-10-18 15:59:06.000000000 +0900
+@@ -78,7 +78,7 @@
+ 	$(CC) -c $(CFLAGS) $< -o $@
+ 
+ mems_seektest: mems_seektest.o libmems_internals.a
+-	$(CC) -o $@ mems_seektest.o $(LDFLAGS) $(CFLAGS) -lmems_internals
++	$(CC) -o $@ mems_seektest.o $(CFLAGS) -lmems_internals $(LDFLAGS)
+ 
+ libmems_internals.a: mems_internals.o mems_piecewise_seek.o mems_hong_seek.o
+ 	ar cru $@ mems_internals.o mems_piecewise_seek.o mems_hong_seek.o
