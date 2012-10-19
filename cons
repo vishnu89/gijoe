@@ -1,5 +1,21 @@
+#!/bin/bash
+
+if [[ -d dstemp ]] 
+then 
+	echo "Are you sure to overwrite dstemp? (y/n)"
+	read ANS
+	if [[ "$ANS" = "y" || "$ANS" = "yes" ]]
+	then
+		rm -fr dstemp
+	elif [[ "$ANS" = "n" || "$ANS" = "no" ]]
+	then
+		exit
+	else
+		echo "answer in (y/n)"
+		exit
+	fi
+fi
 sudo apt-get install bison flex indent
-rm -fr dstemp
 tar xvf .downloads/disksim-4.0.tar
 mv disksim-4.0 dstemp
 cd dstemp
