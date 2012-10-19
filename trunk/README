@@ -2,7 +2,7 @@ See english version below when encoding problem occurs.
 
 한글
 
-실행시키면 비밀번호를 물어보기도 하는데 이건 우분투 사용자를 위해 bison, flex, indent를 깔기 위한 거고요 martini에서는 본인 비밀번호를 입력해도 잘 돌아갑니다.
+주의사항: 실행시키면 비밀번호를 물어보기도 하는데 이건 우분투 사용자를 위해 bison, flex, indent를 깔기 위한 거고요 martini에서는 본인 비밀번호를 입력해도 잘 돌아갑니다.
 
 먼저 컨스트럭트 스크립트를 실행시키기 위한 준비로서
     chmod 777 cons
