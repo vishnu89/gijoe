@@ -13,11 +13,11 @@ See english version below when encoding problem occurs.
         ./dstemp에 disksim이 설치되고 ssd-patch도 설치됩니다.
         ./dstemp/test에 리퀘스트가 3개인 트레이스를 돌려볼 수 있도록 각종 파일과 스크립트가 만들어집니다.
     추가 사용법
-        ]$ make t // ssd-iozone.parv로 disksim 돌리기
-        ]$ make tg // gdb에서 돌리기
-        ]$ make tc // 컴파일 다시 하고 돌리기
-        ]$ make tcg // 컴파일 다시 하고 gdb에서 돌리기
-        test]$ ./run // 리퀘스트가 3개인 트레이스 돌리기
+        ]$ make t       // ssd-iozone.parv로 disksim 돌리기
+        ]$ make tg      // gdb에서 돌리기
+        ]$ make tc      // 컴파일 다시 하고 돌리기
+        ]$ make tcg     // 컴파일 다시 하고 gdb에서 돌리기
+        test]$ ./run    // 리퀘스트가 3개인 트레이스 돌리기
         test]$ ./run -g // gdb에서 돌리기
 
 Svn 사용하기
@@ -43,7 +43,7 @@ Svn 사용하기
         ^X
         c
         문제의_디렉토리/..]$ mv 문제의_디렉토리_temp 문제의_디렉토리
-        할 일을 반복
+        '할 일'을 반복
             
         자세한 설명
             svn add는 (vi, make 등으로) 새로 생성된 파일을 svn 관리 대상에 포함시키겠다고 선언하는 것입니다. 관리 대상의 정보는 각 디렉토리의 .svn에 저장되어 있습니다. 이 .svn이 꼬이면 svn은 '뭘 관리하라는 건지 모르겠단 말이다'라며 각종 (이해할 수 없는) 메세지를 던지지요.
@@ -60,7 +60,8 @@ Svn 사용하기
                 ^X
                 c
                 문제의_디렉토리/..]$ mv 문제의_디렉토리_temp 문제의_디렉토리
-                '할 일'을 반복 // add하고 st확인 후 commit하고 등등을 하라는 거죠.
+                '할 일'을 반복
+                    // add하고 st확인 후 commit하고 등등을 하라는 거죠.
 English
 
 This script requires sudo permission for "apt-get" in Ubuntu, but still works in martini. Type your passward, it doesn't harm you.
