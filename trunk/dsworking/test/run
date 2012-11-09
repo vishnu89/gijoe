@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -- `getopt g $*`
+for i
+do
+    case "$i"
+    in
+        -g)
+           echo "gdb --args ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0";
+           echo "
+*********
+GDB open.
+*********
+";
+           gdb --args ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0;
+           break;;
+        --)
+           echo "../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0"; 
+           ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0;
+           break;;
+    esac
+done
