@@ -277,7 +277,3 @@ Sizes = [
 } # end of Synthio spec
 
 loadparams complete
-Initialized synthio process #0, first event at time 0.744525
-Kicking off cpu #0
-First event occurs at time 0.744525
-Initialization complete
