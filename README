@@ -67,6 +67,12 @@ Svn 사용하기
                 문제의_디렉토리/..]$ mv 문제의_디렉토리_temp 문제의_디렉토리
                 '할 일'을 반복
                     // add하고 st확인 후 commit하고 등등을 하라는 거죠.
+                    
+            만약 make를 한 상태에서 svn add를 하고 난 후에 make clean을 했어야 했다는 것을 깨달았다면 다음과 같은 방법을 써보세요. 일단 make clean을 합니다. 그리고 나서 svn st를 하면 !로 표시된 것들이 뜨고 svn commit이 불가능해집니다. 이 상태에서
+                ]$ svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %
+            를 하면 !들이 지워집니다. 그리고 나서 '할 일'을 반복하면 됩니다.
+            
+            
 English
 
 This script requires sudo permission for "apt-get" in Ubuntu, but still works in martini. Type your passward, it doesn't harm you.
