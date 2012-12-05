@@ -267,14 +267,19 @@ typedef struct ev {
 
 #ifdef ADIVIM
 typedef enum {
-    AIDIVM_WRITE_HOT,
-    ADIVIM_WRITE_COLD,
+    AIDIVM_HOT,
+    ADIVIM_COLD,
     ADIVIM_HOT_TO_COLD,
     AIDIVM_COLD_TO_HOT
-} AIDIVM_IOREQ_TYPE;
+} ADIVIM_TYPE;
 typedef int ADIVIM_APN;
 typedef ADIVIM_APN ADIVIM_HAPN;
 typedef ADIVIM_APN ADIVIM_CAPN;
+typedef struct _adivim_judgement {
+    ADIVIM_TYPE adivim_type;
+    ADIVIM_HAPN adivim_hapn;
+    ADIVIM_CAPN adivim_capn;
+} ADIVIM_JUDGEMENT;
 #endif
     
 typedef struct ioreq_ev {
@@ -307,9 +312,7 @@ typedef struct ioreq_ev {
    struct ioreq_ev *batch_prev;
     
 #ifdef ADIVIM
-    AIDIVM_IOREQ_TYPE adivim_ioreq_type;
-    ADIVIM_HAPN adivim_hapn;
-    ADIVIM_CAPN adivim_capn;
+    ADIVIM_JUDGEMENT adivim_judgement;
 #endif
 } ioreq_event;
 
