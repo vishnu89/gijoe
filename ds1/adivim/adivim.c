@@ -1,6 +1,8 @@
 // Disksim SSD ADIVIM support
 // ©2012 Seoul National University lecture project1 ADIVIM PROJECT team. All right reserved.
-/*
+
+#ifdef ADIVIM
+
 #include "disksim_global.h"
 #include "adivim.h"
 #include "../ssdmodel/ssd_utils.h" // For listnode.
@@ -99,4 +101,6 @@ adivim_section adivim_section_list_update (ioreq_event *req)
 void adivim_mark (ioreq_event *req, ADIVIM_SECTION_TYPE type)
 {
     req->type = type;
-}*/
+}
+
+#endif

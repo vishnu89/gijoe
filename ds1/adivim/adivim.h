@@ -1,6 +1,8 @@
-/*
+
 // Disksim SSD ADIVIM support
 // ©2012 Seoul National University lecture project1 ADIVIM PROJECT team. All right reserved.
+
+#ifdef ADIVIM
 
 #include "disksim_global.h"
 
@@ -44,4 +46,5 @@ typedef struct _adivim_section {
  * update section list, judge section and record the judgement in the request
  */
 void adivim_separate (ioreq_event *req);
-*/
+
+#endif
