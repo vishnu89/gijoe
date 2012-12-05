@@ -1,5 +1,5 @@
 // DiskSim SSD support
-// ©2008 Microsoft Corporation. All Rights Reserved
+// ï¿½2008 Microsoft Corporation. All Rights Reserved
 
 #include "ssd.h"
 #include "ssd_timing.h"
@@ -7,6 +7,9 @@
 #include "ssd_gang.h"
 #include "ssd_utils.h"
 #include "modules/ssdmodel_ssd_param.h"
+#ifdef ADIVIM
+#include "adivim.h"
+#endif
 
 struct my_timing_t {
     ssd_timing_t          t;

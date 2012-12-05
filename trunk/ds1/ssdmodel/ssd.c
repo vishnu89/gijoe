@@ -7,6 +7,9 @@
 #include "ssd_gang.h"
 #include "ssd_init.h"
 #include "modules/ssdmodel_ssd_param.h"
+#ifdef ADIVIM
+#include "adivim.h"
+#endif
 
 #ifndef sprintf_s
 #define sprintf_s3(x,y,z) sprintf(x,z)
@@ -623,6 +626,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
    int blkno = curr->blkno;
    int count = curr->bcount;
 
+#ifndef ADIVIM
    /* **** CAREFUL ... HIJACKING tempint2 and tempptr2 fields here **** */
    curr->tempint2 = count;
    while (count != 0) {
@@ -650,6 +654,114 @@ static void ssd_media_access_request_element (ioreq_event *curr)
        ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
        ssd_activate_elem(currdisk, elem_num);
    }
+#else if
+    adivim_assign_judgement (curr);
+    
+    /* **** CAREFUL ... HIJACKING tempint2 and tempptr2 fields here **** */
+    curr->tempint2 = count;
+    switch (curr->adivim_judgement->adivim_type) {
+        case : ADIVIM_HOT // Original page mapping
+            while (count != 0) {
+                // find the element (package) to direct the request
+                int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
+                ssd_element *elem = &currdisk->elements[elem_num];
+                
+                // create a new sub-request for the element
+                ioreq_event *tmp = (ioreq_event *)getfromextraq();
+                tmp->devno = curr->devno;
+                tmp->busno = curr->busno;
+                tmp->flags = curr->flags;
+                tmp->blkno = blkno;
+                tmp->bcount = ssd_choose_aligned_count(currdisk->params.page_size, blkno, count);
+                ASSERT(tmp->bcount == currdisk->params.page_size);
+                
+                tmp->tempptr2 = curr;
+                blkno += tmp->bcount;
+                count -= tmp->bcount;
+                
+                elem->metadata.reqs_waiting ++;
+                
+                // add the request to the corresponding element's queue
+                ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+                ssd_activate_elem(currdisk, elem_num);
+            }
+        case : ADIVIM_COLD // Block mapping
+            while (count != 0) {
+                // find the element (package) to direct the request
+                int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
+                ssd_element *elem = &currdisk->elements[elem_num];
+                
+                // create a new sub-request for the element
+                ioreq_event *tmp = (ioreq_event *)getfromextraq();
+                tmp->devno = curr->devno;
+                tmp->busno = curr->busno;
+                tmp->flags = curr->flags;
+                tmp->blkno = blkno;
+                tmp->bcount = ssd_choose_aligned_count(currdisk->params.page_size, blkno, count);
+                ASSERT(tmp->bcount == currdisk->params.page_size);
+                
+                tmp->tempptr2 = curr;
+                blkno += tmp->bcount;
+                count -= tmp->bcount;
+                
+                elem->metadata.reqs_waiting ++;
+                
+                // add the request to the corresponding element's queue
+                ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+                ssd_activate_elem(currdisk, elem_num);
+            }
+        case : ADIVIM_HOT_TO_COLD // Invalid previous page mapping and do block mapping
+            while (count != 0) {
+                // find the element (package) to direct the request
+                int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
+                ssd_element *elem = &currdisk->elements[elem_num];
+                
+                // create a new sub-request for the element
+                ioreq_event *tmp = (ioreq_event *)getfromextraq();
+                tmp->devno = curr->devno;
+                tmp->busno = curr->busno;
+                tmp->flags = curr->flags;
+                tmp->blkno = blkno;
+                tmp->bcount = ssd_choose_aligned_count(currdisk->params.page_size, blkno, count);
+                ASSERT(tmp->bcount == currdisk->params.page_size);
+                
+                tmp->tempptr2 = curr;
+                blkno += tmp->bcount;
+                count -= tmp->bcount;
+                
+                elem->metadata.reqs_waiting ++;
+                
+                // add the request to the corresponding element's queue
+                ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+                ssd_activate_elem(currdisk, elem_num);
+            }
+        case : ADIVIM_COLD_TO_HOT // Invalid previous block mapping and do page mapping
+            while (count != 0) {
+                // find the element (package) to direct the request
+                int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
+                ssd_element *elem = &currdisk->elements[elem_num];
+                
+                // create a new sub-request for the element
+                ioreq_event *tmp = (ioreq_event *)getfromextraq();
+                tmp->devno = curr->devno;
+                tmp->busno = curr->busno;
+                tmp->flags = curr->flags;
+                tmp->blkno = blkno;
+                tmp->bcount = ssd_choose_aligned_count(currdisk->params.page_size, blkno, count);
+                ASSERT(tmp->bcount == currdisk->params.page_size);
+                
+                tmp->tempptr2 = curr;
+                blkno += tmp->bcount;
+                count -= tmp->bcount;
+                
+                elem->metadata.reqs_waiting ++;
+                
+                // add the request to the corresponding element's queue
+                ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+                ssd_activate_elem(currdisk, elem_num);
+            }
+    }
+#endif
 }
 
 static void ssd_media_access_request (ioreq_event *curr)

@@ -5,9 +5,33 @@
 
 #include "disksim_global.h"
 #include "adivim.h"
+#include "ssd_timing.h"
+#include "modules/ssdmodel_ssd_param.h"
 #include "../ssdmodel/ssd_utils.h" // For listnode.
 
-static listnode *adivim_section_list; // Sectino list.
+
+/*
+ * Access log as part of section information.
+ */
+typedef struct _section_log {
+    int read_count;
+    int write_count;
+    /* TODO
+     * add access log, frequency etc (later).
+     */
+} ADIVIM_SECTION_LOG;
+
+/*
+ * Section infomation for ADIVIM.
+ */
+typedef struct _adivim_section {
+    int blkno; // Starting sector no. from host
+    int bcount; // Length of request in sector from host
+    ADIVIM_SECTION_LOG log;
+    ADIVIM_JUDGEMENT adivim_judgement;
+}
+
+static listnode *adivim_section_list; // Section list.
 static listnode *adivim_free_hapn_list; // Free hot apn list.
 static listnode *adivim_free_capn_list; // Free cold apn list.
 

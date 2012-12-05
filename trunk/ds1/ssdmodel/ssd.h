@@ -7,9 +7,6 @@
 #include "disksim_ioqueue.h"
 #include "disksim_bus.h"
 #include "config.h"
-#ifdef ADIVIM
-#include "adivim.h"
-#endif
 
 #ifndef DISKSIM_SSD_H
 #define DISKSIM_SSD_H
