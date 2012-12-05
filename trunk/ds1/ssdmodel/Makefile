@@ -1,10 +1,10 @@
 # DiskSim SSD support
-# ©2008 Microsoft Corporation. All Rights Reserved
+# ï¿½2008 Microsoft Corporation. All Rights Reserved
 
 include .paths
 
 LDFLAGS = -lm -L. -ldisksim $(DISKMODEL_LDFLAGS) $(MEMSMODEL_LDFLAGS) \
-                            $(LIBPARAM_LDFLAGS) $(LIBDDBG_LDFLAGS) 
+                            $(LIBPARAM_LDFLAGS) $(LIBDDBG_LDFLAGS)
 
 HP_FAST_OFLAGS = +O4
 NCR_FAST_OFLAGS = -O4 -Hoff=BEHAVED 
@@ -12,7 +12,7 @@ FREEBLOCKS_OFLAGS =
 DEBUG_OFLAGS = -g -DASSERTS # -DDEBUG=1
 PROF_OFLAGS = -g -DASSERTS -p
 GPROF_OFLAGS = -g -DASSERTS -pg
-CFLAGS = $(DEBUG_OFLAGS) $(DISKSIM_CFLAGS) $(DISKMODEL_CFLAGS) -I../ -I$(DISKSIM_PREFIX)/src
+CFLAGS = $(DEBUG_OFLAGS) $(DISKSIM_CFLAGS) $(DISKMODEL_CFLAGS) -I../ -I$(DISKSIM_PREFIX)/src -I$(ADIVIM_PREFIX)
 
 #CC = cc
 CC = gcc -Wall -Wno-unused -MD
