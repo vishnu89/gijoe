@@ -8,7 +8,7 @@
 #include "ssd_init.h"
 #include "modules/ssdmodel_ssd_param.h"
 #ifdef ADIVIM
-#include "adivim.h"
+#include "disksim_global.h"
 #endif
 
 #ifndef sprintf_s
@@ -654,13 +654,13 @@ static void ssd_media_access_request_element (ioreq_event *curr)
        ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
        ssd_activate_elem(currdisk, elem_num);
    }
-#else if
+#else
     adivim_assign_judgement (curr);
     
     /* **** CAREFUL ... HIJACKING tempint2 and tempptr2 fields here **** */
     curr->tempint2 = count;
-    switch (curr->adivim_judgement->adivim_type) {
-        case : ADIVIM_HOT // Original page mapping
+    switch (curr->adivim_judgement.adivim_type) {
+        case ADIVIM_HOT : // Original page mapping
             while (count != 0) {
                 // find the element (package) to direct the request
                 int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
@@ -684,8 +684,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 // add the request to the corresponding element's queue
                 ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
                 ssd_activate_elem(currdisk, elem_num);
-            }
-        case : ADIVIM_COLD // Block mapping
+            } break;
+        case ADIVIM_COLD : // Block mapping
             while (count != 0) {
                 // find the element (package) to direct the request
                 int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
@@ -709,8 +709,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 // add the request to the corresponding element's queue
                 ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
                 ssd_activate_elem(currdisk, elem_num);
-            }
-        case : ADIVIM_HOT_TO_COLD // Invalid previous page mapping and do block mapping
+            } break;
+        case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
             while (count != 0) {
                 // find the element (package) to direct the request
                 int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
@@ -734,8 +734,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 // add the request to the corresponding element's queue
                 ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
                 ssd_activate_elem(currdisk, elem_num);
-            }
-        case : ADIVIM_COLD_TO_HOT // Invalid previous block mapping and do page mapping
+            } break;
+        case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
             while (count != 0) {
                 // find the element (package) to direct the request
                 int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
@@ -759,7 +759,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 // add the request to the corresponding element's queue
                 ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
                 ssd_activate_elem(currdisk, elem_num);
-            }
+            } break;
     }
 #endif
 }

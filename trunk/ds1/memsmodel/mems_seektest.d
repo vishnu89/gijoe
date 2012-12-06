@@ -31,8 +31,13 @@ mems_seektest.o: mems_seektest.c /usr/include/stdlib.h \
  /usr/include/i386-linux-gnu/bits/mathcalls.h mems_internals.h \
  mems_global.h ../src//disksim_global.h ../src//disksim_rand48.h \
  ../src//disksim_malloc.h ../src//disksim_bitstring.h ../src//inline.h \
- /usr/include/string.h /usr/include/xlocale.h ../src//disksim_assertlib.h \
- /usr/include/assert.h ../src//disksim_reqflags.h ../src//disksim_iosim.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/limits.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/i386-linux-gnu/bits/posix1_lim.h \
+ /usr/include/i386-linux-gnu/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/i386-linux-gnu/bits/posix2_lim.h /usr/include/string.h \
+ /usr/include/xlocale.h ../src//disksim_assertlib.h /usr/include/assert.h \
+ ../src//disksim_reqflags.h ../src//disksim_iosim.h \
  ../src//disksim_ioface.h ../src//disksim_global.h \
  ../src//disksim_device.h ../src//disksim_iosim.h \
  ../src//disksim_orgface.h ../src//disksim_iotrace.h \

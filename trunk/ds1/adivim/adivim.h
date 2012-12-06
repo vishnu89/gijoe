@@ -2,11 +2,9 @@
 // Disksim SSD ADIVIM support
 // ©2012 Seoul National University lecture project1 ADIVIM PROJECT team. All right reserved.
 
-#ifdef ADIVIM
-
 #include "disksim_global.h"
-#include "ssd.h"
-#include "ssd_timing.h"
+
+#ifdef ADIVIM
 
 /*
  * For given reqest,
@@ -15,4 +13,5 @@
  */
 void adivim_assign_judgement (ioreq_event *req);
 ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
+
 #endif
