@@ -1,0 +1,57 @@
+./ssd_clean.c:139:    metadata->block_usage[blk].bsn = 0;
+./ssd_clean.c:410:    metadata->block_usage[to_blk].bsn = metadata->block_usage[from_blk].bsn;
+./ssd.h:93:    unsigned int    bsn;                // block sequence number (version number for blocks)
+./ssd.h:148:    unsigned int bsn;               // block sequence number for this ssd element
+./include/ssdmodel/ssd.h:93:    unsigned int    bsn;                // block sequence number (version number for blocks)
+./include/ssdmodel/ssd.h:148:    unsigned int bsn;               // block sequence number for this ssd element
+./include/ssdmodel/.svn/text-base/ssd.h.svn-base:93:    unsigned int    bsn;                // block sequence number (version number for blocks)
+./include/ssdmodel/.svn/text-base/ssd.h.svn-base:148:    unsigned int bsn;               // block sequence number for this ssd element
+./out.txt:33:./ssd_timing.c:545:                        ((active_bsn == prev_bsn) && (pm->active_page > (unsigned int)prev_page))) {
+./ssd_init.c:79:    unsigned int bsn = 1;
+./ssd_init.c:249:        // init the bsn to be zero
+./ssd_init.c:250:        metadata->block_usage[i].bsn = 0;
+./ssd_init.c:335:            metadata->block_usage[block].bsn = bsn ++;
+./ssd_init.c:359:            metadata->block_usage[active_block].bsn = bsn ++;
+./ssd_init.c:369:                metadata->block_usage[plane_active_block].bsn = bsn ++;
+./ssd_init.c:382:    // set the bsn for the ssd element
+./ssd_init.c:383:    metadata->bsn = bsn;
+./ssd_init.c:384:    //printf("set the bsn to %d\n", bsn);
+./ssd_timing.c:175:        ASSERT(metadata->block_usage[prev_block].bsn < metadata->block_usage[active_block].bsn);
+./ssd_timing.c:441:        ASSERT(metadata->block_usage[active_block].bsn == 0);
+./ssd_timing.c:463:        metadata->block_usage[active_block].bsn = metadata->bsn ++;
+./ssd_timing.c:520:            int prev_bsn = -1;
+./ssd_timing.c:528:            prev_bsn = metadata->block_usage[prev_block].bsn;
+./ssd_timing.c:537:                    int active_bsn;
+./ssd_timing.c:541:                    active_bsn = metadata->block_usage[active_block].bsn;
+./ssd_timing.c:544:                    if ((active_bsn > prev_bsn) ||
+./ssd_timing.c:545:                        ((active_bsn == prev_bsn) && (pm->active_page > (unsigned int)prev_page))) {
+./ssd_timing.c:867: * page versions are identified using a block sequence number (bsn) and page
+./ssd_timing.c:868: * number. bsn is a monotonically increasing num stored in the first page of
+./ssd_timing.c:873: * block, the bsn is increased. this way, we can always ensure that the latest
+./ssd_timing.c:877: * P0 to Pi with their corresponding bsns BSN0 to BSNi, we have to make sure
+./.svn/text-base/ssd.h.svn-base:93:    unsigned int    bsn;                // block sequence number (version number for blocks)
+./.svn/text-base/ssd.h.svn-base:148:    unsigned int bsn;               // block sequence number for this ssd element
+./.svn/text-base/ssd_init.c.svn-base:79:    unsigned int bsn = 1;
+./.svn/text-base/ssd_init.c.svn-base:249:        // init the bsn to be zero
+./.svn/text-base/ssd_init.c.svn-base:250:        metadata->block_usage[i].bsn = 0;
+./.svn/text-base/ssd_init.c.svn-base:335:            metadata->block_usage[block].bsn = bsn ++;
+./.svn/text-base/ssd_init.c.svn-base:359:            metadata->block_usage[active_block].bsn = bsn ++;
+./.svn/text-base/ssd_init.c.svn-base:369:                metadata->block_usage[plane_active_block].bsn = bsn ++;
+./.svn/text-base/ssd_init.c.svn-base:382:    // set the bsn for the ssd element
+./.svn/text-base/ssd_init.c.svn-base:383:    metadata->bsn = bsn;
+./.svn/text-base/ssd_init.c.svn-base:384:    //printf("set the bsn to %d\n", bsn);
+./.svn/text-base/ssd_timing.c.svn-base:175:        ASSERT(metadata->block_usage[prev_block].bsn < metadata->block_usage[active_block].bsn);
+./.svn/text-base/ssd_timing.c.svn-base:441:        ASSERT(metadata->block_usage[active_block].bsn == 0);
+./.svn/text-base/ssd_timing.c.svn-base:463:        metadata->block_usage[active_block].bsn = metadata->bsn ++;
+./.svn/text-base/ssd_timing.c.svn-base:520:            int prev_bsn = -1;
+./.svn/text-base/ssd_timing.c.svn-base:528:            prev_bsn = metadata->block_usage[prev_block].bsn;
+./.svn/text-base/ssd_timing.c.svn-base:537:                    int active_bsn;
+./.svn/text-base/ssd_timing.c.svn-base:541:                    active_bsn = metadata->block_usage[active_block].bsn;
+./.svn/text-base/ssd_timing.c.svn-base:544:                    if ((active_bsn > prev_bsn) ||
+./.svn/text-base/ssd_timing.c.svn-base:545:                        ((active_bsn == prev_bsn) && (pm->active_page > (unsigned int)prev_page))) {
+./.svn/text-base/ssd_timing.c.svn-base:867: * page versions are identified using a block sequence number (bsn) and page
+./.svn/text-base/ssd_timing.c.svn-base:868: * number. bsn is a monotonically increasing num stored in the first page of
+./.svn/text-base/ssd_timing.c.svn-base:873: * block, the bsn is increased. this way, we can always ensure that the latest
+./.svn/text-base/ssd_timing.c.svn-base:877: * P0 to Pi with their corresponding bsns BSN0 to BSNi, we have to make sure
+./.svn/text-base/ssd_clean.c.svn-base:139:    metadata->block_usage[blk].bsn = 0;
+./.svn/text-base/ssd_clean.c.svn-base:410:    metadata->block_usage[to_blk].bsn = metadata->block_usage[from_blk].bsn;

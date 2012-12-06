@@ -1,0 +1,23 @@
+./ssd_clean.c:417:            ASSERT(metadata->lba_table[lpn] == (from_blk * s->params.pages_per_block + i));
+./ssd_clean.c:418:            metadata->lba_table[lpn] = to_blk * s->params.pages_per_block + i;
+./ssd.h:127:    int *lba_table;                 // a table mapping the lba to the physical pages
+./include/ssdmodel/ssd.h:127:    int *lba_table;                 // a table mapping the lba to the physical pages
+./include/ssdmodel/.svn/text-base/ssd.h.svn-base:127:    int *lba_table;                 // a table mapping the lba to the physical pages
+./out.txt:24:./ssd_timing.c:338:    metadata->lba_table[lpn] = active_page;
+./ssd_init.c:182:    if ((metadata->lba_table = (int *)malloc(export_size * sizeof(int))) == NULL) {
+./ssd_init.c:323:        metadata->lba_table[i] = ppage;
+./ssd_timing.c:309:    if (metadata->lba_table[lpn] != -1) {
+./ssd_timing.c:315:        unsigned int prev_page = metadata->lba_table[lpn];
+./ssd_timing.c:338:    metadata->lba_table[lpn] = active_page;
+./ssd_timing.c:499:            prev_page = metadata->lba_table[lpn];
+./ssd_timing.c:525:            prev_page = metadata->lba_table[lpn];
+./.svn/text-base/ssd.h.svn-base:127:    int *lba_table;                 // a table mapping the lba to the physical pages
+./.svn/text-base/ssd_init.c.svn-base:182:    if ((metadata->lba_table = (int *)malloc(export_size * sizeof(int))) == NULL) {
+./.svn/text-base/ssd_init.c.svn-base:323:        metadata->lba_table[i] = ppage;
+./.svn/text-base/ssd_timing.c.svn-base:309:    if (metadata->lba_table[lpn] != -1) {
+./.svn/text-base/ssd_timing.c.svn-base:315:        unsigned int prev_page = metadata->lba_table[lpn];
+./.svn/text-base/ssd_timing.c.svn-base:338:    metadata->lba_table[lpn] = active_page;
+./.svn/text-base/ssd_timing.c.svn-base:499:            prev_page = metadata->lba_table[lpn];
+./.svn/text-base/ssd_timing.c.svn-base:525:            prev_page = metadata->lba_table[lpn];
+./.svn/text-base/ssd_clean.c.svn-base:417:            ASSERT(metadata->lba_table[lpn] == (from_blk * s->params.pages_per_block + i));
+./.svn/text-base/ssd_clean.c.svn-base:418:            metadata->lba_table[lpn] = to_blk * s->params.pages_per_block + i;
