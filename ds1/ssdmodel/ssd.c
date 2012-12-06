@@ -659,6 +659,555 @@ static void ssd_media_access_request_element (ioreq_event *curr)
        ssd_activate_elem(currdisk, elem_num);
    }
 #else
+    //-------------------- Integreation ---------------------------
+    struct section*;
+    int flag, elem_num;
+    int range = 0;
+    int prev_flag = -1;
+    int save;
+    int start = 1;
+    ssd_element *elem;
+    ioreq_event *tmp;
+    int perform = 1;
+    
+    /* **** CAREFUL ... HIJACKING tempint2 and tempptr2 fields here **** */
+    curr->tempint2 = count;
+    
+    adivim_assign_judgement (curr);
+    
+    while(count != 0) {
+        
+        ADIVIM_JUDGEMENT adivim_judgement = adivim_get_judgement_by_blkno (currdisk->timing_t, blkno);
+        
+        switch (adivim_judgement.adivim_type) {
+            case ADIVIM_HOT : // Original page mapping
+                flag = 1; break;
+            case ADIVIM_COLD : // Block mapping
+                flag = 0; break;
+            case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
+                flag = 3; break;
+            case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
+                flag = 2; break;
+        }
+        
+        switch(flag) {
+            case 0 : //cold -> cold
+                if(prev_flag != 0){
+                    switch(prev_flag) {
+                        case (-1) :
+                        case 1 :
+                            break;
+                        case 2 :
+                            //cold_invalid();
+                            
+                            while (range >= 0) {
+                                
+                                // find the element (package) to direct the request
+                                elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                                ssd_element *elem = &currdisk->elements[elem_num];
+                                
+                                // create a new sub-request for the element
+                                tmp = (ioreq_event *)getfromextraq();
+                                tmp->devno = curr->devno;
+                                tmp->busno = curr->busno;
+                                tmp->flags = curr->flags;
+                                tmp->blkno = save;
+                                tmp->bcount = currdisk->params.page_size;
+                                
+                                tmp->hc_flag = prev_flag;
+                                
+                                if(perform == 1)
+                                {
+                                    tmp->perform = 1;
+                                    perform = 0;
+                                }
+                                else{
+                                    tmp->perform = 0;
+                                }
+                                
+                                tmp->tempptr2 = curr;
+                                save += tmp->bcount;
+                                range --;
+                                
+                                elem->metadata.reqs_waiting ++;
+                                
+                                // add the request to the corresponding element's queue
+                                ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+                                ssd_activate_elem(currdisk, elem_num);
+			       			}
+                            
+                            start = 1;
+                            perfom = 1;
+                            break;
+                        case 3 :
+                            //hot_invalid();
+                            
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            
+       						elem = &currdisk->elements[elem_num];
+                            
+                            // create a new sub-request for the element
+       						tmp = (ioreq_event *)getfromextraq();
+      						tmp->devno = curr->devno;
+       						tmp->busno = curr->busno;
+       						tmp->flags = curr->flags;
+       						tmp->blkno = save;
+       						tmp->bcount = currdisk->params.page_size;
+                            
+                            tmp->hc_flag = prev_flag;
+		       				tmp->range = range;
+                            
+                            tmp->tempptr2 = curr;
+                            
+                            elem->metadata.reqs_waiting ++;
+                            
+                            // add the request to the corresponding element's queue
+                            ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       					ssd_activate_elem(currdisk, elem_num);
+                            
+                            start = 1;
+                            
+                            break;
+                            
+                        default :
+                            fprintf(stderr, "Error : Wrong hot/cold type\n");
+                    }
+                }
+                
+                if(start == 1)
+                {
+                    save = blkno;
+                    start = 0;
+                    range = -1;
+                }
+                
+                blkno += currdisk->params.page_size;
+                count -= currdisk->params.page_size;
+                range++;
+                
+                prev_flag = flag;
+                
+                if(count == 0)
+                {
+                    elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                    
+       				elem = &currdisk->elements[elem_num];
+       				
+                    // create a new sub-request for the element
+       				tmp = (ioreq_event *)getfromextraq();
+      				tmp->devno = curr->devno;
+       				tmp->busno = curr->busno;
+       				tmp->flags = curr->flags;
+       				tmp->blkno = save;
+       				tmp->bcount = currdisk->params.page_size;
+                    
+                    tmp->hc_flag = flag;
+		       		tmp->range = range;
+                    
+                    tmp->tempptr2 = curr;
+                    
+                    elem->metadata.reqs_waiting ++;
+                    
+                    // add the request to the corresponding element's queue
+                    ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       			ssd_activate_elem(currdisk, elem_num);
+                    
+                }
+                
+                break;
+                
+            case 1 : //hot -> hot
+                if(prev_flag != 1){ //accumulate treat process
+                    switch(prev_flag) {
+                        case (-1) :
+                            break;
+                        case 0 :
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            
+       						elem = &currdisk->elements[elem_num];
+                            
+                            // create a new sub-request for the element
+       						tmp = (ioreq_event *)getfromextraq();
+      						tmp->devno = curr->devno;
+       						tmp->busno = curr->busno;
+       						tmp->flags = curr->flags;
+       						tmp->blkno = save;
+       						tmp->bcount = currdisk->params.page_size;
+                            
+                            tmp->hc_flag = prev_flag;
+                            tmp->range = range;
+                            
+				       		tmp->tempptr2 = curr;
+                            
+                            elem->metadata.reqs_waiting ++;
+                            
+				     		// add the request to the corresponding element's queue
+	      					ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       					ssd_activate_elem(currdisk, elem_num);
+                            
+                            start = 1;
+                            
+                            break;
+                        case 2 :
+                            //cold_invalid();
+                            
+                            while (range >= 0) {
+                                
+                                // find the element (package) to direct the request
+                                elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                                ssd_element *elem = &currdisk->elements[elem_num];
+                                
+                                // create a new sub-request for the element
+                                tmp = (ioreq_event *)getfromextraq();
+                                tmp->devno = curr->devno;
+                                tmp->busno = curr->busno;
+                                tmp->flags = curr->flags;
+                                tmp->blkno = save;
+                                tmp->bcount = currdisk->params.page_size;
+                                
+                                tmp->hc_flag = prev_flag;
+                                
+                                if(perform == 1)
+                                {
+                                    tmp->perform = 1;
+                                    perform = 0;
+                                }
+                                else{
+                                    tmp->perform = 0;
+                                }
+                                
+                                tmp->tempptr2 = curr;
+                                save += tmp->bcount;
+                                range --;
+                                
+                                elem->metadata.reqs_waiting ++;
+                                
+                                // add the request to the corresponding element's queue
+                                ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+                                ssd_activate_elem(currdisk, elem_num);
+			       			}
+                            
+                            start = 1;
+                            perform = 0;
+                            break;
+                            
+                        case 3 :
+                            //hot_invalid();
+                            
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            
+       						elem = &currdisk->elements[elem_num];
+                            
+                            // create a new sub-request for the element
+       						tmp = (ioreq_event *)getfromextraq();
+      						tmp->devno = curr->devno;
+       						tmp->busno = curr->busno;
+       						tmp->flags = curr->flags;
+       						tmp->blkno = save;
+       						tmp->bcount = currdisk->params.page_size;
+                            
+                            tmp->hc_flag = prev_flag;
+		       				tmp->range = range;
+                            
+                            tmp->tempptr2 = curr;
+                            
+                            elem->metadata.reqs_waiting ++;
+                            
+                            // add the request to the corresponding element's queue
+                            ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       					ssd_activate_elem(currdisk, elem_num);
+                            
+                            start = 1;
+                            
+                            break;
+                            
+                        default :
+                            fprintf(stderr, "Error : Wrong hot/cold type\n");
+                    }
+                }
+                
+                elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
+       			elem = &currdisk->elements[elem_num];
+       			
+                // create a new sub-request for the element
+       			tmp = (ioreq_event *)getfromextraq();
+      			tmp->devno = curr->devno;
+       			tmp->busno = curr->busno;
+       			tmp->flags = curr->flags;
+       			tmp->blkno = blkno;
+       			tmp->bcount = ssd_choose_aligned_count(currdisk->params.page_size, blkno, count);
+       			ASSERT(tmp->bcount == currdisk->params.page_size);
+                
+                tmp->hc_flag = flag;
+                
+	       		tmp->tempptr2 = curr;
+	       		blkno += tmp->bcount;
+	       		count -= tmp->bcount;
+                
+                elem->metadata.reqs_waiting ++;
+                
+	     		// add the request to the corresponding element's queue
+	      		ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       		ssd_activate_elem(currdisk, elem_num);
+                
+                prev_flag = flag;
+                
+                break;
+                
+            case 2 : //cold -> hot
+                if(prev_flag != 2){
+                    switch(prev_flag){
+                        case (-1):
+                            break;
+                        case 0 :
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            
+       						elem = &currdisk->elements[elem_num];
+                            
+                            // create a new sub-request for the element
+       						tmp = (ioreq_event *)getfromextraq();
+      						tmp->devno = curr->devno;
+       						tmp->busno = curr->busno;
+       						tmp->flags = curr->flags;
+       						tmp->blkno = save;
+       						tmp->bcount = currdisk->params.page_size;
+                            
+                            tmp->hc_flag = prev_flag;
+                            tmp->range = range;
+                            
+				       		tmp->tempptr2 = curr;
+                            
+                            elem->metadata.reqs_waiting ++;
+                            
+				     		// add the request to the corresponding element's queue
+	      					ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       					ssd_activate_elem(currdisk, elem_num);
+                            
+                            start = 1;
+                            
+                            break;
+                        case 1 :
+                            break;
+                        case 3 :
+                            //hot_invalid();
+                            
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            
+       						elem = &currdisk->elements[elem_num];
+                            
+                            // create a new sub-request for the element
+       						tmp = (ioreq_event *)getfromextraq();
+      						tmp->devno = curr->devno;
+       						tmp->busno = curr->busno;
+       						tmp->flags = curr->flags;
+       						tmp->blkno = save;
+       						tmp->bcount = currdisk->params.page_size;
+                            
+                            tmp->hc_flag = prev_flag;
+		       				tmp->range = range;
+                            
+                            tmp->tempptr2 = curr;
+                            
+                            elem->metadata.reqs_waiting ++;
+                            
+                            // add the request to the corresponding element's queue
+                            ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       					ssd_activate_elem(currdisk, elem_num);
+                            
+                            start = 1;
+                            
+                            break;
+                        default :
+                            fprintf(stderr, "Error : Wrong hot/cold type\n");
+                    }
+                }
+                
+                if(start == 1)
+                {
+                    save = blkno;
+                    range = -1;
+                    start = 0;
+                }
+                
+                blkno += currdisk->params.page_size;
+                count -= currdisk->params.page_size;
+                range++;
+                
+                prev_flag = flag;
+                
+                if(count == 0){
+                    
+                    //cold_invalid();
+                    
+                    while (range >= 0) {
+                        
+ 			      		// find the element (package) to direct the request
+ 			      		elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+ 			      		ssd_element *elem = &currdisk->elements[elem_num];
+                        
+                        // create a new sub-request for the element
+			       		tmp = (ioreq_event *)getfromextraq();
+			       		tmp->devno = curr->devno;
+			       		tmp->busno = curr->busno;
+			       		tmp->flags = curr->flags;
+			       		tmp->blkno = save;
+			       		tmp->bcount = currdisk->params.page_size;
+			       		
+                        tmp->hc_flag = flag;
+                        
+                        if(perform == 1)
+                        {
+                            tmp->perform = 1;
+                            perform = 0;
+                        }
+                        else{
+                            tmp->perform = 0;
+                        }
+                        
+			       		tmp->tempptr2 = curr;
+			       		save += tmp->bcount;
+			       		range --;
+                        
+			       		elem->metadata.reqs_waiting ++;
+                        
+			       		// add the request to the corresponding element's queue
+			       		ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+			       		ssd_activate_elem(currdisk, elem_num);
+                    }
+                }
+                break;
+            case 3 : //hot -> cold
+                if(prev_flag != 3){
+                    switch(prev_flag){
+                        case (-1):
+                            break;
+                        case 0 :
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            
+       						elem = &currdisk->elements[elem_num];
+                            
+                            // create a new sub-request for the element
+       						tmp = (ioreq_event *)getfromextraq();
+      						tmp->devno = curr->devno;
+       						tmp->busno = curr->busno;
+       						tmp->flags = curr->flags;
+       						tmp->blkno = save;
+       						tmp->bcount = currdisk->params.page_size;
+                            
+                            tmp->hc_flag = prev_flag;
+                            tmp->range = range;
+                            
+				       		tmp->tempptr2 = curr;
+                            
+                            elem->metadata.reqs_waiting ++;
+                            
+				     		// add the request to the corresponding element's queue
+	      					ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       					ssd_activate_elem(currdisk, elem_num);
+                            
+                            start = 1;
+                            
+                            break;
+                            
+                        case 1 :
+                            break;
+                        case 2 :
+                            //cold_invalid();
+                            
+                            while (range >= 0) {
+                                
+                                // find the element (package) to direct the request
+                                elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                                ssd_element *elem = &currdisk->elements[elem_num];
+                                
+                                // create a new sub-request for the element
+                                tmp = (ioreq_event *)getfromextraq();
+                                tmp->devno = curr->devno;
+                                tmp->busno = curr->busno;
+                                tmp->flags = curr->flags;
+                                tmp->blkno = save;
+                                tmp->bcount = currdisk->params.page_size;
+                                
+                                tmp->hc_flag = prev_flag;
+                                
+                                if(perform == 1)
+                                {
+                                    tmp->perform = 1;
+                                    perform = 0;
+                                }
+                                else{
+                                    tmp->perform = 0;
+                                }
+                                
+                                tmp->tempptr2 = curr;
+                                save += tmp->bcount;
+                                range --;
+                                
+                                elem->metadata.reqs_waiting ++;
+                                
+                                // add the request to the corresponding element's queue
+                                ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+                                ssd_activate_elem(currdisk, elem_num);
+			       			}
+                            
+                            start = 1;
+                            perform = 1;
+                            break;
+                            
+                        default :
+                            fprintf(stderr, "Error : Wrong hot/cold type\n");
+                    }
+                }
+                
+                if(start == 1)
+                {
+                    save = blkno;
+                    range = -1;
+                    start = 0;
+                }
+                
+                blkno += currdisk->params.page_size;
+                count -= currdisk->params.page_size;
+                range++;
+                
+                prev_flag = flag;
+                
+                if(count == 0){
+                    //hot_invalid();
+                    
+                    elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                    
+       				elem = &currdisk->elements[elem_num];
+       				
+                    // create a new sub-request for the element
+       				tmp = (ioreq_event *)getfromextraq();
+      				tmp->devno = curr->devno;
+       				tmp->busno = curr->busno;
+       				tmp->flags = curr->flags;
+       				tmp->blkno = save;
+       				tmp->bcount = currdisk->params.page_size;
+                    
+                    tmp->hc_flag = flag;
+		       		tmp->range = range;
+                    
+                    tmp->tempptr2 = curr;
+                    
+                    elem->metadata.reqs_waiting ++;
+                    
+                    // add the request to the corresponding element's queue
+                    ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       			ssd_activate_elem(currdisk, elem_num);
+                }
+                
+                break;
+                
+            default :
+                fprintf(stderr, "Error: unknown hot/cold class change\n");
+                exit(1);
+        }
+    }
+    
+#ifdef NOTDEFINE
     //--------------------- from ss --------------------
     struct section*;
     int flag, elem_num;
@@ -1202,106 +1751,15 @@ static void ssd_media_access_request_element (ioreq_event *curr)
     curr->tempint2 = count;
     switch (curr->adivim_judgement.adivim_type) {
         case ADIVIM_HOT : // Original page mapping
-            while (count != 0) {
-                // find the element (package) to direct the request
-                int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
-                ssd_element *elem = &currdisk->elements[elem_num];
-                
-                // create a new sub-request for the element
-                ioreq_event *tmp = (ioreq_event *)getfromextraq();
-                tmp->devno = curr->devno;
-                tmp->busno = curr->busno;
-                tmp->flags = curr->flags;
-                tmp->blkno = blkno;
-                tmp->bcount = ssd_choose_aligned_count(currdisk->params.page_size, blkno, count);
-                ASSERT(tmp->bcount == currdisk->params.page_size);
-                
-                tmp->tempptr2 = curr;
-                blkno += tmp->bcount;
-                count -= tmp->bcount;
-                
-                elem->metadata.reqs_waiting ++;
-                
-                // add the request to the corresponding element's queue
-                ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
-                ssd_activate_elem(currdisk, elem_num);
-            } break;
+            break;
         case ADIVIM_COLD : // Block mapping
-            while (count != 0) {
-                // find the element (package) to direct the request
-                int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
-                ssd_element *elem = &currdisk->elements[elem_num];
-                
-                // create a new sub-request for the element
-                ioreq_event *tmp = (ioreq_event *)getfromextraq();
-                tmp->devno = curr->devno;
-                tmp->busno = curr->busno;
-                tmp->flags = curr->flags;
-                tmp->blkno = blkno;
-                tmp->bcount = ssd_choose_aligned_count(currdisk->params.page_size, blkno, count);
-                ASSERT(tmp->bcount == currdisk->params.page_size);
-                
-                tmp->tempptr2 = curr;
-                blkno += tmp->bcount;
-                count -= tmp->bcount;
-                
-                elem->metadata.reqs_waiting ++;
-                
-                // add the request to the corresponding element's queue
-                ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
-                ssd_activate_elem(currdisk, elem_num);
-            } break;
+            break;
         case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
-            while (count != 0) {
-                // find the element (package) to direct the request
-                int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
-                ssd_element *elem = &currdisk->elements[elem_num];
-                
-                // create a new sub-request for the element
-                ioreq_event *tmp = (ioreq_event *)getfromextraq();
-                tmp->devno = curr->devno;
-                tmp->busno = curr->busno;
-                tmp->flags = curr->flags;
-                tmp->blkno = blkno;
-                tmp->bcount = ssd_choose_aligned_count(currdisk->params.page_size, blkno, count);
-                ASSERT(tmp->bcount == currdisk->params.page_size);
-                
-                tmp->tempptr2 = curr;
-                blkno += tmp->bcount;
-                count -= tmp->bcount;
-                
-                elem->metadata.reqs_waiting ++;
-                
-                // add the request to the corresponding element's queue
-                ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
-                ssd_activate_elem(currdisk, elem_num);
-            } break;
+            break;
         case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
-            while (count != 0) {
-                // find the element (package) to direct the request
-                int elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, blkno);
-                ssd_element *elem = &currdisk->elements[elem_num];
-                
-                // create a new sub-request for the element
-                ioreq_event *tmp = (ioreq_event *)getfromextraq();
-                tmp->devno = curr->devno;
-                tmp->busno = curr->busno;
-                tmp->flags = curr->flags;
-                tmp->blkno = blkno;
-                tmp->bcount = ssd_choose_aligned_count(currdisk->params.page_size, blkno, count);
-                ASSERT(tmp->bcount == currdisk->params.page_size);
-                
-                tmp->tempptr2 = curr;
-                blkno += tmp->bcount;
-                count -= tmp->bcount;
-                
-                elem->metadata.reqs_waiting ++;
-                
-                // add the request to the corresponding element's queue
-                ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
-                ssd_activate_elem(currdisk, elem_num);
-            } break;
+            break;
     }
+#endif
 #endif
 }
 

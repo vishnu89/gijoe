@@ -98,7 +98,10 @@ void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req)
 
 ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno)
 {
+    struct my_timing_t *tt = (struct my_timing_t *) t;
+    ADIVIM_APN pg = blkno/(tt->params->page_size);
     
+    return section_lookup (adivim_section_list, pg);
 }
 
 void adivim_init ()
@@ -411,6 +414,41 @@ bool _section_job (listnode *start, listnode *target, void *arg)
 void section_job (listnode *start, ADIVIM_SECTION *arg)
 {
     ll_apply (start, _section_job, (void *) arg);
+}
+
+bool _section_lookup (listnode *start,listnode *target, void *arg)
+{
+    ADIVIM_APN_ALLOC *data = (ADIVIM_APN_ALLOC *) target->data;
+    ADIVIM_APN pg = *((ADIVIM_APN *) arg);
+
+    if (data->starting < pg && pg < data->starting + data->length)
+    {
+        ADIVIM_JUDGEMENT *datajudge = data->adivim_judgement;
+        arg = (ADIVIM_JUDGEMENT *) malloc (sizeof (ADIVIM_JUDGEMENT));
+        
+        arg->adivim_type = datajudge->adivim_type;
+        arg->hapn = datajudge->hapn;
+        arg->capn = datajudge->capn;
+        
+        return false;
+    }
+    
+    return true;
+}
+
+ADIVIM_JUDGEMENT section_lookup (listnode *start, ADIVIM_APN pg)
+{
+    ADIVIM_APN *arg = malloc (sizeof (ADIVIM_APN));
+    ADIVIM_JUDGEMENT ret;
+    *arg = pg;
+    
+    (ADIVIM_JUDGEMENT*) arg = ll_apply (start, _section_lookup, (void *arg));
+    
+    ret.adivim_type = arg->adivim_type;
+    ret.hapn = arg->hapn;
+    ret.capn = arg->capn;
+    
+    return ret;
 }
 
 ADIVIM_JUDGEMENT adivim_judge (ADIVIM_SECTION *section)

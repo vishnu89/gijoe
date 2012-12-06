@@ -744,6 +744,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
 #ifdef ADIVIM
     struct section*;
     int cbn;
+    int flag;
 #endif;
     
     // parunits is an array of linked list structures, where
@@ -763,8 +764,20 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
             ASSERT(prev_page != -1);
             prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
 #else
-            section = get_from_ADIVIM(reqs[i]->blkno);
-            switch(section->flag){
+            //section = get_from_ADIVIM(reqs[i]->blkno);
+            ADIVIM_JUDGEMENT adivim_judgement = adivim_get_judgement_by_blkno (currdisk->timing_t, blkno);
+            
+            switch (adivim_judgement.adivim_type) {
+                case ADIVIM_HOT : // Original page mapping
+                    flag = 1; break;
+                case ADIVIM_COLD : // Block mapping
+                    flag = 0; break;
+                case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
+                    flag = 3; break;
+                case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
+                    flag = 2; break;
+            }
+            switch(flag){
                 case 0 : //cold->cold
                 case 3 : //hot->cold
                     lpn = section->c_lpn;
@@ -807,6 +820,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
             int min_valid;
 #ifdef ADIVIM
             int cbn;
+            int flag;
 #endif
             plane_num = -1;
             
@@ -817,8 +831,20 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
             prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
             prev_bsn = metadata->block_usage[prev_block].bsn;
 #else
-            section = get_from_ADIVIM(reqs[i]->blkno);
-            switch(section->flag){
+            //section = get_from_ADIVIM(reqs[i]->blkno);
+            ADIVIM_JUDGEMENT adivim_judgement = adivim_get_judgement_by_blkno (currdisk->timing_t, blkno);
+            
+            switch (adivim_judgement.adivim_type) {
+                case ADIVIM_HOT : // Original page mapping
+                    flag = 1; break;
+                case ADIVIM_COLD : // Block mapping
+                    flag = 0; break;
+                case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
+                    flag = 3; break;
+                case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
+                    flag = 2; break;
+            }
+            switch(flag){
                 case 0 : //cold->colD
                     lpn = section->c_lpn;
                     cbn = lpn / s->params.pages_per_block;
