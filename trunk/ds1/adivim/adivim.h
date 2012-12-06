@@ -6,6 +6,7 @@
 
 #ifdef ADIVIM
 
+void adivim_init ();
 /*
  * For given reqest,
  * allocate apn.
