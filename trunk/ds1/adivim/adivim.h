@@ -13,7 +13,7 @@ void adivim_init ();
  * allocate apn.
  * To do so, this function updates section list, judges section and records the judgement in the request
  */
-void adivim_assign_judgement (ioreq_event *req);
+void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
 ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
 
 #endif
