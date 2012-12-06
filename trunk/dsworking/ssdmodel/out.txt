@@ -1,0 +1,43 @@
+./ssd_clean.c:54:            if (ssd_last_page_in_block(metadata->active_page, s)) {
+./ssd_clean.c:60:            ASSERT(metadata->plane_meta[plane_num].active_page == metadata->active_page);
+./ssd_clean.c:61:            if (ssd_last_page_in_block(metadata->active_page, s)) {
+./ssd_clean.c:92:    xfer_cost = ssd_crossover_cost(s, metadata, blk, SSD_PAGE_TO_BLOCK(metadata->active_page, s));
+./ssd_clean.c:991:            metadata->active_page = metadata->plane_meta[plane_num].active_page;
+./ssd.h:107:    unsigned int active_page;       // this points to the next page to write inside an
+./ssd.h:139:    unsigned int active_page;       // this points to the next page to write inside an
+
+./ssd_init.c:134:        metadata->plane_meta[i].active_page = blocks_to_skip*currdisk->params.pages_per_block;
+./ssd_init.c:154:            metadata->active_page = usable_blocks_per_plane * currdisk->params.pages_per_block;
+./ssd_init.c:158:            metadata->active_page = (2 * usable_blocks_per_plane) * currdisk->params.pages_per_block;
+./ssd_init.c:162:            metadata->active_page = (currdisk->params.planes_per_pkg * usable_blocks_per_plane) * currdisk->params.pages_per_block;
+./ssd_init.c:170:    ASSERT(metadata->active_page == metadata->plane_meta[0].active_page);
+./ssd_init.c:171:    active_block = metadata->active_page / currdisk->params.pages_per_block;
+./ssd_init.c:178:    //  reserved_blocks, usable_blocks, metadata->active_page, export_size);
+./ssd_init.c:364:                int plane_active_block = SSD_PAGE_TO_BLOCK(metadata->plane_meta[i].active_page, currdisk);
+./ssd_timing.c:169:void ssd_assert_page_version(int prev_page, int active_page, ssd_element_metadata *metadata, ssd_t *s)
+./ssd_timing.c:172:    int active_block = active_page / s->params.pages_per_block;
+./ssd_timing.c:177:        ASSERT(prev_page < active_page);
+./ssd_timing.c:303:    unsigned int active_page = metadata->active_page;
+./ssd_timing.c:304:    unsigned int active_block = SSD_PAGE_TO_BLOCK(active_page, s);
+./ssd_timing.c:305:    unsigned int pagepos_in_block = active_page % s->params.pages_per_block;
+./ssd_timing.c:321:        ssd_assert_page_version(prev_page, active_page, metadata, s);
+./ssd_timing.c:338:    metadata->lba_table[lpn] = active_page;
+./ssd_timing.c:355:    //printf("lpn %d active pg %d\n", lpn, active_page);
+./ssd_timing.c:358:    metadata->active_page = active_page + 1;
+./ssd_timing.c:359:    metadata->plane_meta[active_plane].active_page = metadata->active_page;
+./ssd_timing.c:363:    if (ssd_last_page_in_block(metadata->active_page, s)) {
+./ssd_timing.c:374:        //printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
+./ssd_timing.c:466:        pm->active_page = active_block * s->params.pages_per_block;
+./ssd_timing.c:467:        metadata->active_page = pm->active_page;
+./ssd_timing.c:540:                    active_block = SSD_PAGE_TO_BLOCK(pm->active_page, s);
+./ssd_timing.c:545:                        ((active_bsn == prev_bsn) && (pm->active_page > (unsigned int)prev_page))) {
+./ssd_timing.c:573:                        free_pages_in_act_blk = s->params.pages_per_block - ((pm->active_page%s->params.pages_per_block) + additive);
+./ssd_timing.c:687:                    if (ssd_last_page_in_block(metadata->plane_meta[plane_num].active_page, s)) {
+./ssd_timing.c:693:                    metadata->active_page = metadata->plane_meta[plane_num].active_page;
+./ssd_timing.c:747:static double ssd_write_one_active_page(int blkno, int count, int elem_num, ssd_t *s)
+./ssd_timing.c:761:    // so if the active_page is already pointing to the summary page,
+./ssd_timing.c:763:    if (ssd_last_page_in_block(metadata->active_page, s)) {
+./ssd_timing.c:787:            ssd_last_page_in_block(metadata->active_page, s)) {
+./ssd_timing.c:804:static void ssd_compute_access_time_one_active_page
+./ssd_timing.c:841:                cost = ssd_write_one_active_page(blkno, count, elem_num, s);
+./ssd_timing.c:887:        ssd_compute_access_time_one_active_page(reqs, total, elem_num, s);
