@@ -7,7 +7,7 @@
 
 #include "adivim.h"
 #include "ssd_timing.h"
-#include "modules/ssdmodel_ssd_param.h"
+#include "../ssdmodule/modules/ssdmodel_ssd_param.h"
 #include "../ssdmodel/ssd_utils.h" // For listnode.
 
 void adivim_init ();
