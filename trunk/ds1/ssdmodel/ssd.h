@@ -26,10 +26,10 @@ extern struct device_header ssd_hdr_initializer;
 
 
 typedef struct {
-   statgen acctimestats;
-   double  requestedbus;
-   double  waitingforbus;
-   int     numbuswaits;
+    statgen acctimestats;
+    double  requestedbus;
+    double  waitingforbus;
+    int     numbuswaits;
 } ssd_stat_t;
 
 /*
@@ -49,9 +49,9 @@ typedef struct _ssd_element_stat {
  * different states a block can be in.
  */
 typedef enum {
-  SSD_BLOCK_CLEAN,
-  SSD_BLOCK_INUSE,
-  SSD_BLOCK_SEALED
+    SSD_BLOCK_CLEAN,
+    SSD_BLOCK_INUSE,
+    SSD_BLOCK_SEALED
 } SSD_BLOCK_STATES;
 
 
@@ -64,32 +64,37 @@ typedef enum {
  * cleaning program.
  */
 typedef struct _block_metadata {
+    
+#ifdef ADIVIM
+    int		type;			//hot : 1, cold : 0
+#endif
+    
     int         block_num;              //
     int         plane_num;              // the plane to which this block belongs to
-
+    
     int         *page;                  // size of the array = pages_per_block
-                                        // holds all the valid logical page numbers present
-                                        // in a block
-
+    // holds all the valid logical page numbers present
+    // in a block
+    
     int         num_valid;              // represents the no of valid pages in the block (that is,
-                                        // the no of non '-1' entries in the above page array)
-                                        // don't use it as an index to add pages in the above array.
-
+    // the no of non '-1' entries in the above page array)
+    // don't use it as an index to add pages in the above array.
+    
     int         rem_lifetime;           // remaining life time for this block. when the system
-                                        // starts for the first time, this value will be initialized
-                                        // to total num of erasures that can be performed on a block.
-                                        // after every time this block is erased, this count is
-                                        // decremented.
-
+    // starts for the first time, this value will be initialized
+    // to total num of erasures that can be performed on a block.
+    // after every time this block is erased, this count is
+    // decremented.
+    
     double      time_of_last_erasure;   // holds the time when the last erasure was performed.
-
+    
     int         state;                  // state of the block
-                                        // a block could be in one of the following states:
-                                        // CLEAN - when the block is erased and clean to take new writes
-                                        // INUSE - when its pages are being filled
-                                        // SEALED - when all the free pages are written and the block
-                                        // is sealed for future writes
-
+    // a block could be in one of the following states:
+    // CLEAN - when the block is erased and clean to take new writes
+    // INUSE - when its pages are being filled
+    // SEALED - when all the free pages are written and the block
+    // is sealed for future writes
+    
     unsigned int    bsn;                // block sequence number (version number for blocks)
 } block_metadata;
 
@@ -98,17 +103,24 @@ typedef struct _block_metadata {
  * holds the plane specific metadata
  */
 typedef struct _plane_metadata {
-
+    
     int free_blocks;                // num of free blocks in this plane
-
+    
     int valid_pages;                // num of valid pages (note that a block might not
-                                    // be free but not all its pages should be valid)
-
+    // be free but not all its pages should be valid)
+    
     unsigned int active_page;       // this points to the next page to write inside an
-                                    // active block.
-
+    // active block.
+#ifdef ADIVIM
+    unsigned int hot_active_page;   // this points to the next hot page to write inside an
+    // hot active block
+    
+    unsigned int cold_active_block; // this points to the next cold page to write inside an
+    // cold active block
+#endif
+    
     int clean_in_progress;          // a flag that is set to 1 when some cleaning is
-                                    // going on in this plane
+    // going on in this plane
     int clean_in_block;             // which block is being cleaned?
     int block_alloc_pos;            // block allocation position in a plane
     int parunit_num;                // parallel unit number
@@ -125,34 +137,51 @@ typedef struct _parunit {
  */
 typedef struct _ssd_element_metadata {
     int *lba_table;                 // a table mapping the lba to the physical pages
-                                    // on the chip.
-
+    // on the chip.
+#ifdef ADIVIM
+    int *hot_lba_table;		    // a table mapping the hot lpn to the physical pages
+    // on the chip.
+    int hot_lba_size;
+    
+    int *cold_lba_table;	    // a table mapping the cold lbn to the physical blocks
+    // on the chip.
+    int cold_lba_size;
+#endif
+    
     char *free_blocks;              // each bit indicates whether a block in the
-                                    // ssd_element is free or in use. number of bits
-                                    // in free_blocks is given by
-                                    // (struct ssd*)->params.blocks_per_element
-
+    // ssd_element is free or in use. number of bits
+    // in free_blocks is given by
+    // (struct ssd*)->params.blocks_per_element
+    
     unsigned int tot_free_blocks;   // total number of free blocks in the system. i'm
-                                    // having this variable just for convenience. it can be
-                                    // computed from the above free_blocks list.
-
+    // having this variable just for convenience. it can be
+    // computed from the above free_blocks list.
+    
     unsigned int active_page;       // this points to the next page to write inside an
-                                    // active block.
-
+    // active block.
+    
+#ifdef ADIVIM
+    unsigned int hot_active_page;   // this points to the next hot page to write inside an
+    // hot active block
+    
+    unsigned int cold_active_block; // this points to the next cold page to write inside an
+    // cold active block
+#endif
+    
     plane_metadata plane_meta[SSD_MAX_PLANES_PER_ELEM];
-
+    
     block_metadata *block_usage;    // contains the number of valid pages in each block.
-                                    // we also store the valid page numbers here. this is useful
-                                    // during cleaning.
-
+    // we also store the valid page numbers here. this is useful
+    // during cleaning.
+    
     unsigned int bsn;               // block sequence number for this ssd element
-
+    
     int plane_to_clean;             // which plane to clean?
     int plane_to_write;             // which plane to write next?
     int block_alloc_pos;            // start allocating block from this position
-
+    
     parunit parunits[SSD_MAX_PARUNITS_PER_ELEM];
-
+    
     int gang_num;                   // the gang to which this element belongs
     int reqs_waiting;               //
     int tot_migrations;             //
@@ -167,10 +196,10 @@ typedef struct _ssd_element_metadata {
 typedef struct _ssd_plane {
     //struct ioq *queue;                // requests that are active on this plane
     //struct ioq *completion_queue;     // requests that complete in this plane
-
+    
     int media_busy;                 // tells you whether the plane is currently being used or not
     int pair_plane;                 // certain planes are paired (in Samsung chips) and two-plane
-                                    // operations can be performed only within a plane-pair.
+    // operations can be performed only within a plane-pair.
     int num_blocks;                 // no of blocks in this plane.
 } ssd_plane;
 
@@ -183,14 +212,14 @@ typedef struct _ssd_plane {
  * performed concurrently.
  */
 typedef struct _ssd_element {
-   struct ioq *queue;
-   int media_busy;
-   ssd_element_metadata metadata;               // contains the mapping info b/w lba and flash pages
-   ssd_element_stat stat;                       // statistics about each ssd element
-
-   int pin_busy;                                // state to hold the busy state of the package pins
-   int num_planes;                              // number of planes in this package
-   ssd_plane plane[SSD_MAX_PLANES_PER_ELEM];    // an array of flash planes
+    struct ioq *queue;
+    int media_busy;
+    ssd_element_metadata metadata;               // contains the mapping info b/w lba and flash pages
+    ssd_element_stat stat;                       // statistics about each ssd element
+    
+    int pin_busy;                                // state to hold the busy state of the package pins
+    int num_planes;                              // number of planes in this package
+    ssd_plane plane[SSD_MAX_PLANES_PER_ELEM];    // an array of flash planes
 } ssd_element;
 
 typedef struct _ssd_elem_number {
@@ -290,41 +319,41 @@ typedef struct _ssd_timing_params {
     int    pages_per_block;             // pages per block
     int    blocks_per_element;          // total blocks per chip
     int    element_stride_pages;        // usually 1 or 2
-
+    
     //vp - changing the chip_xfer_latency to per byte transfer cost
     //instead of per sector transfer cost to make more accurate estimate
     double chip_xfer_latency;           // time to get a byte to/from the chip register
     double page_read_latency;           // time to read a page into chip register
     double page_write_latency;          // time to write a page from chip register
     double block_erase_latency;         // time to erase a block
-
+    
     int     write_policy;               // policy followed when writing a block
-                                        // follow the above definitions
-                                        // (e.g., DISKSIM_SSD_WRITE_POLICY_SIMPLE)
-
+    // follow the above definitions
+    // (e.g., DISKSIM_SSD_WRITE_POLICY_SIMPLE)
+    
     int     reserve_blocks;             // percentage of blocks to reserve
-
+    
     int     min_freeblks_percent;       // min free blocks percentage
-
+    
     int     cleaning_policy;            // cleaning & wear-leveling policy used to
-                                        // clean blocks
-
+    // clean blocks
+    
     int     planes_per_pkg;             // num of planes in a single SSD package
-
+    
     unsigned int    blocks_per_plane;   // num of flash blocks in a single plane
-
+    
     int     plane_block_mapping;        // how blocks are mapped in a plane
-
+    
     int     copy_back;      // how active pages are assigned in an element
-
+    
     int     num_parunits;               // number of parallel units in each element
-
+    
     int     elements_per_gang;          // number of packages in a gang
-
+    
     int     gang_share;                 // is this a shared bus or shared control gang?
-
+    
     int     cleaning_in_background;     // do we want to do the cleaning in foreground/background?
-
+    
     int     alloc_pool_logic;           // static or dynamic allocation
 } ssd_timing_params;
 
@@ -332,49 +361,55 @@ struct _ssd_timing_t;    // forward def for timing module.
 //typedef struct _ssd_timing_t *ssd_timing_t;
 
 typedef struct ssd {
-   struct device_header hdr;
-   ssd_timing_params  params;
+    struct device_header hdr;
+    ssd_timing_params  params;
     struct _ssd_timing_t   *timing_t;
-
-   double overhead;
-   double bus_transaction_latency;
-   int numblocks;
-   int devno;
-   int inited;
-   int reconnect_reason;
-
-   ioreq_event *channel_activity;
-   ioreq_event *completion_queue;
-   struct ioq *queue;
-
-   ssd_element elements[SSD_MAX_ELEMENTS];
-
-   // for ganging elements
-   unsigned int data_pages_per_elem;    // number of pages that can be used to store data
-   gang_metadata gang_meta[SSD_MAX_ELEMENTS];
-
-   double blktranstime;
-   int maxqlen;
-   int busowned;
-   ioreq_event *buswait;
-   int neverdisconnect;
-   int numinbuses;
-   int inbuses[MAXINBUSES];
-   int depth[MAXINBUSES];
-   int slotno[MAXINBUSES];
-
-   int printstats;
-   ssd_stat_t stat;
+    
+    double overhead;
+    double bus_transaction_latency;
+    int numblocks;
+    int devno;
+    int inited;
+    int reconnect_reason;
+    
+    ioreq_event *channel_activity;
+    ioreq_event *completion_queue;
+    struct ioq *queue;
+    
+    ssd_element elements[SSD_MAX_ELEMENTS];
+    
+    // for ganging elements
+    unsigned int data_pages_per_elem;    // number of pages that can be used to store data
+    gang_metadata gang_meta[SSD_MAX_ELEMENTS];
+    
+    double blktranstime;
+    int maxqlen;
+    int busowned;
+    ioreq_event *buswait;
+    int neverdisconnect;
+    int numinbuses;
+    int inbuses[MAXINBUSES];
+    int depth[MAXINBUSES];
+    int slotno[MAXINBUSES];
+    
+    int printstats;
+    ssd_stat_t stat;
 } ssd_t;
 
 typedef struct ssd_info {
-   struct ssd **ssds;
-   int numssds;
-  int ssds_len; /* allocated size of ssds */
+    struct ssd **ssds;
+    int numssds;
+    int ssds_len; /* allocated size of ssds */
 } ssdinfo_t;
 
 /* request structure */
 typedef struct _ssd_req {
+    
+#ifdef ADIVIM
+    int hc_flag;
+    int range;
+    int perform;
+#endif
     int blk;
     int count;
     int is_read;
@@ -383,7 +418,7 @@ typedef struct _ssd_req {
     double acctime;
     double schtime;         // when to schedule this event?
     int include;            // should we include its cost in acctime stats
-                            // if we're getting parallel ios, then we don't need to include all of 'em
+    // if we're getting parallel ios, then we don't need to include all of 'em
 } ssd_req;
 
 /* some more definitions */
