@@ -10,7 +10,8 @@
 #include "modules/ssdmodel_ssd_param.h"
 #include "../ssdmodel/ssd_utils.h" // For listnode.
 
-void adivim_assign_judgement (ioreq_event *req);
+void adivim_init ();
+void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
 ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
 
 /*
@@ -73,11 +74,26 @@ ADIVIM_SECTION adivim_update_section_list (ioreq_event *req);
  */
 void adivim_mark (ioreq_event *req, ADIVIM_TYPE type);
 
-
-void adivim_assign_judgement (ioreq_event *req)
+void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req)
 {
-    ;
-    //adivim_mark (req, adivim_judge (adivim_update_section_list (req)));
+    struct my_timing_t *tt = (struct my_timing_t *) t;
+    ADIVIM_SECTION *section = (ADIVIM_SECTION *) malloc (sizeof (ADIVIM_SECTION));
+    
+    section->starting = (req->blkno)/(tt->params->page_size);
+    section->length = (req->bcount)/(tt->params->page_size);
+    
+    if (curr->flags & READ)
+    {
+        section->adivim_section_log.read_count = 1;
+        section->adivim_section_log.write_count = 0;
+    }
+    else
+    {
+        section->adivim_section_log.read_count = 0;
+        section->adivim_section_log.write_count = 1;
+    }
+    
+    adivim_mark (req, adivim_judge (section_job (section)));
 }
 
 ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno)
@@ -103,6 +119,9 @@ void adivim_init ()
     ll_insert_at_head (*adivim_free_capn_list, adivim_capn_alloc);
 }
 
+/*
+ * Copied from ssd_timing.c
+ */
 listnode *_ll_insert_at_head(listnode *start, listnode *toinsert)
 {
     if ((!start) || (!toinsert)) {
@@ -152,10 +171,8 @@ void ll_apply (*start, bool (*job) (listnode *start, listnode *target, void *arg
         node = start->next;
         while (node && (node != start) && keep_go)
         {
-            if (cmp(node->data))
-            {
-                keep_go = job (start, node, arg);
-            }
+            keep_go = job (start, node, arg);
+            node = node->next;
         }
     }
 }
@@ -229,6 +246,16 @@ bool _free_apn (listnode *start, listnode *target, void *arg)
     return false;
 }
 
+void free_apn (listnode *start, ADIVIM_APN starting, ADIVIM_APN length)
+{
+    ADIVIM_APN_ALLOC *arg = malloc (sizeof (ADIVIM_APN_ALLOC));
+    arg->starting = starting;
+    arg->length = length;
+    
+    ll_apply (start, _free_apn, (void *) arg);
+    free (arg);
+}
+
 bool _alloc_apn (listnode *start, listnode *target, void *arg)
 {
     ADIVIM_APN_ALLOC *data = (ADIVIM_APN_ALLOC *) target->data;
@@ -249,11 +276,15 @@ bool _alloc_apn (listnode *start, listnode *target, void *arg)
 ADIVIM_APN alloc_apn (listnode *start, ADIVIM_APN size)
 {
     ADIVIM_APN *arg = (ADIVIM_APN *) malloc (sizeof (ADIVIM_APN));
+    ADIVIM_APN ret;
     *arg = size;
     
-    ll_apply (start, _alloc_apn, (void *)arg);
+    ll_apply (start, _alloc_apn, (void *) arg);
     
-    return *((ADIVIM_APN *) arg);
+    ret = *((ADIVIM_APN *) arg);
+    free (arg);
+    
+    return ret;
 }
 
 bool _section_job (listnode *start, listnode *target, void *arg)
@@ -272,8 +303,8 @@ bool _section_job (listnode *start, listnode *target, void *arg)
         // add new section
         // allocate a new node
         listnode *newnode = malloc(sizeof(listnode));
-        ADIVIM_SECTION *newdata = malloc (sizeof (ADIVIM_APN_ALLOC));
-        newnode->data = (void *) newdata
+        ADIVIM_SECTION *newdata = malloc (sizeof (ADIVIM_SECTION));
+        newnode->data = (void *) newdata;
         
         // increment the number of entries
         ((header_data *)(start->data))->size ++;
@@ -286,7 +317,7 @@ bool _section_job (listnode *start, listnode *target, void *arg)
         newdata->adivim_access_log.read_count = arg->adivim_access_log.read_count;
         newdata->adivim_access_log.write_count = arg->adivim_access_log.write_count;
         
-        if (arg->starting + arg->length < data->starting)
+        if (arg->starting + arg->length <= data->starting)
         {
             // Really newbe
             newdata->length = arg->length;
@@ -298,42 +329,88 @@ bool _section_job (listnode *start, listnode *target, void *arg)
             // divide section occur. that will be devided in follwing code.
             newdata->length = data->starting - arg->starting;
             newdata->adivim_judgement = adivim_judge (newdata);
+            arg->length = arg->starting + arg->length - data->starting;
             arg->starting = data->starting;
+            
             return _section_job (start, target, arg);
         }
     }
     
-    if (data->starting < arg->starting && arg->starting < data->starting + data->length)
+    if (arg->starting = data->starting)
     {
-        // devide target
-    }
-    
-    if (arg->starting < data->starting + data->length && data->starting + data->length < arg->starting + arg->length)
-    {
-        if (target->next->data->starting < arg->starting + arg->length)
+        if (data->length <= arg->length)
         {
-            // concatenation occur
-            // modify target
-            void *nextdata = target->next->data;
-            ADIVIM_APN diff = nextdata->starting + nextdata->length - (data->starting + data->length);
-            data->length += diff;
+            data->adivim_access_log.read_count += arg->adivim_access_log.read_count;
+            data->adivim_access_log.write_count += arg->adivim_access_log.write_count;
+            data->adivim_judgement = adivim_judge (data);
             
-            // release next node and check again on target
-            ll_release_node (start, target->next);
-            return free_apn (start, target, arg);
+            arg->starting += data->length;
+            arg->length = arg->length - data->length;
+            
+            return true;
         }
         else
         {
-            // concatenation doesn't occur
-            //modify target
-            ADIVIM_APN diff = arg->starting + arg->length - (data->starting + data->length);
-            data->length += diff;
+            // divide target into two.
+            // allocate a new node
+            listnode *newnode = malloc(sizeof(listnode));
+            ADIVIM_SECTION *newdata = malloc (sizeof (ADIVIM_SECTION));
+            newnode->data = (void *) newdata;
+            
+            // increment the number of entries
+            ((header_data *)(start->data))->size ++;
+            
+            // insert before target
+            _ll_insert_at_head(target->prev, newnode);
+            
+            // init new section
+            newdata->starting = arg->starting;
+            newdata->length = arg->length
+            newdata->adivim_access_log.read_count = data->adivim_access_log.read_count + arg->adivim_access_log.read_count;
+            newdata->adivim_access_log.write_count = data->adivim_access_log.write_count + arg->adivim_access_log.write_count;
+            newdata->adivim_judgement = adivim_judge (newdata);
+            
+            // modify target
+            data->starting += arg->length;
+            data->length -= arg->length;
             
             return false;
         }
     }
     
+    if (data->starting < arg->starting && arg->starting < data->starting + data->length)
+    {
+        // divide target into two.
+        // allocate a new node
+        listnode *newnode = malloc(sizeof(listnode));
+        ADIVIM_SECTION *newdata = malloc (sizeof (ADIVIM_SECTION));
+        newnode->data = (void *) newdata;
+        
+        // increment the number of entries
+        ((header_data *)(start->data))->size ++;
+        
+        // insert after target
+        _ll_insert_at_head(target, newnode);
+        
+        // init new section
+        newdata->starting = arg->starting;
+        newdata->length = data->starting + data->length - arg->starting;
+        newdata->adivim_access_log.read_count = data->adivim_access_log.read_count;
+        newdata->adivim_access_log.write_count = data->adivim_access_log.write_count;
+        newdata->adivim_judgement = adivim_judge (newdata);
+        
+        // modify target
+        data->length = arg->starting - data->starting;
+        
+        return true;
+    }
+    
     return false;
+}
+
+void section_job (listnode *start, ADIVIM_SECTION *arg)
+{
+    ll_apply (start, _section_job, (void *) arg);
 }
 
 ADIVIM_JUDGEMENT adivim_judge (ADIVIM_SECTION *section)
@@ -353,6 +430,7 @@ ADIVIM_JUDGEMENT adivim_judge (ADIVIM_SECTION *section)
         };
         
         // Allocate ADIVIM_HAPN
+        alloc_apn (adivim_free_hapn_list, section->length);
     }
     else // Section will be cold
     {
@@ -369,6 +447,7 @@ ADIVIM_JUDGEMENT adivim_judge (ADIVIM_SECTION *section)
         };
         
         // Allocate ADIVIM_CAPN
+        alloc_apn (adivim_free_capn_list, section->length);
     }
     
     return section->adivim_judgement;
@@ -421,9 +500,9 @@ adivim_section adivim_section_list_update (ioreq_event *req)
     }
 }
 
-void adivim_mark (ioreq_event *req, ADIVIM_TYPE type)
+void adivim_mark (ioreq_event *req, ADIVIM_JUDGEMENT adivim_judgement)
 {
-    req->type = type;
+    req->adivim_judgement = adivim_judgement;
 }
 
 #endif
