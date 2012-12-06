@@ -280,7 +280,7 @@ typedef enum {
 typedef int ADIVIM_APN;
 typedef ADIVIM_APN ADIVIM_HAPN;
 typedef ADIVIM_APN ADIVIM_CAPN;
-//ADIVIM_APN ADIVIM_APN_INFINITY = (ADIVIM_APN) MAX_INT;
+ADIVIM_APN ADIVIM_APN_INFINITY = (ADIVIM_APN) MAX_INT;
 typedef struct _adivim_judgement {
     ADIVIM_TYPE adivim_type;
     ADIVIM_HAPN adivim_hapn;
@@ -289,6 +289,14 @@ typedef struct _adivim_judgement {
 #endif
     
 typedef struct ioreq_ev {
+#ifdef ADIVIM
+    int    hc_flag; 	//0 : cold -> cold
+                        //1 : hot -> hot
+                        //2 : cold -> hot
+                        //3 : hot -> cold
+    int 	  range;	//cold block write page range
+    int    perform;	//hot/cold invalid perform
+#endif
    double time;
    int    type;
    struct ioreq_ev *next;
