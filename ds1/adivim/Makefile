@@ -1,10 +1,12 @@
 # Disksim SSD ADIVIM support
 # Copyright (c) 2012 ADIVIM PROJECT team, lecture project1, Seoul National University. All right reserved.
 # Makefile is modified from ../ssdmodel/Makefile.
+
 include .paths
 
 LDFLAGS = -lm -L. -ldisksim $(DISKMODEL_LDFLAGS) $(MEMSMODEL_LDFLAGS) \
-                            $(LIBPARAM_LDFLAGS) $(LIBDDBG_LDFLAGS) 
+                            $(LIBPARAM_LDFLAGS) $(LIBDDBG_LDFLAGS) \
+                            $(SSDMODEL_LDFLAGS)
 
 HP_FAST_OFLAGS = +O4
 NCR_FAST_OFLAGS = -O4 -Hoff=BEHAVED 
@@ -56,7 +58,7 @@ modules/*.h modules/*.c:
 
 DISKSIM_ADIVIM_SRC = adivim.c
 
-DISKSIM_ADIVIM_OBJ = $(DISKSIM_SSD_SRC:.c=.o) 
+DISKSIM_ADIVIM_OBJ = $(DISKSIM_ADIVIM_SRC:.c=.o) 
 
 $(DISKSIM_ADIVIM_OBJ): %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@

@@ -109,6 +109,11 @@
 #include <sys/types.h>
 #include <stdio.h>
 
+#ifndef ADIVIM
+#define ADIVIM
+#include <limits.h>
+#endif
+
 #ifdef _WIN32
 #define u_int		unsigned int
 #define u_int64_t	unsigned __int64
@@ -264,17 +269,18 @@ typedef struct ev {
    int    temp;
    char space[DISKSIM_EVENT_SPACESIZE];
 } event;
-
+    
 #ifdef ADIVIM
 typedef enum {
-    AIDIVM_HOT,
+    ADIVIM_HOT,
     ADIVIM_COLD,
     ADIVIM_HOT_TO_COLD,
-    AIDIVM_COLD_TO_HOT
+    ADIVIM_COLD_TO_HOT
 } ADIVIM_TYPE;
 typedef int ADIVIM_APN;
 typedef ADIVIM_APN ADIVIM_HAPN;
 typedef ADIVIM_APN ADIVIM_CAPN;
+//ADIVIM_APN ADIVIM_APN_INFINITY = (ADIVIM_APN) MAX_INT;
 typedef struct _adivim_judgement {
     ADIVIM_TYPE adivim_type;
     ADIVIM_HAPN adivim_hapn;
