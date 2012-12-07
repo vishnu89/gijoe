@@ -30,6 +30,12 @@ typedef struct {
     double  requestedbus;
     double  waitingforbus;
     int     numbuswaits;
+#ifdef ADIVIM
+	int write_page_num;
+	int write_req_num;
+	int avg_lifetime;
+#endif
+
 } ssd_stat_t;
 
 /*

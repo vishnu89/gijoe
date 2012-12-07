@@ -24,6 +24,12 @@ static void ssd_statinit (int devno, int firsttime)
     currdisk->stat.requestedbus = 0.0;
     currdisk->stat.waitingforbus = 0.0;
     currdisk->stat.numbuswaits = 0;
+#ifdef ADIVIM
+	currdisk->stat.write_page_num = 0;
+	currdisk->stat.write_req_num = 0;
+	currdisk->stat.avg_lifetime = 0;
+#endif
+
 }
 
 void ssd_initialize_diskinfo ()

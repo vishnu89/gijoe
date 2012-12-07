@@ -1820,6 +1820,9 @@ void ssd_printcleanstats(int *set, int setsize, char *sourcestr)
 
             elts_count += s->params.nelements;
 
+#ifdef ADIVIM
+	        int sum_lifetime =0;
+#endif
             for (j = 0; j < s->params.nelements; j ++) {
                 int plane_num;
                 double avg_lifetime;
@@ -1829,6 +1832,14 @@ void ssd_printcleanstats(int *set, int setsize, char *sourcestr)
                 ssd_element_stat *stat = &(s->elements[j].stat);
 
                 avg_lifetime = ssd_compute_avg_lifetime(-1, j, s);
+
+#ifdef ADIVIM
+				sum_lifetime+= avg_lifetime;
+				if (j+1==s->params.nelements) {
+					s->stat.avg_lifetime = sum_lifetime/(s->params.nelements);
+					fprintf(outputfile_adv, "Average Lifetime : \t%d\n", s->stat.avg_lifetime);
+				}
+#endif
 
                 fprintf(outputfile, "%s #%d elem #%d   Total reqs issued:\t%d\n",
                     sourcestr, set[i], j, s->elements[j].stat.tot_reqs_issued);
@@ -1955,6 +1966,25 @@ void ssd_printstats (void)
 
    fprintf(outputfile, "\nSSD STATISTICS\n");
    fprintf(outputfile, "---------------------\n\n");
+#ifdef
+   fprintf(outputfile_adv, "\nADIVIM STATISTICS\n-------------------\n\n");
+
+   int write_page_sum=0;
+   int write_req_sum=0;
+   for (i=0; i<MAXDEVICES; i++) {
+	   ssd_t *currdisk = getssd(i);
+	   if (currdisk) {
+		   for (j=0; j<8; j++) {
+			   write_page_sum+=currdisk->stat.write_page_num;
+			   write_req_sum+=currdisk->stat.write_req_num;
+		   }
+	   }
+   }
+   fprintf(outputfile_adv, "Total Write Count : \t%d\n", write_page_sum);
+   fprintf(outputfile_adv, "Total Write Req : \t%d\n", write_req_sum);
+   fprintf(outputfile_adv, "Write Amplification Factor : \t%d\n", write_page_sum/write_req_sum);
+
+#endif
 
    sprintf_s3(prefix, 80, "ssd ");
 
