@@ -17,14 +17,19 @@ disksim_logorg.o: disksim_logorg.c /usr/include/errno.h \
   /usr/include/stdio.h /usr/include/libio.h /usr/include/_G_config.h \
   /usr/include/wchar.h /usr/lib/gcc/i486-linux-gnu/4.3.2/include/stdarg.h \
   /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
-  /usr/include/stdlib.h /usr/include/alloca.h /usr/include/math.h \
-  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
-  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
-  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
-  /usr/include/bits/mathcalls.h disksim_assertlib.h /usr/include/assert.h \
-  disksim_reqflags.h disksim_stat.h disksim_iosim.h disksim_ioface.h \
-  disksim_device.h disksim_orgface.h disksim_iotrace.h disksim_iodriver.h \
-  config.h ../libparam/include/libparam/libparam.h \
+  /usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed/limits.h \
+  /usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/math.h /usr/include/bits/huge_val.h \
+  /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h \
+  /usr/include/bits/inf.h /usr/include/bits/nan.h \
+  /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h \
+  disksim_assertlib.h /usr/include/assert.h disksim_reqflags.h \
+  disksim_stat.h disksim_iosim.h disksim_ioface.h disksim_device.h \
+  disksim_orgface.h disksim_iotrace.h disksim_iodriver.h config.h \
+  ../libparam/include/libparam/libparam.h \
   ../libparam/include/libparam/bitvector.h \
   ../libddbg/include/libddbg/libddbg.h disksim_bus.h disksim_controller.h \
   disksim_ioqueue.h disksim_disk.h ../diskmodel/include/diskmodel/dm.h \

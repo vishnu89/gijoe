@@ -67,7 +67,7 @@ DISKSIM_SSD_SRC = ssd.c ssd_timing.c ssd_clean.c \
 DISKSIM_SSD_OBJ = $(DISKSIM_SSD_SRC:.c=.o) 
 
 $(DISKSIM_SSD_OBJ): %.o: %.c
-	$(CC) -c $(CFLAGS) $< -o $@
+	$(CC) -c $(CFLAGS) $(LDFLAGS)  $< -o $@
 
 
 # production rule for making disksim with freeblocks support

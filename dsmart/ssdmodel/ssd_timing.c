@@ -7,10 +7,11 @@
 #include "ssd_gang.h"
 #include "ssd_utils.h"
 #include "modules/ssdmodel_ssd_param.h"
+#include "disksim_global.h"
 #ifdef ADIVIM
 #include "adivim.h"
-//void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
-//ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
+//extern void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
+//extern ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
 #endif
 
 struct my_timing_t {

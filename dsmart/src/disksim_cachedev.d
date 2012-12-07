@@ -26,7 +26,12 @@ disksim_cachedev.o: disksim_cachedev.c modules/modules.h \
   /usr/include/bits/byteswap.h /usr/include/sys/select.h \
   /usr/include/bits/select.h /usr/include/bits/sigset.h \
   /usr/include/bits/time.h /usr/include/sys/sysmacros.h \
-  /usr/include/bits/pthreadtypes.h /usr/include/stdlib.h \
+  /usr/include/bits/pthreadtypes.h \
+  /usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed/limits.h \
+  /usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/stdlib.h \
   /usr/include/alloca.h /usr/include/string.h /usr/include/xlocale.h \
   /usr/include/math.h /usr/include/bits/huge_val.h \
   /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h \

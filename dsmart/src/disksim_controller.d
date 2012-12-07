@@ -14,8 +14,13 @@ disksim_controller.o: disksim_controller.c disksim_global.h \
   /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
   /usr/lib/gcc/i486-linux-gnu/4.3.2/include/stdarg.h \
   /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
-  /usr/include/stdlib.h /usr/include/alloca.h /usr/include/string.h \
-  /usr/include/xlocale.h /usr/include/math.h /usr/include/bits/huge_val.h \
+  /usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed/limits.h \
+  /usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/string.h /usr/include/xlocale.h \
+  /usr/include/math.h /usr/include/bits/huge_val.h \
   /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h \
   /usr/include/bits/inf.h /usr/include/bits/nan.h \
   /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h \
