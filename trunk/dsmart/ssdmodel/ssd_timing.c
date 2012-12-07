@@ -424,7 +424,10 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
     metadata->hot_lba_table[lpn] = active_page;
     
     // increment the usage count on the active block
-    metadata->block_usage[active_block].page[pagepos_in_block] = lpn;
+    s->stat.write_page_num++;
+	s->stat.write_req_num++;    //ADIVIM
+
+	metadata->block_usage[active_block].page[pagepos_in_block] = lpn;
     metadata->block_usage[active_block].num_valid ++;
     metadata->plane_meta[active_plane].valid_pages ++;
     ssd_assert_valid_pages(active_plane, metadata, s);
@@ -541,7 +544,9 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 			}
             
 			cost = s->params.page_write_latency * metadata->block_usage[metadata->cold_active_block].num_valid;
-			
+			s->stat.write_page_num+=metadata->block_usage[metadata->cold_active_block].num_valid;
+			s->stat.write_req_num++;	//ADIVIM
+
 			/*prev_block invalid*/
             metadata->block_usage[prev_block].num_valid = 0;
 			metadata->block_usage[prev_block].state = SSD_BLOCK_SEALED;
