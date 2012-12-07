@@ -258,7 +258,12 @@ typedef struct foo {
    int    temp;
 } foo;
 
+#ifndef ADIVIM
 #define DISKSIM_EVENT_SIZE	128
+#else 
+#define DISKSIM_EVENT_SIZE	172
+#endif
+    
 #define DISKSIM_EVENT_SPACESIZE	(DISKSIM_EVENT_SIZE - sizeof(struct foo))
 
 typedef struct ev {
@@ -280,7 +285,7 @@ typedef enum {
 typedef int ADIVIM_APN;
 typedef ADIVIM_APN ADIVIM_HAPN;
 typedef ADIVIM_APN ADIVIM_CAPN;
-#define ADIVIM_APN_INFINITY = (ADIVIM_APN) INT_MAX;
+static const ADIVIM_APN ADIVIM_APN_INFINITY = (ADIVIM_APN) INT_MAX;
 typedef struct _adivim_judgement {
     ADIVIM_TYPE adivim_type;
     ADIVIM_HAPN adivim_hapn;

@@ -8,10 +8,10 @@
 #include "ssd_init.h"
 #include "modules/ssdmodel_ssd_param.h"
 #ifdef ADIVIM
-//#include "adivim.h"
 #include "disksim_global.h"
-void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
-ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
+#include "adivim.h"
+//void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
+//ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
 #endif
 
 #ifndef sprintf_s
