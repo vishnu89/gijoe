@@ -144,8 +144,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 blocks_to_skip = (i*currdisk->params.blocks_per_plane + usable_blocks_per_plane);
         	metadata->plane_meta[i].hot_active_page = blocks_to_skip*currdisk->params.pages_per_block;
         	metadata->plane_meta[i].cold_active_block = (blocks_to_skip*currdisk->params.pages_per_block + (currdisk->params.pages_per_block))
-								/ currdisk->params.pages_per_block;
-                
+								/ currdisk->params.pages_per_block; 
 		break;
 
             case PLANE_BLOCKS_PAIRWISE_STRIPE:
@@ -505,7 +504,9 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 ssd_set_bit(metadata->free_blocks, bitpos);
                 metadata->block_usage[plane_active_block].state = SSD_BLOCK_INUSE;
                 metadata->block_usage[plane_active_block].bsn = bsn ++;
-                metadata->tot_free_blocks --;
+                metadata->block_usage[plane_active_block].type = 1;
+                
+		metadata->tot_free_blocks --;
                 metadata->plane_meta[i].free_blocks --;
 
                 plane_active_block = metadata->plane_meta[i].cold_active_block;
@@ -513,7 +514,9 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 ssd_set_bit(metadata->free_blocks, bitpos);
                 metadata->block_usage[plane_active_block].state = SSD_BLOCK_INUSE;
                 metadata->block_usage[plane_active_block].bsn = bsn ++;
-                metadata->tot_free_blocks --;
+                metadata->block_usage[plane_active_block].type = 0;
+                
+		metadata->tot_free_blocks --;
                 metadata->plane_meta[i].free_blocks --;
             }
         break;
