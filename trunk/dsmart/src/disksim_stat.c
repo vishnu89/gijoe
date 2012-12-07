@@ -101,6 +101,9 @@
 #include "disksim_global.h"
 #include "disksim_stat.h"
 
+#ifdef ADIVIM
+#include <string.h>
+#endif
 
 int stat_get_count (statgen *statptr)
 {
@@ -328,6 +331,12 @@ void stat_print_set (statgen **statset, int statcnt, char *identstr)
       runsquares = 0.0;
    }
    fprintf(outputfile, "%s%s average: \t%f\n", identstr, statdesc, avg);
+#ifdef ADIVIM
+   if (!strcmp(identstr, "ssd ") && !strcmp(statdesc, "Response time")) {
+	   fprintf(outputfile_adv, "%s average: \t%f\n", statdesc, avg);
+   }
+#endif
+
    fprintf(outputfile, "%s%s std.dev.:\t%f\n", identstr, statdesc, runsquares);
    if (maxval == (double) ((int)maxval)) {
       fprintf(outputfile, "%s%s maximum:\t%d\n", identstr, statdesc, (int)maxval);

@@ -473,6 +473,10 @@ typedef struct disksim {
 
 extern disksim_t *disksim;
 
+#ifdef ADIVIM
+	FILE *outputfile_adv
+#endif
+
 /* remapping #defines for some of the variables in disksim_t */
 #define warmuptime       (disksim->warmuptime)
 #define simtime	         (disksim->simtime)
