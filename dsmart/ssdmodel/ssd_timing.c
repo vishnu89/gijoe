@@ -1097,7 +1097,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 	int elem_num;
 	int i;
 	ssd_element_metadata* temp;
-	struct section* sect;
+//	struct section* sect;
 	unsigned int temp_block;
 	unsigned int temp_pos;
 	unsigned int temp_page;
@@ -1109,8 +1109,8 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 	{
 		elem_num = (temp_blk/(s->params.element_stride_pages*s->params.page_size)) % s->params.nelements;
 		temp = &(s->elements[elem_num].metadata);
-		sect = get_from_ADIVIM(temp_blk);
-		temp_lpn = sect->h_lpn;
+//		sect = get_from_ADIVIM(temp_blk);
+		temp_lpn = (adivim_get_judgement_by_blkno(s->timing_t, blk)).advim_hapn;
 		temp_page = temp->hot_lba_table[temp_lpn];
 		temp_block = SSD_PAGE_TO_BLOCK(temp_page, s);
 		temp_pos = temp_page % s->params.pages_per_block;
@@ -1125,7 +1125,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 
 	if(flag == 1)
 	{
-    		struct section* sect;
+//    		struct section* sect;
     		int ii, jj;
     		int b_size = 0;
     		unsigned int cbn;
@@ -1133,22 +1133,22 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
     		int iter = 0;
     		unsigned int *bucket;
 
-		sect = get_from_ADIVIM(blk);
+//		sect = get_from_ADIVIM(blk);
 		save_lpn = (unsigned int*)malloc(sizeof(unsigned int) * (r->range + 1));
 		ii = 0;
 		iter = 1;
 		b_size = 1;
-		save_lpn[ii] = sect->c_lpn;
-	        cbn = sect->c_lpn / (s->params.pages_per_block - 1);
+		save_lpn[ii] = (adivim_get_judgement_by_blkno(s->timing_t, blk)).advim_capn;
+		cbn = save_lpn[ii] / (s->params.pages_per_block - 1);
 		
 
 		for(ii= 1; ii < (range + 1) ; ii++)
 		{
-			sect = get_from_ADIVIM(blk);
-			save_lpn[ii] = sect->c_lpn;
-			if(cbn != (sect->c_lpn / (s->params.pages_per_block - 1)))
+			//sect = get_from_ADIVIM(blk);
+			save_lpn[ii] = (adivim_get_judgement_by_blkno(s->timing_t, blk)).advim_capn;
+			if(cbn != (save_lpn[ii] / (s->params.pages_per_block - 1)))
 			{
-				cbn = sect->c_lpn / (s->params.pages_per_block - 1);
+				cbn = save_lpn[ii] / (s->params.pages_per_block - 1);
 				iter++;
 				bucket = (unsigned int*)malloc(sizeof(unsigned int) * b_size);
 				for(jj= b_size; jj > 0 ; jj--)
@@ -1165,7 +1165,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 		
 	}
 }
-
+/*
 void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, int flag, int perform)
 {
 	//flag 1 : read, 0 : write
@@ -1263,6 +1263,7 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
 	   }
 	}
 }
+*/
 #endif
 static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, ssd_t *s)
 {
@@ -1275,13 +1276,15 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
     int read_cycle = 0;
     listnode **parunits;
 #ifdef ADIVIM
-    struct section* sect;
+//    struct section* sect;
     int ii, jj;
     int b_size = 0;
     unsigned int cbn;
     unsigned int *save_lpn;
     int iter = 0;
     unsigned int *bucket;
+    int cnt = 0;
+    unsigned int temp_lpn;
 #endif
      
     // all the requests must be of the same type
@@ -1363,18 +1366,20 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 		if(r->is_read){
 			switch(r->hc_flag){
 				case 0://cold->cold
-					sect = get_from_ADIVIM(r->blk);
+			//		sect = get_from_ADIVIM(r->blk);
 				//	save_lpn = (unsigned int*)malloc(sizeof(unsigned int) * (r->range + 1));
 					ii = 0;
 					iter = 1;
 				//	save_lpn[ii] = sect->c_lpn;
-				        cbn = sect->c_lpn / (s->params.pages_per_block - 1);
+				  
+				        cbn = (adivim_get_judgement_by_blkno (s->timing_t, r->blk)).adivim_capn / (s->params.pages_per_block - 1);
 
-					for(ii= 1; ii < (range + 1) ; ii++)
+					for(ii= 1; ii < (r->range + 1) ; ii++)
 					{
 						sect = get_from_ADIVIM(r->blk + (ii* s->params.page_size));
 				//		save_lpn[ii] = sect->c_lpn;
-						if(cbn != (sect->c_lpn / (s->params.pages_per_block - 1)))
+						temp_lpn = adivim_get_judgement_by_blkno(s->timing_t, r->blk+(ii*s->params.page_size)).aduvun_capn
+						if(cbn != ((adivim_get_judgement_by_blkno(s->timing_t, r->blk+(ii*s->params.page_size)).aduvun_capn) / (s->params.pages_per_block - 1)))
 						{
 							cbn = sect->c_lpn / (s->params.pages_per_block - 1);
 							iter++;
@@ -1393,7 +1398,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 				case 2://cold->hot
 					if(r->perform == 1)
 					{
-						cold_invalid & wrtie();
+						//cold_invalid & wrtie();
 					}
 	
 					parunit_op_cost[i] = s->params.page_read_latency;
@@ -1410,7 +1415,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 				//	save_lpn[ii] = sect->c_lpn;
 				        cbn = sect->c_lpn / (s->params.pages_per_block - 1);
 
-					for(ii= 1; ii < (range + 1) ; ii++)
+					for(ii= 1; ii < (r->range + 1) ; ii++)
 					{
 						sect = get_from_ADIVIM(r->blk + (ii *s->params.page_size));
 				//		save_lpn[ii] = sect->c_lpn;
@@ -1445,7 +1450,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 				        cbn = sect->c_lpn / (s->params.pages_per_block - 1);
 					parunit_op_cost[i] = 0;
 
-					for(ii= 1; ii < (range + 1) ; ii++)
+					for(ii= 1; ii < (r->range + 1) ; ii++)
 					{
 						sect = get_from_ADIVIM(r->blk + (ii * s->params.page_size));
 						save_lpn[ii] = sect->c_lpn;
@@ -1495,7 +1500,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 				case 2://cold->hot
 					if(r->perform == 1)
 					{
-						cold_invalid & wrtie();
+						//cold_invalid & wrtie();
 					}
 	
 					sect = get_from_ADIVIM(r->blk);
@@ -1525,7 +1530,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 				        cbn = sect->c_lpn / (s->params.pages_per_block - 1);
 					parunit_op_cost[i] = 0;
 
-					for(ii= 1; ii < (range + 1) ; ii++)
+					for(ii= 1; ii < (r->range + 1) ; ii++)
 					{
 						sect = get_from_ADIVIM(r->blk + (ii * s->params.page_size));
 						save_lpn[ii] = sect->c_lpn;
@@ -1567,13 +1572,31 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 
                 // calc the cost: the access time should be something like this
                 // for read
+#ifdef ADIVIM
+		switch(r->hc_flag){
+			case 0 :
+			case 3 :
+				cnt = r->range + 1;
+				break;
+			case 1 :
+			case 2 :
+				cnt = 1;
+				break;
+			default :
+				fprintf(stderr, "Wrong hot/cold type\n");
+		}
+#endif
                 if (read_cycle) {
                     if (SSD_PARUNITS_PER_ELEM(s) > 4) {
                         printf("modify acc time here ...\n");
                         ASSERT(0);
                     }
                     if (op_count == 1) {
+#ifndef ADIVM
                         r->acctime = parunit_op_cost[i] + ssd_data_transfer_cost(s,s->params.page_size);
+#else
+                        r->acctime = parunit_op_cost[i] + (ssd_data_transfer_cost(s,s->params.page_size) * cnt);
+#endif     
                         r->schtime = parunit_tot_cost[i] + (op_count-1)*ssd_data_transfer_cost(s,s->params.page_size) + r->acctime;
                     } else {
                         r->acctime = ssd_data_transfer_cost(s,s->params.page_size);
@@ -1581,7 +1604,11 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
                     }
                 } else {
                     // for write
-                    r->acctime = parunit_op_cost[i] + ssd_data_transfer_cost(s,s->params.page_size);
+#ifndef ADIVM
+                        r->acctime = parunit_op_cost[i] + ssd_data_transfer_cost(s,s->params.page_size);
+#else
+                        r->acctime = parunit_op_cost[i] + (ssd_data_transfer_cost(s,s->params.page_size) * cnt);
+#endif     
                     r->schtime = parunit_tot_cost[i] + (op_count-1)*ssd_data_transfer_cost(s,s->params.page_size) + r->acctime;
                 }
 
