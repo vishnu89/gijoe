@@ -65,7 +65,7 @@ $(DISKSIM_ADIVIM_OBJ): %.o: %.c
 
 
 libadivim.a: $(MODULEDEPS) $(DISKSIM_ADIVIM_OBJ) 
-#modules/adivim_adv_param.o
+ #modules/adivim_adv_param.o
 	ar cru $@ $(DISKSIM_ADIVIM_OBJ) #modules/adivim_adv_param.o
 	ranlib $@
 	mkdir -p lib
