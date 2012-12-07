@@ -14,14 +14,19 @@ raw_layout.o: raw_layout.c /usr/include/stdio.h /usr/include/features.h \
   /usr/include/bits/time.h /usr/include/sys/sysmacros.h \
   /usr/include/bits/pthreadtypes.h /usr/include/alloca.h disksim_global.h \
   disksim_rand48.h disksim_malloc.h disksim_bitstring.h inline.h \
-  /usr/include/string.h /usr/include/xlocale.h /usr/include/math.h \
-  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
-  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
-  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
-  /usr/include/bits/mathcalls.h disksim_assertlib.h /usr/include/assert.h \
-  disksim_reqflags.h disksim_iosim.h disksim_ioface.h disksim_device.h \
-  disksim_orgface.h disksim_iotrace.h disksim_stat.h disksim_iodriver.h \
-  config.h ../libparam/include/libparam/libparam.h \
+  /usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed/limits.h \
+  /usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/string.h \
+  /usr/include/xlocale.h /usr/include/math.h /usr/include/bits/huge_val.h \
+  /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h \
+  /usr/include/bits/inf.h /usr/include/bits/nan.h \
+  /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h \
+  disksim_assertlib.h /usr/include/assert.h disksim_reqflags.h \
+  disksim_iosim.h disksim_ioface.h disksim_device.h disksim_orgface.h \
+  disksim_iotrace.h disksim_stat.h disksim_iodriver.h config.h \
+  ../libparam/include/libparam/libparam.h \
   ../libparam/include/libparam/bitvector.h \
   ../libddbg/include/libddbg/libddbg.h disksim_bus.h disksim_controller.h \
   disksim_disk.h disksim_ioqueue.h ../diskmodel/include/diskmodel/dm.h \
