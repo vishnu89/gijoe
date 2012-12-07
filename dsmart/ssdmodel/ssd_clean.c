@@ -92,6 +92,10 @@ static double ssd_clean_one_page
     cost += s->params.page_read_latency;
     cost += ssd_move_page(lp_num, blk, plane_num, elem_num, s);
 
+#ifdef ADIVIM
+    s->stat.write_page_num++;
+#endif
+
     // if the write is within the same plane, then the data need
     // not cross the pins. but if not, add the cost of transferring
     // the bytes across the pins
