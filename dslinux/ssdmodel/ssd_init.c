@@ -274,13 +274,13 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
     //cold_lba_talbe size if half
     if ((metadata->cold_lba_table = (int *)malloc((usable_blocks / 2) * sizeof(int))) == NULL) {
        	fprintf(stderr, "Error: malloc to lba table in ssd_element_metadata_init failed\n");
-       	fprintf(stderr, "Allocation size = %d\n", (usuable_blocks / 2) * sizeof(int));
+       	fprintf(stderr, "Allocation size = %d\n", (usable_blocks / 2) * sizeof(int));
        	exit(1);
     }
     
     metadata->cold_lba_size = (usable_blocks / 2);
     
-    for(ii=0; ii < (usuable_blocks / 2) ; ii++)
+    for(ii=0; ii < (usable_blocks / 2) ; ii++)
     {
 	    metadata->cold_lba_table[ii] = -1;
     }
@@ -296,7 +296,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
     }
     
     bytes_to_alloc = tot_blocks / (sizeof(unsigned char) * 8);
-    if (!(metadata->free_blocks = (unsigned char *)malloc(bytes_to_alloc))) {
+    if (!(metadata->free_blocks = (char *) malloc (bytes_to_alloc))) {
         fprintf(stderr, "Error: malloc to free_blocks in ssd_element_metadata_init failed\n");
         fprintf(stderr, "Allocation size = %d\n", bytes_to_alloc);
         exit(1);
@@ -435,7 +435,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
         // also increment the block sequence number.
         if (pp_index == 0) {
             bitpos = ssd_block_to_bitpos(currdisk, block);
-            ssd_set_bit(metadata->free_blocks, bitpos);
+            ssd_set_bit((unsigned char *) metadata->free_blocks, bitpos);
             metadata->block_usage[block].state = SSD_BLOCK_INUSE;
             metadata->block_usage[block].bsn = bsn ++;
         }
@@ -486,12 +486,12 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
     switch(currdisk->params.copy_back) {
         case SSD_COPY_BACK_DISABLE:
             bitpos = ssd_block_to_bitpos(currdisk, hot_active_block);
-            ssd_set_bit(metadata->free_blocks, bitpos);
+            ssd_set_bit((unsigned char *) metadata->free_blocks, bitpos);
             metadata->block_usage[hot_active_block].state = SSD_BLOCK_INUSE;
             metadata->block_usage[hot_active_block].bsn = bsn ++;
             
             bitpos = ssd_block_to_bitpos(currdisk, cold_active_block);
-            ssd_set_bit(metadata->free_blocks, bitpos);
+            ssd_set_bit((unsigned char *) metadata->free_blocks, bitpos);
             metadata->block_usage[cold_active_block].state = SSD_BLOCK_INUSE;
             metadata->block_usage[cold_active_block].bsn = bsn ++;
             
@@ -502,7 +502,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 int plane_active_block = SSD_PAGE_TO_BLOCK(metadata->plane_meta[i].hot_active_page, currdisk);
                 
                 bitpos = ssd_block_to_bitpos(currdisk, plane_active_block);
-                ssd_set_bit(metadata->free_blocks, bitpos);
+                ssd_set_bit((unsigned char *) metadata->free_blocks, bitpos);
                 metadata->block_usage[plane_active_block].state = SSD_BLOCK_INUSE;
                 metadata->block_usage[plane_active_block].bsn = bsn ++;
                 metadata->tot_free_blocks --;
@@ -510,7 +510,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 
                 plane_active_block = metadata->plane_meta[i].cold_active_block;
                 bitpos = ssd_block_to_bitpos(currdisk, plane_active_block);
-                ssd_set_bit(metadata->free_blocks, bitpos);
+                ssd_set_bit((unsigned char *) metadata->free_blocks, bitpos);
                 metadata->block_usage[plane_active_block].state = SSD_BLOCK_INUSE;
                 metadata->block_usage[plane_active_block].bsn = bsn ++;
                 metadata->tot_free_blocks --;
@@ -591,7 +591,7 @@ void ssd_alloc_queues(ssd_t *t)
 
 void ssd_initialize (void)
 {
-    static print1 = 1;
+    static int print1 = 1;
     int i, j;
     
     if (disksim->ssdinfo == NULL) {

@@ -8,9 +8,9 @@
 #include "ssd_utils.h"
 #include "modules/ssdmodel_ssd_param.h"
 #ifdef ADIVIM
-//#include "adivim.h"
-void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
-ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
+#include "adivim.h"
+//void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
+//ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
 #endif
 
 struct my_timing_t {
@@ -132,7 +132,7 @@ int ssd_free_bits(int plane_num, int elem_num, ssd_element_metadata *metadata, s
     int freecount = 0;
     int start = plane_num * s->params.blocks_per_plane;
     for (i = start; i < start + (int)s->params.blocks_per_plane; i ++) {
-        if (!ssd_bit_on(metadata->free_blocks, i)) {
+        if (!ssd_bit_on((unsigned char *) metadata->free_blocks, i)) {
             freecount ++;
         }
     }
@@ -620,6 +620,8 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
             _ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
         }
 	}
+    
+    return cost;
 }
 #endif
 /*
@@ -877,7 +879,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                 do {
                     int active_block;
                     int active_bsn;
-                    int _flag
+                    int _flag;
                     plane_metadata *pm = &metadata->plane_meta[j];
                     
 #ifndef ADIVIM
@@ -901,7 +903,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                             active_bsn = metadata->block_usage[active_block].bsn;
                         case 1 ://hot -> hot
                         case 2 ://cold->hot
-                            active_block = SSD_PAGE_TO_BLCOK(pm->hot_active_page, s);
+                            active_block = SSD_PAGE_TO_BLOCK(pm->hot_active_page, s);
                             active_bsn = metadata->block_usage[active_block].bsn;
                         default :
                             fprintf(stderr, "Error : Wrong hot/cold type\n");
@@ -960,7 +962,6 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     int tmp;
                     int size;
                     int additive = 0;
-                    int _flag;
                     
                     ssd_req *r;
                     listnode *n;
@@ -1155,7 +1156,10 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
                     int plane_num = r->plane_num;
                     // if this is the last page on the block, allocate a new block
                     if (ssd_last_page_in_block(metadata->plane_meta[plane_num].active_page, s)) {
+#ifndef ADIVIM
                         _ssd_alloc_active_block(plane_num, elem_num, s);
+#else
+#endif
                     }
                     
                     // issue the write to the current active page.
@@ -1255,7 +1259,10 @@ static double ssd_write_one_active_page(int blkno, int count, int elem_num, ssd_
         // which might still have free pages for writing.
         if (!cleaning_invoked ||
             ssd_last_page_in_block(metadata->active_page, s)) {
+#ifndef ADIVIM
             _ssd_alloc_active_block(-1, elem_num, s);
+#else
+#endif
         }
     }
     

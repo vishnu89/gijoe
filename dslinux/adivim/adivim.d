@@ -1,0 +1,1 @@
+adivim.o: adivim.c

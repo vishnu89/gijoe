@@ -41,8 +41,8 @@ export MEMSMODEL_LDPATH=$(MEMSMODEL_PREFIX)/lib
 export MEMSMODEL_LDFLAGS=-L$(MEMSMODEL_LDPATH) -lmemsmodel
 
 # path to adivim
-export ADIVIM_PREFIX=../../adivim
-export ADIVIM_INCL=$(ADIVIM_PREFIX)/include
-export ADIVIM_CFLAGS=-I$(ADIVIM_INCL)
-export ADIVIM_LDPATH=$(ADIVIM_PREFIX)/lib
-export ADIVIM_LDFLAGS=-L$(ADIVIM_LDPATH) -ladivim
+#export ADIVIM_PREFIX=../../adivim
+#export ADIVIM_INCL=$(ADIVIM_PREFIX)/include
+#export ADIVIM_CFLAGS=-I$(ADIVIM_INCL)
+#export ADIVIM_LDPATH=$(ADIVIM_PREFIX)/lib
+#export ADIVIM_LDFLAGS=-L$(ADIVIM_LDPATH) -ladivim

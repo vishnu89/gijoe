@@ -1,5 +1,5 @@
 // DiskSim SSD support
-// ©2008 Microsoft Corporation. All Rights Reserved
+// ï¿½2008 Microsoft Corporation. All Rights Reserved
 
 #include "ssd.h"
 #include "ssd_clean.h"
@@ -20,7 +20,7 @@ static int ssd_same_plane_blocks
 int ssd_can_clean_block(ssd_t *s, ssd_element_metadata *metadata, int blk)
 {
     int bitpos = ssd_block_to_bitpos(s, blk);
-    return ((ssd_bit_on(metadata->free_blocks, bitpos)) && (metadata->block_usage[blk].state == SSD_BLOCK_SEALED));
+    return ((ssd_bit_on((unsigned char *)metadata->free_blocks, bitpos)) && (metadata->block_usage[blk].state == SSD_BLOCK_SEALED));
 }
 
 /*
@@ -52,14 +52,20 @@ static double ssd_move_page(int lpn, int from_blk, int plane_num, int elem_num, 
     switch(s->params.copy_back) {
         case SSD_COPY_BACK_DISABLE:
             if (ssd_last_page_in_block(metadata->active_page, s)) {
+#ifndef ADIVIM
                 _ssd_alloc_active_block(-1, elem_num, s);
+#else
+#endif
             }
             break;
 
         case SSD_COPY_BACK_ENABLE:
             ASSERT(metadata->plane_meta[plane_num].active_page == metadata->active_page);
             if (ssd_last_page_in_block(metadata->active_page, s)) {
+#ifndef ADIVIM
                 _ssd_alloc_active_block(plane_num, elem_num, s);
+#else
+#endif
             }
             break;
 
@@ -134,7 +140,7 @@ void ssd_update_free_block_status(int blk, int plane_num, ssd_element_metadata *
     // clear the bit corresponding to this block in the
     // free blocks list for future use
     bitpos = ssd_block_to_bitpos(s, blk);
-    ssd_clear_bit(metadata->free_blocks, bitpos);
+    ssd_clear_bit((unsigned char *) metadata->free_blocks, bitpos);
     metadata->block_usage[blk].state = SSD_BLOCK_CLEAN;
     metadata->block_usage[blk].bsn = 0;
     metadata->tot_free_blocks ++;
@@ -422,7 +428,7 @@ int ssd_migrate_cold_data(int to_blk, double *mcost, int plane_num, int elem_num
     metadata->block_usage[to_blk].state = metadata->block_usage[from_blk].state;
 
     bitpos = ssd_block_to_bitpos(s, to_blk);
-    ssd_set_bit(metadata->free_blocks, bitpos);
+    ssd_set_bit((unsigned char *) metadata->free_blocks, bitpos);
     metadata->tot_free_blocks --;
     metadata->plane_meta[metadata->block_usage[to_blk].plane_num].free_blocks --;
 

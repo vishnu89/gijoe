@@ -1,8 +1,10 @@
 // DiskSim SSD support
-// ©2008 Microsoft Corporation. All Rights Reserved
+// ï¿½2008 Microsoft Corporation. All Rights Reserved
 
 #ifndef DISKSIM_SSD_TIMING_H
 #define DISKSIM_SSD_TIMING_H
+
+#include "ssd.h"
 
 typedef struct _ssd_timing_t {
     int     (*choose_element)(struct _ssd_timing_t *t, int blkno);

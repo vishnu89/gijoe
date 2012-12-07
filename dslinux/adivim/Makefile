@@ -14,7 +14,7 @@ FREEBLOCKS_OFLAGS =
 DEBUG_OFLAGS = -g -DASSERTS # -DDEBUG=1
 PROF_OFLAGS = -g -DASSERTS -p
 GPROF_OFLAGS = -g -DASSERTS -pg
-CFLAGS = $(DEBUG_OFLAGS) $(DISKSIM_CFLAGS) $(DISKMODEL_CFLAGS) -I../ -I$(DISKSIM_PREFIX)/src -I$(SSDMODEL_PREFIX)
+CFLAGS = $(DEBUG_OFLAGS) $(DISKSIM_CFLAGS) $(DISKMODEL_CFLAGS) $(SSDMODEL_CFLAGS) -I../ -I$(DISKSIM_PREFIX)/src -I$(SSDMODEL_PREFIX)
 
 #CC = cc
 CC = gcc -Wall -Wno-unused -MD
@@ -64,12 +64,13 @@ $(DISKSIM_ADIVIM_OBJ): %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
 
-libadivim.a: $(MODULEDEPS) $(DISKSIM_ADIVIM_OBJ) 
-	ar cru $@ $(DISKSIM_ADIVIM_OBJ)
+libadivim.a: $(MODULEDEPS) $(DISKSIM_ADIVIM_OBJ) #modules/adivim_adv_param.o
+	ar cru $@ $(DISKSIM_ADIVIM_OBJ) #modules/adivim_adv_param.o
 	ranlib $@
 	mkdir -p lib
 	cp libadivim.a lib
 
+depend: .depend 
 
 .depend: *.c *.h
 	$(MAKE) -C modules

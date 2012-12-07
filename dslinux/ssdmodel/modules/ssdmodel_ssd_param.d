@@ -23,7 +23,12 @@ modules/ssdmodel_ssd_param.o: modules/ssdmodel_ssd_param.c \
  /usr/include/i386-linux-gnu/bits/sigset.h \
  /usr/include/i386-linux-gnu/bits/time.h \
  /usr/include/i386-linux-gnu/sys/sysmacros.h \
- /usr/include/i386-linux-gnu/bits/pthreadtypes.h /usr/include/stdlib.h \
+ /usr/include/i386-linux-gnu/bits/pthreadtypes.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/limits.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/i386-linux-gnu/bits/posix1_lim.h \
+ /usr/include/i386-linux-gnu/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/i386-linux-gnu/bits/posix2_lim.h /usr/include/stdlib.h \
  /usr/include/i386-linux-gnu/bits/waitflags.h \
  /usr/include/i386-linux-gnu/bits/waitstatus.h /usr/include/alloca.h \
  /usr/include/math.h /usr/include/i386-linux-gnu/bits/huge_val.h \
@@ -44,4 +49,4 @@ modules/ssdmodel_ssd_param.o: modules/ssdmodel_ssd_param.c \
  ../diskmodel/include/diskmodel/dm_types.h /usr/include/inttypes.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include/stdint.h /usr/include/stdint.h \
  /usr/include/i386-linux-gnu/bits/wchar.h ../src//disksim_bus.h \
- ../src//config.h ../adivim/adivim.h
+ ../src//config.h

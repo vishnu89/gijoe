@@ -50,4 +50,5 @@ ssd_timing.o: ssd_timing.c ssd.h ../src//disksim_global.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include/stdint.h /usr/include/stdint.h \
  /usr/include/i386-linux-gnu/bits/wchar.h ../src//disksim_bus.h \
  ../src//config.h ssd_timing.h ssd_clean.h modules/ssdmodel_ssd_param.h \
- ssd_gang.h ssd_utils.h ../adivim/adivim.h
+ ssd_gang.h ssd_utils.h ../adivim/include/adivim.h \
+ ../ssdmodel/ssd_timing.h

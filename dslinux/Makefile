@@ -40,6 +40,7 @@ all:
 	$(MAKE) -C libparam
 	$(MAKE) -C diskmodel
 	$(MAKE) -C memsmodel
+	#$(MAKE) -C adivim
 	$(MAKE) -C ssdmodel
 	$(MAKE) -C adivim
 	$(MAKE) -C src
