@@ -7,8 +7,8 @@
 #include "ssd_gang.h"
 #include "ssd_init.h"
 #include "modules/ssdmodel_ssd_param.h"
-#ifdef ADIVIM
 #include "disksim_global.h"
+#ifdef ADIVIM
 #include "adivim.h"
 //void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
 //ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
@@ -1966,7 +1966,7 @@ void ssd_printstats (void)
 
    fprintf(outputfile, "\nSSD STATISTICS\n");
    fprintf(outputfile, "---------------------\n\n");
-#ifdef
+#ifdef ADIVIM
    fprintf(outputfile_adv, "\nADIVIM STATISTICS\n-------------------\n\n");
 
    int write_page_sum=0;

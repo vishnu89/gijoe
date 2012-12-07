@@ -2,9 +2,9 @@
 // Disksim SSD ADIVIM support
 // ©2012 Seoul National University lecture project1 ADIVIM PROJECT team. All right reserved.
 
-#ifdef ADIVIM
-
 #include "disksim_global.h"
+
+#ifdef ADIVIM
 #include "ssdmodel/ssd_timing.h"
 
 void adivim_init ();
