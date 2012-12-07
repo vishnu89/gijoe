@@ -553,7 +553,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 
         		// seal the last summary page. since we use the summary page
         		// as a metadata, we don't count it as a valid data page.
-        		metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -1;
+        		metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -2;
         		metadata->block_usage[metadata->cold_active_block].state = SSD_BLOCK_SEALED;
         		//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
 
@@ -612,7 +612,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 
         	// seal the last summary page. since we use the summary page
         	// as a metadata, we don't count it as a valid data page.
-        	metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -1;
+        	metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -2;
         	metadata->block_usage[metadata->cold_active_block].state = SSD_BLOCK_SEALED;
         	//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
 
