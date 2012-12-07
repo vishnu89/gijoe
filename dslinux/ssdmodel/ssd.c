@@ -8,7 +8,10 @@
 #include "ssd_init.h"
 #include "modules/ssdmodel_ssd_param.h"
 #ifdef ADIVIM
+//#include "adivim.h"
 #include "disksim_global.h"
+void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
+ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
 #endif
 
 #ifndef sprintf_s
@@ -527,7 +530,7 @@ static void ssd_activate_elem(ssd_t *currdisk, int elem_num)
                 r->plane_num = -1; // we don't know to which plane this req will be directed at
 #ifdef ADIVIM
                 r->hc_flag = req->hc_flag;
-                r->range = req->ragne;
+                r->range = req->range;
                 r->perform = req->perform;
 #endif
                 if (req->flags & READ) {
@@ -660,7 +663,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
    }
 #else
     //-------------------- Integreation ---------------------------
-    struct section*;
+    //struct section*;
     int flag, elem_num;
     int range = 0;
     int prev_flag = -1;
@@ -673,13 +676,11 @@ static void ssd_media_access_request_element (ioreq_event *curr)
     /* **** CAREFUL ... HIJACKING tempint2 and tempptr2 fields here **** */
     curr->tempint2 = count;
     
-    adivim_assign_judgement (curr);
+    adivim_assign_judgement (currdisk->timing_t, curr);
     
     while(count != 0) {
         
-        ADIVIM_JUDGEMENT adivim_judgement = adivim_get_judgement_by_blkno (currdisk->timing_t, blkno);
-        
-        switch (adivim_judgement.adivim_type) {
+        switch ((adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_type) {
             case ADIVIM_HOT : // Original page mapping
                 flag = 1; break;
             case ADIVIM_COLD : // Block mapping
@@ -737,7 +738,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
 			       			}
                             
                             start = 1;
-                            perfom = 1;
+                            perform = 1;
                             break;
                         case 3 :
                             //hot_invalid();

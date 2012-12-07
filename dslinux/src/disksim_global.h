@@ -280,7 +280,7 @@ typedef enum {
 typedef int ADIVIM_APN;
 typedef ADIVIM_APN ADIVIM_HAPN;
 typedef ADIVIM_APN ADIVIM_CAPN;
-ADIVIM_APN ADIVIM_APN_INFINITY = (ADIVIM_APN) MAX_INT;
+#define ADIVIM_APN_INFINITY = (ADIVIM_APN) INT_MAX;
 typedef struct _adivim_judgement {
     ADIVIM_TYPE adivim_type;
     ADIVIM_HAPN adivim_hapn;

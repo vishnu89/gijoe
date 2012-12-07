@@ -8,7 +8,9 @@
 #include "ssd_utils.h"
 #include "modules/ssdmodel_ssd_param.h"
 #ifdef ADIVIM
-#include "adivim.h"
+//#include "adivim.h"
+void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
+ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
 #endif
 
 struct my_timing_t {
@@ -418,7 +420,7 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
     }
     
     // add the entry to the lba table
-    metadata->hot_lba_table[lpn] = hot_active_page;
+    metadata->hot_lba_table[lpn] = active_page;
     
     // increment the usage count on the active block
     metadata->block_usage[active_block].page[pagepos_in_block] = lpn;
@@ -438,7 +440,7 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
     //printf("lpn %d active pg %d\n", lpn, active_page);
     
     // go to the next free page
-    metadata->hot_active_page = hot_active_page + 1;
+    metadata->hot_active_page = active_page + 1;
     metadata->plane_meta[active_plane].hot_active_page = metadata->hot_active_page;
     
     // if this is the last data page on the block, let us write the
@@ -556,7 +558,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
         		metadata->block_usage[metadata->cold_active_block].state = SSD_BLOCK_SEALED;
         		//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
                 
-                _ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0)
+                _ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
             }
 		}
         
@@ -584,10 +586,10 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
         		// seal the last summary page. since we use the summary page
         		// as a metadata, we don't count it as a valid data page.
         		metadata->block_usage[prev_block].page[s->params.pages_per_block - 1] = -1;
-        		metadata->block_usage[prev_blcok].state = SSD_BLOCK_SEALED;
+        		metadata->block_usage[prev_block].state = SSD_BLOCK_SEALED;
         		//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
                 
-                _ssd_alloc_active_block(metadata->block_usage[prev_blcok].plane_num, elem_num, s, 0)
+                _ssd_alloc_active_block(metadata->block_usage[prev_block].plane_num, elem_num, s, 0);
             }
 		}
 	}
@@ -615,7 +617,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
         	metadata->block_usage[metadata->cold_active_block].state = SSD_BLOCK_SEALED;
         	//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
             
-            _ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0)
+            _ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
         }
 	}
 }
@@ -635,7 +637,7 @@ void _ssd_alloc_active_block(int plane_num, int elem_num, ssd_t *s, int flag)
 #endif
 {
     ssd_element_metadata *metadata = &(s->elements[elem_num].metadata);
-    unsigned char *free_blocks = metadata->free_blocks;
+    unsigned char *free_blocks = (unsigned char *) metadata->free_blocks;
     int active_block = -1;
     int prev_pos;
     int bitpos;
@@ -742,10 +744,10 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
     listnode **parunits;
     int filled = 0;
 #ifdef ADIVIM
-    struct section*;
+    //struct section*;
     int cbn;
     int flag;
-#endif;
+#endif
     
     // parunits is an array of linked list structures, where
     // each entry in the array corresponds to one parallel unit
@@ -765,9 +767,8 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
             prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
 #else
             //section = get_from_ADIVIM(reqs[i]->blkno);
-            ADIVIM_JUDGEMENT adivim_judgement = adivim_get_judgement_by_blkno (currdisk->timing_t, blkno);
             
-            switch (adivim_judgement.adivim_type) {
+            switch ((adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_type) {
                 case ADIVIM_HOT : // Original page mapping
                     flag = 1; break;
                 case ADIVIM_COLD : // Block mapping
@@ -780,7 +781,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
             switch(flag){
                 case 0 : //cold->cold
                 case 3 : //hot->cold
-                    lpn = section->c_lpn;
+                    lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_capn;
                     cbn = lpn / s->params.pages_per_block;
                     prev_block = metadata->cold_lba_table[cbn];
                     prev_page = prev_block + (lpn % s->params.pages_per_block);
@@ -788,7 +789,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     break;
                 case 1 ://hot->hot
                 case 2 ://cold->hot
-                    lpn = section->h_lpn;
+                    lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_hapn;
                     prev_page = metadata->hot_lba_table[lpn];
                     ASSERT(prev_page != -1);
                     prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
@@ -832,9 +833,8 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
             prev_bsn = metadata->block_usage[prev_block].bsn;
 #else
             //section = get_from_ADIVIM(reqs[i]->blkno);
-            ADIVIM_JUDGEMENT adivim_judgement = adivim_get_judgement_by_blkno (currdisk->timing_t, blkno);
             
-            switch (adivim_judgement.adivim_type) {
+            switch ((adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_type) {
                 case ADIVIM_HOT : // Original page mapping
                     flag = 1; break;
                 case ADIVIM_COLD : // Block mapping
@@ -846,7 +846,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
             }
             switch(flag){
                 case 0 : //cold->colD
-                    lpn = section->c_lpn;
+                    lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_capn;
                     cbn = lpn / s->params.pages_per_block;
                     prev_block = metadata->cold_lba_table[cbn];
                     prev_page = prev_block + (lpn % s->params.pages_per_block);
@@ -854,7 +854,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     ASSERT(prev_page != -1);
                     break;
                 case 1 ://hot->hot
-                    lpn = section->h_lpn;
+                    lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_hapn;
                     prev_page = metadata->hot_lba_table[lpn];
                     ASSERT(prev_page != -1);
                     prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
@@ -877,13 +877,24 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                 do {
                     int active_block;
                     int active_bsn;
+                    int _flag
                     plane_metadata *pm = &metadata->plane_meta[j];
                     
 #ifndef ADIVIM
                     active_block = SSD_PAGE_TO_BLOCK(pm->active_page, s);
                     active_bsn = metadata->block_usage[active_block].bsn;
 #else
-                    switch(section->flag){
+                    switch ((adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_type) {
+                        case ADIVIM_HOT : // Original page mapping
+                            _flag = 1; break;
+                        case ADIVIM_COLD : // Block mapping
+                            _flag = 0; break;
+                        case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
+                            _flag = 3; break;
+                        case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
+                            _flag = 2; break;
+                    }
+                    switch(_flag){
                         case 0 ://cold -> cold
                         case 3 ://hot->cold
                             active_block = pm->cold_active_block;
@@ -949,11 +960,22 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     int tmp;
                     int size;
                     int additive = 0;
+                    int _flag;
                     
                     ssd_req *r;
                     listnode *n;
                     
-                    switch(section->flag){
+                    switch ((adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_type) {
+                        case ADIVIM_HOT : // Original page mapping
+                            flag = 1; break;
+                        case ADIVIM_COLD : // Block mapping
+                            flag = 0; break;
+                        case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
+                            flag = 3; break;
+                        case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
+                            flag = 2; break;
+                    }
+                    switch(_flag){
                         case 0 :
                         case 1 :
                             // see if we can write to this block
