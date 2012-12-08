@@ -8,11 +8,7 @@
 #include "ssd_init.h"
 #include "modules/ssdmodel_ssd_param.h"
 #include "disksim_global.h"
-#ifdef ADIVIM
-#include "adivim.h"
-//void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
-//ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
-#endif
+
 
 #ifndef sprintf_s
 #define sprintf_s3(x,y,z) sprintf(x,z)
@@ -672,7 +668,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
     ssd_element *elem;
     ioreq_event *tmp;
     int perform = 1;
-    
+    unsigned int cbn; 
+    int temp_flag;
     /* **** CAREFUL ... HIJACKING tempint2 and tempptr2 fields here **** */
     curr->tempint2 = count;
     
@@ -720,6 +717,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 if(perform == 1)
                                 {
                                     tmp->perform = 1;
+				    tmp->range = range;
                                     perform = 0;
                                 }
                                 else{
@@ -743,7 +741,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case 3 :
                             //hot_invalid();
                             
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
                             
        						elem = &currdisk->elements[elem_num];
                             
@@ -778,6 +776,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 if(start == 1)
                 {
                     save = blkno;
+		    cbn = (adivim_get_judgement_by_blkno (currdisk->timing_t, save)).adivim_capn / (currdisk->params.pages_per_block -1);
                     start = 0;
                     range = -1;
                 }
@@ -787,14 +786,29 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 range++;
                 
                 prev_flag = flag;
-                
-                if(count == 0)
-                {
-                    elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+
+		if(count != 0)
+		{
+        		switch ((adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_type) {
+            			case ADIVIM_HOT : // Original page mapping
+                			temp_flag = 1; break;
+            			case ADIVIM_COLD : // Block mapping
+                			temp_flag = 0; break;
+            			case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
+                			temp_flag = 3; break;
+            			case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
+                			temp_flag = 2; break;
+        		}
+
+			if(flag == temp_flag){
+
+			if(cbn != ((adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_capn / (currdisk->params.pages_per_block -1)))
+			{
+				elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
                     
        				elem = &currdisk->elements[elem_num];
        				
-                    // create a new sub-request for the element
+                    		// create a new sub-request for the element
        				tmp = (ioreq_event *)getfromextraq();
       				tmp->devno = curr->devno;
        				tmp->busno = curr->busno;
@@ -802,16 +816,50 @@ static void ssd_media_access_request_element (ioreq_event *curr)
        				tmp->blkno = save;
        				tmp->bcount = currdisk->params.page_size;
                     
-                    tmp->hc_flag = flag;
+                    		tmp->hc_flag = flag;
 		       		tmp->range = range;
                     
-                    tmp->tempptr2 = curr;
+                    		tmp->tempptr2 = curr;
                     
-                    elem->metadata.reqs_waiting ++;
+                    		elem->metadata.reqs_waiting ++;
                     
-                    // add the request to the corresponding element's queue
-                    ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+                    		// add the request to the corresponding element's queue
+                    		ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
 	       			ssd_activate_elem(currdisk, elem_num);
+
+				cbn  = (adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_capn / (currdisk->params.pages_per_block -1);
+				save = blkno;
+				range = -1;
+
+			}
+
+			}
+
+		}
+		else
+                {
+                   	elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                   	 	
+       		   	elem = &currdisk->elements[elem_num];
+       					
+                	    // create a new sub-request for the element
+       	       		tmp = (ioreq_event *)getfromextraq();
+      			tmp->devno = curr->devno;
+       			tmp->busno = curr->busno;
+       			tmp->flags = curr->flags;
+       			tmp->blkno = save;
+       			tmp->bcount = currdisk->params.page_size;
+                    
+                    	tmp->hc_flag = flag;
+		       	tmp->range = range;
+                    
+                    	tmp->tempptr2 = curr;
+                    
+                    	elem->metadata.reqs_waiting ++;
+                    
+                    	// add the request to the corresponding element's queue
+                    	ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       		ssd_activate_elem(currdisk, elem_num);
                     
                 }
                 
@@ -823,28 +871,28 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case (-1) :
                             break;
                         case 0 :
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
                             
-       						elem = &currdisk->elements[elem_num];
+       			    elem = &currdisk->elements[elem_num];
                             
                             // create a new sub-request for the element
-       						tmp = (ioreq_event *)getfromextraq();
-      						tmp->devno = curr->devno;
-       						tmp->busno = curr->busno;
-       						tmp->flags = curr->flags;
-       						tmp->blkno = save;
-       						tmp->bcount = currdisk->params.page_size;
+       			    tmp = (ioreq_event *)getfromextraq();
+      			    tmp->devno = curr->devno;
+       			    tmp->busno = curr->busno;
+       			    tmp->flags = curr->flags;
+       		            tmp->blkno = save;
+       		    	    tmp->bcount = currdisk->params.page_size;
                             
                             tmp->hc_flag = prev_flag;
                             tmp->range = range;
                             
-				       		tmp->tempptr2 = curr;
+			    tmp->tempptr2 = curr;
                             
                             elem->metadata.reqs_waiting ++;
                             
-				     		// add the request to the corresponding element's queue
-	      					ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
-	       					ssd_activate_elem(currdisk, elem_num);
+			    // add the request to the corresponding element's queue
+	      		    ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       		    ssd_activate_elem(currdisk, elem_num);
                             
                             start = 1;
                             
@@ -872,6 +920,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 {
                                     tmp->perform = 1;
                                     perform = 0;
+				    tmp->range = range;
                                 }
                                 else{
                                     tmp->perform = 0;
@@ -895,7 +944,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case 3 :
                             //hot_invalid();
                             
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
                             
        						elem = &currdisk->elements[elem_num];
                             
@@ -961,28 +1010,28 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case (-1):
                             break;
                         case 0 :
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
                             
-       						elem = &currdisk->elements[elem_num];
+       			    elem = &currdisk->elements[elem_num];
                             
                             // create a new sub-request for the element
-       						tmp = (ioreq_event *)getfromextraq();
-      						tmp->devno = curr->devno;
-       						tmp->busno = curr->busno;
-       						tmp->flags = curr->flags;
-       						tmp->blkno = save;
-       						tmp->bcount = currdisk->params.page_size;
+       			    tmp = (ioreq_event *)getfromextraq();
+      			    tmp->devno = curr->devno;
+       			    tmp->busno = curr->busno;
+       			    tmp->flags = curr->flags;
+       			    tmp->blkno = save;
+       			    tmp->bcount = currdisk->params.page_size;
                             
                             tmp->hc_flag = prev_flag;
                             tmp->range = range;
                             
-				       		tmp->tempptr2 = curr;
+			    tmp->tempptr2 = curr;
                             
                             elem->metadata.reqs_waiting ++;
                             
-				     		// add the request to the corresponding element's queue
-	      					ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
-	       					ssd_activate_elem(currdisk, elem_num);
+			    // add the request to the corresponding element's queue
+	      		    ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       		    ssd_activate_elem(currdisk, elem_num);
                             
                             start = 1;
                             
@@ -992,7 +1041,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case 3 :
                             //hot_invalid();
                             
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
                             
        						elem = &currdisk->elements[elem_num];
                             
@@ -1059,6 +1108,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         if(perform == 1)
                         {
                             tmp->perform = 1;
+			    tmp->range = range;
                             perform = 0;
                         }
                         else{
@@ -1083,7 +1133,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case (-1):
                             break;
                         case 0 :
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
                             
        						elem = &currdisk->elements[elem_num];
                             
@@ -1134,7 +1184,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 if(perform == 1)
                                 {
                                     tmp->perform = 1;
-                                    perform = 0;
+                                    tmp->range = range;
+				    perform = 0;
                                 }
                                 else{
                                     tmp->perform = 0;
@@ -1163,7 +1214,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 if(start == 1)
                 {
                     save = blkno;
-                    range = -1;
+                    cbn = (adivim_get_judgement_by_blkno (currdisk->timing_t, save)).adivim_capn / (currdisk->params.pages_per_block -1);
+		    range = -1;
                     start = 0;
                 }
                 
@@ -1172,15 +1224,29 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 range++;
                 
                 prev_flag = flag;
-                
-                if(count == 0){
-                    //hot_invalid();
-                    
-                    elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+ 
+		if(count != 0)
+		{
+        		switch ((adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_type) {
+            			case ADIVIM_HOT : // Original page mapping
+                			temp_flag = 1; break;
+            			case ADIVIM_COLD : // Block mapping
+                			temp_flag = 0; break;
+            			case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
+                			temp_flag = 3; break;
+            			case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
+                			temp_flag = 2; break;
+        		}
+
+			if(flag == temp_flag){
+
+			if(cbn != ((adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_capn / (currdisk->params.pages_per_block -1)))
+			{
+				elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
                     
        				elem = &currdisk->elements[elem_num];
        				
-                    // create a new sub-request for the element
+                    		// create a new sub-request for the element
        				tmp = (ioreq_event *)getfromextraq();
       				tmp->devno = curr->devno;
        				tmp->busno = curr->busno;
@@ -1188,17 +1254,52 @@ static void ssd_media_access_request_element (ioreq_event *curr)
        				tmp->blkno = save;
        				tmp->bcount = currdisk->params.page_size;
                     
-                    tmp->hc_flag = flag;
+                    		tmp->hc_flag = flag;
 		       		tmp->range = range;
                     
-                    tmp->tempptr2 = curr;
+                    		tmp->tempptr2 = curr;
                     
-                    elem->metadata.reqs_waiting ++;
+                    		elem->metadata.reqs_waiting ++;
                     
-                    // add the request to the corresponding element's queue
-                    ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+                    		// add the request to the corresponding element's queue
+                    		ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
 	       			ssd_activate_elem(currdisk, elem_num);
-                }
+
+				cbn  = (adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_capn / (currdisk->params.pages_per_block -1);
+				save = blkno;
+				range = -1;
+
+			}
+
+			}
+
+		}
+		else
+                {
+                   	elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                   	 	
+       		   	elem = &currdisk->elements[elem_num];
+       					
+                	    // create a new sub-request for the element
+       	       		tmp = (ioreq_event *)getfromextraq();
+      			tmp->devno = curr->devno;
+       			tmp->busno = curr->busno;
+       			tmp->flags = curr->flags;
+       			tmp->blkno = save;
+       			tmp->bcount = currdisk->params.page_size;
+                    
+                    	tmp->hc_flag = flag;
+		       	tmp->range = range;
+                    
+                    	tmp->tempptr2 = curr;
+                    
+                    	elem->metadata.reqs_waiting ++;
+                    
+                    	// add the request to the corresponding element's queue
+                    	ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
+	       		ssd_activate_elem(currdisk, elem_num);
+                    
+                }               
                 
                 break;
                 

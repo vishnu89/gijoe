@@ -35,7 +35,6 @@ typedef struct {
 	int write_req_num;
 	int avg_lifetime;
 #endif
-
 } ssd_stat_t;
 
 /*

@@ -9,7 +9,7 @@
 #include "modules/ssdmodel_ssd_param.h"
 #include "disksim_global.h"
 #ifdef ADIVIM
-#include "adivim.h"
+#include "../adivim/adivim.h"
 //extern void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
 //extern ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
 #endif
@@ -1138,14 +1138,14 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 		ii = 0;
 		iter = 1;
 		b_size = 1;
-		save_lpn[ii] = (adivim_get_judgement_by_blkno(s->timing_t, blk)).advim_capn;
+		save_lpn[ii] = (adivim_get_judgement_by_blkno(s->timing_t, blk)).adivim_capn;
 		cbn = save_lpn[ii] / (s->params.pages_per_block - 1);
 		
 
 		for(ii= 1; ii < (range + 1) ; ii++)
 		{
 			//sect = get_from_ADIVIM(blk);
-			save_lpn[ii] = (adivim_get_judgement_by_blkno(s->timing_t, blk)).advim_capn;
+			save_lpn[ii] = (adivim_get_judgement_by_blkno(s->timing_t, blk)).adivim_capn;
 			if(cbn != (save_lpn[ii] / (s->params.pages_per_block - 1)))
 			{
 				cbn = save_lpn[ii] / (s->params.pages_per_block - 1);
@@ -1162,109 +1162,115 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 			b_size++;
 			blk += s->params.page_size;
 		}
+
+
+		bucket = (unsigned int*)malloc(sizeof(unsigned int) * b_size);
+		
+		for(jj=b_size ; jj > 0 ; jj--)
+		{
+			bucket[b_size-jj] = save_lpn[ii-jj];
+		}
+		
+		cost += _ssd_write_block_osr(s, metadata, elem_num, bucket, b_size);
+					
+		free(bucket);
+		free(save_lpn);
 		
 	}
 }
-/*
-void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, int flag, int perform)
+
+void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, int flag, int perform, int e_num, int p_num)
 {
 	//flag 1 : read, 0 : write
 	int elem_num;
 	int i;
 	ssd_element_metadata* temp;
+	
 	struct section* sect;
+	
 	unsigned int temp_block;
 	unsigned int temp_pos;
 	unsigned int temp_page;
+	
 	int temp_lpn;
+	int temp_cbn;
 	int temp_blk = blk;
 	int cost = 0;
     	
-	struct section* sect;
-    	int ii, jj;
-    	int b_size = 0;
-    	unsigned int cbn;
-    	unsigned int *save_lpn;
-    	int iter = 0;
-    	unsigned int *bucket;
 	int lpn;
 
 	int plane_num = 0;
 
-	if(flag == 0 || (flag == 1 && perform == 1)){
+	if(perform == 1){
 	
 	//element unknown.......
 	//assuming elem_num.....
-
-	sect = get_from_ADIVIM(blk);
-	save_lpn = (unsigned int*)malloc(sizeof(unsigned int) * (r->range + 1));
-	ii = 0;
-	iter = 1;
-	b_size = 1;
-	save_lpn[ii] = sect->c_lpn;
-        cbn = sect->c_lpn / (s->params.pages_per_block - 1);
-	
-	for(ii= 1; ii < (range + 1) ; ii++)
-	{
-		sect = get_from_ADIVIM(blk);
-		save_lpn[ii] = sect->c_lpn;
-		if(cbn != (sect->c_lpn / (s->params.pages_per_block - 1)))
+		for(i=0; i<=range ; i++)
 		{
-			cbn = sect->c_lpn / (s->params.pages_per_block - 1);
-			iter++;
-			bucket = (unsigned int*)malloc(sizeof(unsigned int) * b_size);
-			for(jj= b_size; jj > 0 ; jj--)
+		
+			sect = get_from_ADIVIM(blk);
+			temp_lpn = (adivim_get_judgement_by_blkno (s->timing_t, temp_blk)).adivim_capn;
+			temp_cbn = temp_lpn / (s->params.pages_per_block -1);
+			elem_num = ssd_choose_element(s->timing_t, temp_cbn);
+			temp = &(s->elements[elem_num].metadata);
+			temp_block = temp->cold_lba_table[temp_cbn];
+			
+			ASSERT(temp_block != -1);
+			
+			temp_pos = temp_lpn % (s->params.pages_per_block - 1);
+			
+			temp->block_usage[temp_block].page[temp_pos] = -2;
+			temp->block_usage[temp_block].num_valid --;
+			
+			/*doubt logic about initialisze*/
+			/*so, to begin with cover by comment*/
+			/*if(temp->block_usage[temp_block].num_valid == 0)
 			{
-				bucket[b_size-jj] = save_lpn[ii-jj];
+				temp->cold_lba_table[temp_cbn] = -1;
 			}
-			cost += _ssd_write_block_osr(s, metadata, act_elem_num, bucket, b_size);
-			free(bucket);		
-			b_size = 1;
+			*/
 		}
-		b_size++;
-		blk += s->params.page_size;
-	}
-	
+
 	}
 
 	if(flag == 1)
 	{
 	   cost = 0;
-	   for(ii=0; ii <= range ; ii++){
+	  // for(ii=0; ii <= range ; ii++){
 		
-		elem_num = (blk/(s->params.element_stride_pages*s->params.page_size)) % s->params.nelements;
-		temp = &(s->elements[elem_num].metadata);
+		//elem_num = (blk/(s->params.element_stride_pages*s->params.page_size)) % s->params.nelements;
+		//temp = &(s->elements[elem_num].metadata);
 		
 		sect = get_from_ADIVIM(blk);
                 lpn = sect->h_lpn;
 
-		for(plane_num = 0; plane_num < s->params.planes_per_pkg ; plane_num ++)
-		{
-			if(temp->hot_active_page == temp->plane_meta[palne_num].hot_active_pge)
-			{
-				break;
-			}
-		}
-
-		ASSERT(plane_num < 8);
+	//	for(plane_num = 0; plane_num < s->params.planes_per_pkg ; plane_num ++)
+	//	{
+	//		if(metadata->hot_active_page == metadata->plane_meta[palne_num].hot_active_pge)
+	//		{
+	//			break;
+	//		}
+	//	}
+//
+//		ASSERT(plane_num < 8);
 		
 		// if this is the last page on the block, allocate a new block
-               	if (ssd_last_page_in_block(temp->plane_meta[plane_num].hot_active_page, s)) {
-                	    _ssd_alloc_active_block(plane_num, elem_num, s, 1);
+               	if (ssd_last_page_in_block(metadata->plane_meta[p_num].hot_active_page, s)) {
+                	    _ssd_alloc_active_block(p_num, e_num, s, 1);
                 }
 
                 // issue the write to the current active page.
                 // we need to transfer the data across the serial pins for write.
-                metadata->hot_active_page = metadata->plane_meta[plane_num].hot_active_page;
+                metadata->hot_active_page = metadata->plane_meta[p_num].hot_active_page;
                 //printf("elem %d plane %d ", elem_num, plane_num);
                 cost += _ssd_write_page_osr(s, metadata, lpn);
 
-		blk += s->params.page_size;
-	   }
+	//	blk += s->params.page_size;
+	  // }
 	}
 }
-*/
 #endif
+
 static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, ssd_t *s)
 {
     double max_cost = 0;
@@ -1396,10 +1402,9 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 					parunit_op_cost[i] = s->params.page_read_latency;
 					break;
 				case 2://cold->hot
-					if(r->perform == 1)
-					{
-						//cold_invalid & wrtie();
-					}
+					
+					cold_invalid(s, metadata, r->blk, r->range, 1 , r->perform, elem_num, plane_num);
+					
 	
 					parunit_op_cost[i] = s->params.page_read_latency;
 					break;
@@ -1498,11 +1503,9 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 					
 					break;
 				case 2://cold->hot
-					if(r->perform == 1)
-					{
-						//cold_invalid & wrtie();
-					}
-	
+
+					cold_invalid(s, metadata, r->blk, r->range, 0 , r->perform, elem_num, plane_num);
+
 					sect = get_from_ADIVIM(r->blk);
                     			lpn = sect->h_lpn;
 					// if this is the last page on the block, allocate a new block

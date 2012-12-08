@@ -40,9 +40,9 @@ all:
 	$(MAKE) -C libparam
 	$(MAKE) -C diskmodel
 	$(MAKE) -C memsmodel
-	#$(MAKE) -C adivim
-	$(MAKE) -C ssdmodel
 	$(MAKE) -C adivim
+	$(MAKE) -C ssdmodel
+	#$(MAKE) -C adivim
 	$(MAKE) -C src
 	$(MAKE) -C diskmodel/layout_g4_tools
         # If dixtrac is included, build it with the distribution
