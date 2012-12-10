@@ -6,7 +6,7 @@
 
 #ifdef ADIVIM
 #include "disksim_global.h"
-#include "ssdmodel/ssd_timing.h"
+#include "ssd_timing.h"
 
 void adivim_init ();
 /*
@@ -14,7 +14,7 @@ void adivim_init ();
  * allocate apn.
  * To do so, this function updates section list, judges section and records the judgement in the request
  */
-void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
-ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
+void adivim_assign_judgement (void *t, ioreq_event *req);
+ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (void *t, int blkno);
 
 #endif

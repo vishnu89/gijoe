@@ -55,6 +55,8 @@ modules:
 	mkdir -p include/ssdmodel/modules
 	cp -pR modules/*.h include/ssdmodel/modules
 	cp ssd.h include/ssdmodel
+    cp ssd_timing.h include/ssdmodel
+    cp adivim.h include/ssdmodel 
 
 modules/*.h modules/*.c:
 	$(MAKE) -C modules
@@ -62,7 +64,8 @@ modules/*.h modules/*.c:
 -include *.d
 
 DISKSIM_SSD_SRC = ssd.c ssd_timing.c ssd_clean.c \
-			    ssd_gang.c ssd_init.c ssd_utils.c 
+			    ssd_gang.c ssd_init.c ssd_utils.c \
+                adivim.c
 
 DISKSIM_SSD_OBJ = $(DISKSIM_SSD_SRC:.c=.o) 
 
