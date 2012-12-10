@@ -9,7 +9,6 @@
 #include "modules/ssdmodel_ssd_param.h"
 #include "disksim_global.h"
 #ifdef ADIVIM
-#include "../adivim/adivim.h"
 //extern void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
 //extern ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
 #endif

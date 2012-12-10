@@ -9,12 +9,12 @@
 #include <stdbool.h>
 #include "adivim.h"
 #include "ssd_timing.h"
-#include "../ssdmodel/modules/ssdmodel_ssd_param.h"
-#include "../ssdmodel/ssd_utils.h" // For listnode.
+#include "ssdmodel_ssd_param.h"
+#include "ssd_utils.h" // For listnode.
 
 void adivim_init ();
-void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req);
-ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno);
+void adivim_assign_judgement (void *t, ioreq_event *req);
+ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (void *t, int blkno);
 
 /*
  * Access log as part of section information.
@@ -92,7 +92,7 @@ struct my_timing_t {
     int next_write_page[SSD_MAX_ELEMENTS];
 };
 
-void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req)
+void adivim_assign_judgement (void *t, ioreq_event *req)
 {
     struct my_timing_t *tt = (struct my_timing_t *) t;
     ADIVIM_SECTION *section = (ADIVIM_SECTION *) malloc (sizeof (ADIVIM_SECTION));
@@ -114,7 +114,7 @@ void adivim_assign_judgement (ssd_timing_t *t, ioreq_event *req)
     //adivim_mark (req, adivim_judge (section_job (*adivim_section_list, section)));
 }
 
-ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (ssd_timing_t *t, int blkno)
+ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (void *t, int blkno)
 {
     struct my_timing_t *tt = (struct my_timing_t *) t;
     ADIVIM_APN pg = blkno/(tt->params->page_size);
