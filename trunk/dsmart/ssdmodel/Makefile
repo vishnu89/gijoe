@@ -4,8 +4,7 @@
 include .paths
 
 LDFLAGS = -lm -L. -ldisksim $(DISKMODEL_LDFLAGS) $(MEMSMODEL_LDFLAGS) \
-                            $(LIBPARAM_LDFLAGS) $(LIBDDBG_LDFLAGS) \
-                            $(ADIVIM_LDFLAGS)
+                            $(LIBPARAM_LDFLAGS) $(LIBDDBG_LDFLAGS)
 
 HP_FAST_OFLAGS = +O4
 NCR_FAST_OFLAGS = -O4 -Hoff=BEHAVED 
@@ -13,7 +12,7 @@ FREEBLOCKS_OFLAGS =
 DEBUG_OFLAGS = -g -DASSERTS # -DDEBUG=1
 PROF_OFLAGS = -g -DASSERTS -p
 GPROF_OFLAGS = -g -DASSERTS -pg
-CFLAGS = $(DEBUG_OFLAGS) $(DISKSIM_CFLAGS) $(DISKMODEL_CFLAGS) $(ADIVIM_CFLAGS) -I../ -I$(DISKSIM_PREFIX)/src -I$(ADIVIM_PREFIX)
+CFLAGS = $(DEBUG_OFLAGS) $(DISKSIM_CFLAGS) $(DISKMODEL_CFLAGS) $(ADIVIM_CFLAGS) -I../ -I$(DISKSIM_PREFIX)/src
 
 #CC = cc
 CC = gcc -Wall -Wno-unused -MD
@@ -55,8 +54,8 @@ modules:
 	mkdir -p include/ssdmodel/modules
 	cp -pR modules/*.h include/ssdmodel/modules
 	cp ssd.h include/ssdmodel
-    cp ssd_timing.h include/ssdmodel
-    cp adivim.h include/ssdmodel 
+	cp ssd_timing.h include/ssdmodel
+	cp adivim.h include/ssdmodel 
 
 modules/*.h modules/*.c:
 	$(MAKE) -C modules
