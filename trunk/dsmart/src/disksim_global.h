@@ -276,29 +276,29 @@ typedef struct ev {
 } event;
     
 #ifdef ADIVIM
-typedef enum {
-    ADIVIM_HOT,
-    ADIVIM_COLD
-} ADIVIM_TYPE;
-typedef int ADIVIM_APN;
-typedef ADIVIM_APN ADIVIM_HAPN;
-typedef ADIVIM_APN ADIVIM_CAPN;
-static const ADIVIM_APN ADIVIM_APN_INFINITY = (ADIVIM_APN) INT_MAX;
-typedef struct _adivim_judgement {
-    ADIVIM_TYPE adivim_type;
-    ADIVIM_HAPN adivim_hapn;
-    ADIVIM_CAPN adivim_capn;
-} ADIVIM_JUDGEMENT;
+    typedef enum {
+        ADIVIM_HOT,
+        ADIVIM_COLD
+    } ADIVIM_TYPE;
+    typedef int ADIVIM_APN;
+    typedef ADIVIM_APN ADIVIM_HAPN;
+    typedef ADIVIM_APN ADIVIM_CAPN;
+    static const ADIVIM_APN ADIVIM_APN_INFINITY = (ADIVIM_APN) INT_MAX;
+    typedef struct _adivim_judgement {
+        ADIVIM_TYPE adivim_type;
+        ADIVIM_HAPN adivim_hapn;
+        ADIVIM_CAPN adivim_capn;
+    } ADIVIM_JUDGEMENT;
 #endif
     
 typedef struct ioreq_ev {
 #ifdef ADIVIM
-    int    hc_flag; 	//0 : cold -> cold
-                        //1 : hot -> hot
-                        //2 : cold -> hot
-                        //3 : hot -> cold
-    int 	  range;	//cold block write page range
-    int    perform;	//hot/cold invalid perform
+    int   hc_flag; 	//0 : cold -> cold
+                    //1 : hot -> hot
+                    //2 : cold -> hot
+                    //3 : hot -> cold
+    int   range;	//cold block write page range
+    int   perform;	//hot/cold invalid perform
 #endif
    double time;
    int    type;
@@ -327,10 +327,6 @@ typedef struct ioreq_ev {
    int    batch_size;
    struct ioreq_ev *batch_next;
    struct ioreq_ev *batch_prev;
-    
-#ifdef ADIVIM
-    ADIVIM_JUDGEMENT adivim_judgement;
-#endif
 } ioreq_event;
 
 typedef struct timer_ev {

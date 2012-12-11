@@ -6,7 +6,6 @@
 
 #ifdef ADIVIM
 #include "disksim_global.h"
-#include "ssd_timing.h"
 
 void adivim_init ();
 /*
