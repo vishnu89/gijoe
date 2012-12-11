@@ -21,7 +21,12 @@ ssd_timing.o: ssd_timing.c ssd.h ../src//disksim_global.h \
  /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include/stdarg.h \
  /usr/include/i386-linux-gnu/bits/stdio_lim.h \
- /usr/include/i386-linux-gnu/bits/sys_errlist.h /usr/include/stdlib.h \
+ /usr/include/i386-linux-gnu/bits/sys_errlist.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/limits.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/i386-linux-gnu/bits/posix1_lim.h \
+ /usr/include/i386-linux-gnu/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/i386-linux-gnu/bits/posix2_lim.h /usr/include/stdlib.h \
  /usr/include/i386-linux-gnu/bits/waitflags.h \
  /usr/include/i386-linux-gnu/bits/waitstatus.h /usr/include/alloca.h \
  /usr/include/string.h /usr/include/xlocale.h /usr/include/math.h \
@@ -44,5 +49,5 @@ ssd_timing.o: ssd_timing.c ssd.h ../src//disksim_global.h \
  ../diskmodel/include/diskmodel/dm_types.h /usr/include/inttypes.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include/stdint.h /usr/include/stdint.h \
  /usr/include/i386-linux-gnu/bits/wchar.h ../src//disksim_bus.h \
- ../src//config.h ssd_timing.h ssd_clean.h modules/ssdmodel_ssd_param.h \
- ssd_gang.h ssd_utils.h
+ ../src//config.h adivim.h ssd_timing.h ssd_clean.h \
+ modules/ssdmodel_ssd_param.h ssd_gang.h ssd_utils.h

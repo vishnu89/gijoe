@@ -109,6 +109,11 @@
 #include <sys/types.h>
 #include <stdio.h>
 
+#ifndef ADIVIM
+#define ADIVIM
+#include <limits.h>
+#endif
+
 #ifdef _WIN32
 #define u_int		unsigned int
 #define u_int64_t	unsigned __int64
@@ -253,7 +258,12 @@ typedef struct foo {
    int    temp;
 } foo;
 
+#ifndef ADIVIM
 #define DISKSIM_EVENT_SIZE	128
+#else 
+#define DISKSIM_EVENT_SIZE	172
+#endif
+    
 #define DISKSIM_EVENT_SPACESIZE	(DISKSIM_EVENT_SIZE - sizeof(struct foo))
 
 typedef struct ev {
@@ -264,8 +274,32 @@ typedef struct ev {
    int    temp;
    char space[DISKSIM_EVENT_SPACESIZE];
 } event;
-
+    
+#ifdef ADIVIM
+    typedef enum {
+        ADIVIM_HOT,
+        ADIVIM_COLD
+    } ADIVIM_TYPE;
+    typedef int ADIVIM_APN;
+    typedef ADIVIM_APN ADIVIM_HAPN;
+    typedef ADIVIM_APN ADIVIM_CAPN;
+    static const ADIVIM_APN ADIVIM_APN_INFINITY = (ADIVIM_APN) INT_MAX;
+    typedef struct _adivim_judgement {
+        ADIVIM_TYPE adivim_type;
+        ADIVIM_HAPN adivim_hapn;
+        ADIVIM_CAPN adivim_capn;
+    } ADIVIM_JUDGEMENT;
+#endif
+    
 typedef struct ioreq_ev {
+#ifdef ADIVIM
+    int   hc_flag; 	//0 : cold -> cold
+                    //1 : hot -> hot
+                    //2 : cold -> hot
+                    //3 : hot -> cold
+    int   range;	//cold block write page range
+    int   perform;	//hot/cold invalid perform
+#endif
    double time;
    int    type;
    struct ioreq_ev *next;
@@ -432,6 +466,10 @@ typedef struct disksim {
 } disksim_t;
 
 extern disksim_t *disksim;
+
+#ifdef ADIVIM
+	FILE *outputfile_adv;
+#endif
 
 /* remapping #defines for some of the variables in disksim_t */
 #define warmuptime       (disksim->warmuptime)

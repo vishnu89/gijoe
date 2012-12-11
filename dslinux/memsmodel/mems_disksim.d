@@ -25,7 +25,12 @@ mems_disksim.o: mems_disksim.c /usr/include/stdio.h \
  /usr/include/string.h /usr/include/xlocale.h mems_global.h \
  ../src//disksim_global.h ../src//disksim_rand48.h \
  ../src//disksim_malloc.h ../src//disksim_bitstring.h ../src//inline.h \
- /usr/include/math.h /usr/include/i386-linux-gnu/bits/huge_val.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/limits.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/i386-linux-gnu/bits/posix1_lim.h \
+ /usr/include/i386-linux-gnu/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/i386-linux-gnu/bits/posix2_lim.h /usr/include/math.h \
+ /usr/include/i386-linux-gnu/bits/huge_val.h \
  /usr/include/i386-linux-gnu/bits/huge_valf.h \
  /usr/include/i386-linux-gnu/bits/huge_vall.h \
  /usr/include/i386-linux-gnu/bits/inf.h \

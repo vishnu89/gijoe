@@ -2,6 +2,7 @@
 
 
 cp $1/Makefile $2/Makefile
+cp $1/src/disksim_global.h $2/src/disksim_global.h
 cp $1/ssdmodel/Makefile $2/ssdmodel/Makefile
 cp $1/ssdmodel/adivim.h $2/ssdmodel/adivim.h
 cp $1/ssdmodel/adivim.c $2/ssdmodel/adivim.c

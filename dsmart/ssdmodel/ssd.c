@@ -8,7 +8,6 @@
 #include "ssd_init.h"
 #include "modules/ssdmodel_ssd_param.h"
 #include "disksim_global.h"
-#include "adivim.h"
 
 #ifndef sprintf_s
 #define sprintf_s3(x,y,z) sprintf(x,z)
@@ -673,7 +672,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
     /* **** CAREFUL ... HIJACKING tempint2 and tempptr2 fields here **** */
     curr->tempint2 = count;
     
-    adivim_assign_judgement (currdisk->timing_t, curr);
+    adivim_assign_judgement ((void *) currdisk->timing_t, curr);
     
     while(count != 0) {
         
@@ -767,7 +766,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 if(start == 1)
                 {
                     save = blkno;
-		    cbn = (adivim_get_judgement_by_blkno (currdisk->timing_t, save)).adivim_capn / (currdisk->params.pages_per_block -1);
+                    cbn = (adivim_get_judgement_by_blkno (currdisk->timing_t, save)).adivim_capn / (currdisk->params.pages_per_block -1);
                     start = 0;
                     range = -1;
                 }
