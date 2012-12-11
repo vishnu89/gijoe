@@ -611,6 +611,9 @@ void ssd_initialize (void)
      fprintf (outputfile, "Entered ssd_initialize - numssds %d\n", numssds);
      */
     ssd_setcallbacks();
+#ifdef ADIVIM
+    adivim_init ();
+#end if
     
     // fprintf(stdout, "MAXDEVICES = %d, numssds %d\n", MAXDEVICES, numssds);
     // vp - changing the MAXDEVICES in the below 'for' loop to numssds

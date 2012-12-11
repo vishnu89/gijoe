@@ -278,9 +278,7 @@ typedef struct ev {
 #ifdef ADIVIM
 typedef enum {
     ADIVIM_HOT,
-    ADIVIM_COLD,
-    ADIVIM_HOT_TO_COLD,
-    ADIVIM_COLD_TO_HOT
+    ADIVIM_COLD
 } ADIVIM_TYPE;
 typedef int ADIVIM_APN;
 typedef ADIVIM_APN ADIVIM_HAPN;

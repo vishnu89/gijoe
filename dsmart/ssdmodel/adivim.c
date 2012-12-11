@@ -5,6 +5,9 @@
 //#include "disksim_global.h"
 
 #ifdef ADIVIM
+#define ADIVIM_INIT_TYPE ADIVIM_HOT
+#define ADIVIM_ALLOC_INIT_HAPN(length) adivim_alloc_apn(*adivim_free_hapn_list, length)
+#define ADIVIM_ALLOC_INIT_cAPN(length) (ADIVIM_APN) -1
 #include "disksim_global.h"
 #include <stdbool.h>
 #include "adivim.h"
@@ -14,6 +17,7 @@
 
 void adivim_init ();
 void adivim_assign_judgement (void *t, ioreq_event *req);
+void adivim_assign_flag_by_blkno (void *t, int blkno, int *flag);
 ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (void *t, int blkno);
 
 /*
@@ -79,7 +83,6 @@ ADIVIM_APN adivim_alloc_apn (listnode *start, ADIVIM_APN size);
 bool _adivim_section_lookup (listnode *start,listnode *target, void *arg);
 ADIVIM_JUDGEMENT adivim_section_lookup (listnode *start, ADIVIM_APN pg);
 
-
 struct my_timing_t {
     ssd_timing_t          t;
     ssd_timing_params    *params;
@@ -106,6 +109,37 @@ void adivim_assign_judgement (void *t, ioreq_event *req)
     }
     
     adivim_section_job (*adivim_section_list, section);
+}
+
+void adivim_assign_flag_by_blkno (void *t, int blkno, int *flag)
+{
+    ADIVIM_JUDGEMENT judgement = adivim_get_judgement_by_blkno (currdisk->timing_t, blkno);
+    switch (judgmenet.adivim_type) {
+        case ADIVIM_HOT :
+            if (judgement.adivim_capn == (ADIVIM_APN) -1)
+            {
+                // Original page mapping
+                *flag = 1;
+            }
+            else
+            {
+                // Invalid previous block mapping and do page mapping
+                *flag = 2;
+            }
+            break;
+        case ADIVIM_COLD :
+            if (judgement.adivim_hapn == (ADIVIM_APN) -1)
+            {
+                // Block mapping
+                *flag = 0;
+            }
+            else
+            {
+                // Invalid previous page mapping and do block mapping
+                *flag = 3;
+            }
+            break;
+    }
 }
 
 ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (void *t, int blkno)
@@ -321,14 +355,20 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
         {
             // Really newbe
             newdata->length = toinsert->length;
-            newdata->adivim_judgement = adivim_judge (newdata);
+            newdata->adivim_judgement.adivim_type = ADIVIM_INIT_TYPE;
+            newdata->adivim_judgement.adivim_hapn = ADIVIM_ALLOC_INIT_HAPN(newdata->length);
+            newdata->adivim_judgement.adivim_capn = ADIVIM_ALLOC_INIT_CAPN(newdata->lengt);
+            
             return false;
         }
         else
         {
             // divide section occur. that will be devided in follwing code.
             newdata->length = data->starting - toinsert->starting;
-            newdata->adivim_judgement = adivim_judge (newdata);
+            newdata->adivim_judgement.adivim_type = ADIVIM_INIT_TYPE;
+            newdata->adivim_judgement.adivim_hapn = ADIVIM_ALLOC_INIT_HAPN(newdata->length);
+            newdata->adivim_judgement.adivim_capn = ADIVIM_ALLOC_INIT_CAPN(newdata->lengt);
+            
             toinsert->length = toinsert->starting + toinsert->length - data->starting;
             toinsert->starting = data->starting;
             
@@ -342,7 +382,7 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
         {
             data->adivim_access_log.read_count += toinsert->adivim_access_log.read_count;
             data->adivim_access_log.write_count += toinsert->adivim_access_log.write_count;
-            data->adivim_judgement = adivim_judge (data);
+            adivim_judge (data);
             
             toinsert->starting += data->length;
             toinsert->length = toinsert->length - data->length;
@@ -368,11 +408,16 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
             newdata->length = toinsert->length;
             newdata->adivim_access_log.read_count = data->adivim_access_log.read_count + toinsert->adivim_access_log.read_count;
             newdata->adivim_access_log.write_count = data->adivim_access_log.write_count + toinsert->adivim_access_log.write_count;
-            newdata->adivim_judgement = adivim_judge (newdata);
+            newdata->adivim_judgement.adivim_type = data->adivim_judgement.adivim_type;
+            newdata->adivim_judgement.adivim_hapn = data->adivim_judgement.adivim_hapn;
+            newdata->adivim_judgement.adivim_capn = data->adivim_judgement.adivim_capn;
+            adivim_judge (newdata);
             
             // modify target
             data->starting += toinsert->length;
             data->length -= toinsert->length;
+            data->adivim_judgement.adivim_hapn += toinsert->length;
+            data->adivim_judgement.adivim_capn += toinsert->length;
             
             return false;
         }
@@ -397,7 +442,9 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
         newdata->length = data->starting + data->length - toinsert->starting;
         newdata->adivim_access_log.read_count = data->adivim_access_log.read_count;
         newdata->adivim_access_log.write_count = data->adivim_access_log.write_count;
-        newdata->adivim_judgement = adivim_judge (newdata);
+        newdata->adivim_judgement.adivim_type = data->adivim_judgement.adivim_type;
+        newdata->adivim_judgement.adivim_hapn = data->adivim_judgement.adivim_hapn + (toinsert->starting - data->starting);
+        newdata->adivim_judgement.adivim_capn = data->adivim_judgement.adivim_capn + (toinsert->starting - data->starting);
         
         // modify target
         data->length = toinsert->starting - data->starting;
@@ -461,39 +508,23 @@ ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section)
         {
             case ADIVIM_HOT : break;
             case ADIVIM_COLD :
-                section->adivim_judgement.adivim_type = ADIVIM_COLD_TO_HOT;
+                section->adivim_judgement.adivim_type = ADIVIM_HOT;
                 section->adivim_judgement.adivim_hapn = adivim_alloc_apn (*adivim_free_hapn_list, section->length);
                 adivim_free_apn (*adivim_free_capn_list, section->starting, section->length);
                 break;
-            case ADIVIM_HOT_TO_COLD :
-                section->adivim_judgement.adivim_type = ADIVIM_COLD_TO_HOT;
-                section->adivim_judgement.adivim_hapn = adivim_alloc_apn (*adivim_free_hapn_list, section->length);
-                adivim_free_apn (*adivim_free_capn_list, section->starting, section->length);
-                break;
-            case ADIVIM_COLD_TO_HOT :
-                section->adivim_judgement.adivim_type = ADIVIM_HOT; break;
         };
-        
-        section.adivim_hapn = adivim_alloc_apn (*adivim_free_hapn_list, section->length);
-        section.adivim_capn = (ADIVIM_APN) -1;
     }
     else // Section will be cold
     {
-        // Assign ADIVIM_TYPE and allocation ADIVIM_APNs
         switch (section->adivim_judgement.adivim_type)
         {
-            case ADIVIM_HOT : 
-                section->adivim_judgement.adivim_type = ADIVIM_COLD; break;
-            case ADIVIM_COLD : break;
-            case ADIVIM_HOT_TO_COLD : // Some error occured because ADIVIM_HOT_TO_COLD and ADIVIM_COLD_TO_HOT is only used in ioreq_event. Section should be either ADIVIM_HOT or ADIVIM_COLD.
-                section->adivim_judgement.adivim_type = ADIVIM_COLD; break;
-            case ADIVIM_COLD_TO_HOT :
-                section->adivim_judgement.adivim_type = ADIVIM_COLD; break;
+            case ADIVIM_HOT :
+                section->adivim_judgement.adivim_type = ADIVIM_COLD;
+                section->adivim_judgement.adivim_capn = adivim_alloc_apn (*adivim_free_capn_list, section->length);
+                adivim_free_apn (*adivim_free_hapn_list, section->starting, section->length);
+                break;
+            case ADIVIM_COLD :break;
         };
-        
-        // Allocate ADIVIM_CAPN
-        section.adivim_hapn = (ADIVIM_APN) -1;
-        section.adivim_capn = adivim_alloc_apn (*adivim_free_capn_list, section->length);
     }
     
     return section;
