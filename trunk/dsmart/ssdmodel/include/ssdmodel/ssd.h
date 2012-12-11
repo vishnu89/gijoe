@@ -7,6 +7,7 @@
 #include "disksim_ioqueue.h"
 #include "disksim_bus.h"
 #include "config.h"
+#include "adivim.h"
 
 #ifndef DISKSIM_SSD_H
 #define DISKSIM_SSD_H
@@ -35,6 +36,7 @@ typedef struct {
 	int write_req_num;
 	int avg_lifetime;
 #endif
+
 } ssd_stat_t;
 
 /*

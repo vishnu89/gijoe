@@ -36,4 +36,4 @@ ssd_utils.o: ssd_utils.c ssd_utils.h ssd.h ../src//disksim_global.h \
   ../src//disksim_ioqueue.h ../diskmodel/include/diskmodel/dm.h \
   ../diskmodel/include/diskmodel/dm_types.h /usr/include/inttypes.h \
   /usr/include/stdint.h /usr/include/bits/wchar.h ../src//disksim_bus.h \
-  ../src//config.h
+  ../src//config.h adivim.h
