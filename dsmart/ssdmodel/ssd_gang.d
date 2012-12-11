@@ -36,4 +36,5 @@ ssd_gang.o: ssd_gang.c ssd.h ../src//disksim_global.h \
   ../src//disksim_ioqueue.h ../diskmodel/include/diskmodel/dm.h \
   ../diskmodel/include/diskmodel/dm_types.h /usr/include/inttypes.h \
   /usr/include/stdint.h /usr/include/bits/wchar.h ../src//disksim_bus.h \
-  ../src//config.h ssd_gang.h modules/ssdmodel_ssd_param.h ssd_timing.h
+  ../src//config.h adivim.h ssd_gang.h modules/ssdmodel_ssd_param.h \
+  ssd_timing.h
