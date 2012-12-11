@@ -8,6 +8,7 @@
 #include "ssd_init.h"
 #include "modules/ssdmodel_ssd_param.h"
 #include "disksim_global.h"
+//#include "adivim.h"
 
 #ifndef sprintf_s
 #define sprintf_s3(x,y,z) sprintf(x,z)

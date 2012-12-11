@@ -20,7 +20,12 @@ disksim_device.o: disksim_device.c disksim_global.h disksim_rand48.h \
  /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include/stdarg.h \
  /usr/include/i386-linux-gnu/bits/stdio_lim.h \
- /usr/include/i386-linux-gnu/bits/sys_errlist.h /usr/include/stdlib.h \
+ /usr/include/i386-linux-gnu/bits/sys_errlist.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/limits.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/i386-linux-gnu/bits/posix1_lim.h \
+ /usr/include/i386-linux-gnu/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/i386-linux-gnu/bits/posix2_lim.h /usr/include/stdlib.h \
  /usr/include/i386-linux-gnu/bits/waitflags.h \
  /usr/include/i386-linux-gnu/bits/waitstatus.h /usr/include/alloca.h \
  /usr/include/string.h /usr/include/xlocale.h /usr/include/math.h \
@@ -46,15 +51,16 @@ disksim_device.o: disksim_device.c disksim_global.h disksim_rand48.h \
  ../memsmodel/include/memsmodel/mems_disksim.h \
  ../ssdmodel/include/ssdmodel/ssd.h disksim_ioqueue.h disksim_bus.h \
  config.h inline.h disksim_iosim.h disksim_global.h disksim_stat.h \
- config.h modules/modules.h modules/disksim_bus_param.h \
- modules/disksim_bus_stats_param.h modules/disksim_cachedev_param.h \
- modules/disksim_cachemem_param.h modules/disksim_ctlr_param.h \
- modules/disksim_ctlr_stats_param.h modules/disksim_device_param.h \
- modules/disksim_device_stats_param.h modules/disksim_disk_param.h \
- modules/disksim_global_param.h modules/disksim_iodriver_param.h \
- modules/disksim_iodriver_stats_param.h modules/disksim_iomap_param.h \
- modules/disksim_ioqueue_param.h modules/disksim_iosim_param.h \
- modules/disksim_logorg_param.h modules/disksim_pf_param.h \
- modules/disksim_pf_stats_param.h modules/disksim_simpledisk_param.h \
- modules/disksim_stats_param.h modules/disksim_syncset_param.h \
- modules/disksim_synthgen_param.h modules/disksim_synthio_param.h
+ config.h ../ssdmodel/include/ssdmodel/adivim.h modules/modules.h \
+ modules/disksim_bus_param.h modules/disksim_bus_stats_param.h \
+ modules/disksim_cachedev_param.h modules/disksim_cachemem_param.h \
+ modules/disksim_ctlr_param.h modules/disksim_ctlr_stats_param.h \
+ modules/disksim_device_param.h modules/disksim_device_stats_param.h \
+ modules/disksim_disk_param.h modules/disksim_global_param.h \
+ modules/disksim_iodriver_param.h modules/disksim_iodriver_stats_param.h \
+ modules/disksim_iomap_param.h modules/disksim_ioqueue_param.h \
+ modules/disksim_iosim_param.h modules/disksim_logorg_param.h \
+ modules/disksim_pf_param.h modules/disksim_pf_stats_param.h \
+ modules/disksim_simpledisk_param.h modules/disksim_stats_param.h \
+ modules/disksim_syncset_param.h modules/disksim_synthgen_param.h \
+ modules/disksim_synthio_param.h

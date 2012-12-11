@@ -6,6 +6,7 @@
 #include "ssd_clean.h"
 #include "ssd_utils.h"
 #include "ssd_init.h"
+//#include "adivim.h"
 
 /* read-only globals used during readparams phase */
 static char *statdesc_acctimestats  =   "Access time";
