@@ -677,16 +677,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
     
     while(count != 0) {
         
-        switch ((adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_type) {
-            case ADIVIM_HOT : // Original page mapping
-                flag = 1; break;
-            case ADIVIM_COLD : // Block mapping
-                flag = 0; break;
-            case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
-                flag = 3; break;
-            case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
-                flag = 2; break;
-        }
+        adivim_assign_flag_by_blkno (currdisk->timing_t, blkno, &flag);
         
         switch(flag) {
             case 0 : //cold -> cold
@@ -789,16 +780,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
 
 		if(count != 0)
 		{
-        		switch ((adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_type) {
-            			case ADIVIM_HOT : // Original page mapping
-                			temp_flag = 1; break;
-            			case ADIVIM_COLD : // Block mapping
-                			temp_flag = 0; break;
-            			case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
-                			temp_flag = 3; break;
-            			case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
-                			temp_flag = 2; break;
-        		}
+            adivim_assign_flag_by_blkno (currdisk->timing_t, blkno, &temp_flag);
 
 			if(flag == temp_flag){
 
@@ -1227,16 +1209,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
  
 		if(count != 0)
 		{
-        		switch ((adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_type) {
-            			case ADIVIM_HOT : // Original page mapping
-                			temp_flag = 1; break;
-            			case ADIVIM_COLD : // Block mapping
-                			temp_flag = 0; break;
-            			case ADIVIM_HOT_TO_COLD : // Invalid previous page mapping and do block mapping
-                			temp_flag = 3; break;
-            			case ADIVIM_COLD_TO_HOT : // Invalid previous block mapping and do page mapping
-                			temp_flag = 2; break;
-        		}
+            adivim_assign_flag_by_blkno (currdisk->timing_t, blkno, &temp_flag);
 
 			if(flag == temp_flag){
 
