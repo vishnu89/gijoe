@@ -31,7 +31,7 @@
 TOP_BUILDDIR=$(shell pwd)
 include .paths
 
-SUBDIRS=libddbg libparam diskmodel memsmodel ssdmodel adivim src
+SUBDIRS=libddbg libparam diskmodel memsmodel ssdmodel src
 
 all:
 	rm -fr src/disksim
@@ -67,13 +67,13 @@ doc:
 	$(MAKE) -C diskmodel/modules
 	$(MAKE) -C memsmodel/modules
 	$(MAKE) -C ssdmodel/modules
-	$(MAKE) -C adivim/modules
+	#$(MAKE) -C adivim/modules
 
 doc-clean:
 	$(MAKE) -C memsmodel/modules distclean
 	$(MAKE) -C diskmodel/modules distclean
 	$(MAKE) -C ssdmodel/modules distclean
-	$(MAKE) -C adivim/modules distclean
+	#$(MAKE) -C adivim/modules distclean
 	$(MAKE) -C src/modules distclean
 	$(MAKE) -C libparam distclean
 	$(MAKE) -C libddbg distclean

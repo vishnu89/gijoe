@@ -2,17 +2,17 @@
 // ©2012 Seoul National University lecture project1 ADIVIM PROJECT team. All right reserved.
 
 
-//#include "disksim_global.h"
+#include "disksim_global.h"
 
 #ifdef ADIVIM
 #define ADIVIM_INIT_TYPE ADIVIM_HOT
 #define ADIVIM_ALLOC_INIT_HAPN(length) adivim_alloc_apn(*adivim_free_hapn_list, length)
-#define ADIVIM_ALLOC_INIT_cAPN(length) (ADIVIM_APN) -1
-#include "disksim_global.h"
+#define ADIVIM_ALLOC_INIT_CAPN(length) (ADIVIM_APN) -1
+//#include "disksim_global.h"
 #include <stdbool.h>
 #include "adivim.h"
 #include "ssd_timing.h"
-#include "ssdmodel_ssd_param.h"
+#include "modules/ssdmodel_ssd_param.h"
 #include "ssd_utils.h" // For listnode.
 
 void adivim_init ();
@@ -64,7 +64,7 @@ void adivim_init ();
  * For given section information,
  * judge which is hot and cold.
  */
-ADIVIM_JUDGEMENT adivim_judge (ADIVIM_SECTION *section);
+ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section);
 
 /*
  * For given request,
@@ -72,7 +72,7 @@ ADIVIM_JUDGEMENT adivim_judge (ADIVIM_SECTION *section);
  */
 ADIVIM_SECTION adivim_update_section_list (ioreq_event *req);
 
-listnode *_adivim_ll_insert_at_head(listnode *start, void *data);
+listnode *_adivim_ll_insert_at_head(listnode *start, listnode *toinsert);
 void adivim_ll_apply (listnode *start, bool (*job) (listnode *start, listnode *target, void *arg), void *arg);
 void adivim_free_apn (listnode *start, ADIVIM_APN starting, ADIVIM_APN length);
 bool _adivim_free_apn (listnode *start, listnode *target, void *arg);
@@ -113,8 +113,8 @@ void adivim_assign_judgement (void *t, ioreq_event *req)
 
 void adivim_assign_flag_by_blkno (void *t, int blkno, int *flag)
 {
-    ADIVIM_JUDGEMENT judgement = adivim_get_judgement_by_blkno (currdisk->timing_t, blkno);
-    switch (judgmenet.adivim_type) {
+    ADIVIM_JUDGEMENT judgement = adivim_get_judgement_by_blkno (t, blkno);
+    switch (judgement.adivim_type) {
         case ADIVIM_HOT :
             if (judgement.adivim_capn == (ADIVIM_APN) -1)
             {
@@ -293,7 +293,7 @@ void adivim_free_apn (listnode *start, ADIVIM_APN starting, ADIVIM_APN length)
 bool _adivim_alloc_apn (listnode *start, listnode *target, void *arg)
 {
     ADIVIM_APN_ALLOC *data = (ADIVIM_APN_ALLOC *) target->data;
-    ADIVIM_APN new = (ADIVIM_APN_ALLOC *) arg;
+    ADIVIM_APN_ALLOC *new = (ADIVIM_APN_ALLOC *) arg;
     
     if (new->length < data->length)
     {
@@ -309,7 +309,7 @@ bool _adivim_alloc_apn (listnode *start, listnode *target, void *arg)
 
 ADIVIM_APN adivim_alloc_apn (listnode *start, ADIVIM_APN size)
 {
-    ADIVIM_APN *arg = (ADIVIM_APN_ALLOC *) malloc (sizeof (ADIVIM_APN_ALLOC));
+    ADIVIM_APN_ALLOC *arg = (ADIVIM_APN_ALLOC *) malloc (sizeof (ADIVIM_APN_ALLOC));
     ADIVIM_APN ret;
     arg->length = size;
     
@@ -357,7 +357,7 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
             newdata->length = toinsert->length;
             newdata->adivim_judgement.adivim_type = ADIVIM_INIT_TYPE;
             newdata->adivim_judgement.adivim_hapn = ADIVIM_ALLOC_INIT_HAPN(newdata->length);
-            newdata->adivim_judgement.adivim_capn = ADIVIM_ALLOC_INIT_CAPN(newdata->lengt);
+            newdata->adivim_judgement.adivim_capn = ADIVIM_ALLOC_INIT_CAPN(newdata->length);
             
             return false;
         }
@@ -367,7 +367,7 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
             newdata->length = data->starting - toinsert->starting;
             newdata->adivim_judgement.adivim_type = ADIVIM_INIT_TYPE;
             newdata->adivim_judgement.adivim_hapn = ADIVIM_ALLOC_INIT_HAPN(newdata->length);
-            newdata->adivim_judgement.adivim_capn = ADIVIM_ALLOC_INIT_CAPN(newdata->lengt);
+            newdata->adivim_judgement.adivim_capn = ADIVIM_ALLOC_INIT_CAPN(newdata->length);
             
             toinsert->length = toinsert->starting + toinsert->length - data->starting;
             toinsert->starting = data->starting;

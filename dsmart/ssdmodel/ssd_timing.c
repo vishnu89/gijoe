@@ -8,6 +8,7 @@
 #include "ssd_utils.h"
 #include "modules/ssdmodel_ssd_param.h"
 #include "disksim_global.h"
+//#include "adivim.h"
 
 struct my_timing_t {
     ssd_timing_t          t;
@@ -1047,7 +1048,8 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
     
     return parunits;
 }
-#ifdef ADIVM
+
+#ifdef ADIVIM
 void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int blk, int range, int flag)
 {
 	//flag 1 : read, 0 : write
@@ -1055,7 +1057,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 	int elem_num;
 	int i;
 	ssd_element_metadata* temp;
-//	struct section* sect;
+    //struct section* sect;
 	unsigned int temp_block;
 	unsigned int temp_pos;
 	unsigned int temp_page;
@@ -1067,15 +1069,15 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 	{
 		elem_num = (temp_blk/(s->params.element_stride_pages*s->params.page_size)) % s->params.nelements;
 		temp = &(s->elements[elem_num].metadata);
-//		sect = get_from_ADIVIM(temp_blk);
-		temp_lpn = (adivim_get_judgement_by_blkno(s->timing_t, blk)).advim_hapn;
+        //sect = get_from_ADIVIM(temp_blk);
+		temp_lpn = (adivim_get_judgement_by_blkno(s->timing_t, blk)).adivim_hapn;
 		temp_page = temp->hot_lba_table[temp_lpn];
 		temp_block = SSD_PAGE_TO_BLOCK(temp_page, s);
 		temp_pos = temp_page % s->params.pages_per_block;
 
 		temp->block_usage[temp_block].num_valid--;
-		temp->block_usage[temp_blokd].page[temp_pos] = -2;
-		temp->hot_lba_talbe[temp_lpn] = -1; /// doubt..... 
+		temp->block_usage[temp_block].page[temp_pos] = -2;
+		temp->hot_lba_table[temp_lpn] = -1; /// doubt.....
 
 		temp_blk += s->params.page_size;
 		
@@ -1083,16 +1085,16 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 
 	if(flag == 1)
 	{
-//    		struct section* sect;
-    		int ii, jj;
-    		int b_size = 0;
-    		unsigned int cbn;
-    		unsigned int *save_lpn;
-    		int iter = 0;
-    		unsigned int *bucket;
+        //struct section* sect;
+        int ii, jj;
+        int b_size = 0;
+        unsigned int cbn;
+        unsigned int *save_lpn;
+        int iter = 0;
+        unsigned int *bucket;
 
-//		sect = get_from_ADIVIM(blk);
-		save_lpn = (unsigned int*)malloc(sizeof(unsigned int) * (r->range + 1));
+        //sect = get_from_ADIVIM(blk);
+		save_lpn = (unsigned int*)malloc(sizeof(unsigned int) * (range + 1));
 		ii = 0;
 		iter = 1;
 		b_size = 1;
@@ -1159,73 +1161,72 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
 
 	int plane_num = 0;
 
-	if(perform == 1){
-	
-	//element unknown.......
-	//assuming elem_num.....
-		for(i=0; i<=range ; i++)
-		{
-		
-			sect = get_from_ADIVIM(blk);
-			temp_lpn = (adivim_get_judgement_by_blkno (s->timing_t, temp_blk)).adivim_capn;
-			temp_cbn = temp_lpn / (s->params.pages_per_block -1);
-			elem_num = ssd_choose_element(s->timing_t, temp_cbn);
-			temp = &(s->elements[elem_num].metadata);
-			temp_block = temp->cold_lba_table[temp_cbn];
-			
-			ASSERT(temp_block != -1);
-			
-			temp_pos = temp_lpn % (s->params.pages_per_block - 1);
-			
-			temp->block_usage[temp_block].page[temp_pos] = -2;
-			temp->block_usage[temp_block].num_valid --;
-			
-			/*doubt logic about initialisze*/
-			/*so, to begin with cover by comment*/
-			/*if(temp->block_usage[temp_block].num_valid == 0)
-			{
-				temp->cold_lba_table[temp_cbn] = -1;
-			}
-			*/
-		}
+	if(perform == 1)
+    {
+        //element unknown.......
+        //assuming elem_num.....
+        for(i=0; i<=range ; i++)
+        {
+        
+            //sect = get_from_ADIVIM(blk);
+            temp_lpn = (adivim_get_judgement_by_blkno (s->timing_t, temp_blk)).adivim_capn;
+            temp_cbn = temp_lpn / (s->params.pages_per_block -1);
+            elem_num = ssd_choose_element(s->timing_t, temp_cbn);
+            temp = &(s->elements[elem_num].metadata);
+            temp_block = temp->cold_lba_table[temp_cbn];
+            
+            ASSERT(temp_block != -1);
+            
+            temp_pos = temp_lpn % (s->params.pages_per_block - 1);
+            
+            temp->block_usage[temp_block].page[temp_pos] = -2;
+            temp->block_usage[temp_block].num_valid --;
+            
+            /*doubt logic about initialisze*/
+            /*so, to begin with cover by comment*/
+            /*if(temp->block_usage[temp_block].num_valid == 0)
+            {
+                temp->cold_lba_table[temp_cbn] = -1;
+            }
+            */
+        }
 
-	}
+        if(flag == 1)
+        {
+           cost = 0;
+          // for(ii=0; ii <= range ; ii++){
+            
+            //elem_num = (blk/(s->params.element_stride_pages*s->params.page_size)) % s->params.nelements;
+            //temp = &(s->elements[elem_num].metadata);
+            
+            //sect = get_from_ADIVIM(blk);
+            lpn = (adivim_get_judgement_by_blkno (s->timing_t, temp_blk)).adivim_hapn;
 
-	if(flag == 1)
-	{
-	   cost = 0;
-	  // for(ii=0; ii <= range ; ii++){
-		
-		//elem_num = (blk/(s->params.element_stride_pages*s->params.page_size)) % s->params.nelements;
-		//temp = &(s->elements[elem_num].metadata);
-		
-		sect = get_from_ADIVIM(blk);
-                lpn = sect->h_lpn;
+        //	for(plane_num = 0; plane_num < s->params.planes_per_pkg ; plane_num ++)
+        //	{
+        //		if(metadata->hot_active_page == metadata->plane_meta[palne_num].hot_active_pge)
+        //		{
+        //			break;
+        //		}
+        //	}
+    //
+    //		ASSERT(plane_num < 8);
+            
+            // if this is the last page on the block, allocate a new block
+            if (ssd_last_page_in_block(metadata->plane_meta[p_num].hot_active_page, s)) {
+                _ssd_alloc_active_block(p_num, e_num, s, 1);
+            }
 
-	//	for(plane_num = 0; plane_num < s->params.planes_per_pkg ; plane_num ++)
-	//	{
-	//		if(metadata->hot_active_page == metadata->plane_meta[palne_num].hot_active_pge)
-	//		{
-	//			break;
-	//		}
-	//	}
-//
-//		ASSERT(plane_num < 8);
-		
-		// if this is the last page on the block, allocate a new block
-               	if (ssd_last_page_in_block(metadata->plane_meta[p_num].hot_active_page, s)) {
-                	    _ssd_alloc_active_block(p_num, e_num, s, 1);
-                }
+            // issue the write to the current active page.
+            // we need to transfer the data across the serial pins for write.
+            metadata->hot_active_page = metadata->plane_meta[p_num].hot_active_page;
+            //printf("elem %d plane %d ", elem_num, plane_num);
+            cost += _ssd_write_page_osr(s, metadata, lpn);
 
-                // issue the write to the current active page.
-                // we need to transfer the data across the serial pins for write.
-                metadata->hot_active_page = metadata->plane_meta[p_num].hot_active_page;
-                //printf("elem %d plane %d ", elem_num, plane_num);
-                cost += _ssd_write_page_osr(s, metadata, lpn);
-
-	//	blk += s->params.page_size;
-	  // }
-	}
+        //	blk += s->params.page_size;
+          // }
+        }
+    }
 }
 #endif
 
@@ -1398,7 +1399,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
                     //free(save_lpn);
 					break;
 				default :
-					fprint(stderr, "Error : Wrong hot/cold type\n");
+					fprintf (stderr, "Error : Wrong hot/cold type\n");
 			}
 		}
 		else{
@@ -1529,15 +1530,15 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 					
 					break;
 				default :
-					fprint(stderr, "Error : Wrong hot/cold type\n");
+					fprintf (stderr, "Error : Wrong hot/cold type\n");
 			}
 
 		}
 #endif
-                ASSERT(r->count <= s->params.page_size);
+        ASSERT(r->count <= s->params.page_size);
 
-                // calc the cost: the access time should be something like this
-                // for read
+        // calc the cost: the access time should be something like this
+        // for read
 #ifdef ADIVIM
 		switch(r->hc_flag){
 			case 0 :
@@ -1550,42 +1551,42 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 				break;
 			default :
 				fprintf(stderr, "Wrong hot/cold type\n");
-		}
+        }
 #endif
-                if (read_cycle) {
-                    if (SSD_PARUNITS_PER_ELEM(s) > 4) {
-                        printf("modify acc time here ...\n");
-                        ASSERT(0);
-                    }
-                    if (op_count == 1) {
+        if (read_cycle) {
+            if (SSD_PARUNITS_PER_ELEM(s) > 4) {
+                printf("modify acc time here ...\n");
+                ASSERT(0);
+            }
+            if (op_count == 1) {
 #ifndef ADIVM
-                        r->acctime = parunit_op_cost[i] + ssd_data_transfer_cost(s,s->params.page_size);
+                r->acctime = parunit_op_cost[i] + ssd_data_transfer_cost(s,s->params.page_size);
 #else
-                        r->acctime = parunit_op_cost[i] + (ssd_data_transfer_cost(s,s->params.page_size) * cnt);
+                r->acctime = parunit_op_cost[i] + (ssd_data_transfer_cost(s,s->params.page_size) * cnt);
 #endif     
-                        r->schtime = parunit_tot_cost[i] + (op_count-1)*ssd_data_transfer_cost(s,s->params.page_size) + r->acctime;
-                    } else {
-                        r->acctime = ssd_data_transfer_cost(s,s->params.page_size);
-                        r->schtime = parunit_tot_cost[i] + op_count*ssd_data_transfer_cost(s,s->params.page_size) + parunit_op_cost[i];
-                    }
-                } else {
-                    // for write
+                r->schtime = parunit_tot_cost[i] + (op_count-1)*ssd_data_transfer_cost(s,s->params.page_size) + r->acctime;
+            } else {
+                r->acctime = ssd_data_transfer_cost(s,s->params.page_size);
+                r->schtime = parunit_tot_cost[i] + op_count*ssd_data_transfer_cost(s,s->params.page_size) + parunit_op_cost[i];
+            }
+        } else {
+            // for write
 #ifndef ADIVM
-                        r->acctime = parunit_op_cost[i] + ssd_data_transfer_cost(s,s->params.page_size);
+            r->acctime = parunit_op_cost[i] + ssd_data_transfer_cost(s,s->params.page_size);
 #else
-                        r->acctime = parunit_op_cost[i] + (ssd_data_transfer_cost(s,s->params.page_size) * cnt);
+            r->acctime = parunit_op_cost[i] + (ssd_data_transfer_cost(s,s->params.page_size) * cnt);
 #endif     
-                    r->schtime = parunit_tot_cost[i] + (op_count-1)*ssd_data_transfer_cost(s,s->params.page_size) + r->acctime;
-                }
+            r->schtime = parunit_tot_cost[i] + (op_count-1)*ssd_data_transfer_cost(s,s->params.page_size) + r->acctime;
+        }
 
 
-                // find the maximum cost for this round of operations
-                if (max_cost < r->schtime) {
-                    max_cost = r->schtime;
-                }
+        // find the maximum cost for this round of operations
+        if (max_cost < r->schtime) {
+            max_cost = r->schtime;
+        }
 
-                // release the node from the linked list
-                ll_release_node(parunits[i], n);
+        // release the node from the linked list
+        ll_release_node(parunits[i], n);
             }
         }
 
@@ -1605,7 +1606,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
     return max_cost;
 }
 
-static double ssd_write_one_active_page(int blkno, int count, int elem_num, ssd_t *s)
+double ssd_write_one_active_page(int blkno, int count, int elem_num, ssd_t *s)
 {
     double cost = 0;
     int cleaning_invoked = 0;
@@ -1649,7 +1650,7 @@ static double ssd_write_one_active_page(int blkno, int count, int elem_num, ssd_
 #ifndef ADIVIM
             _ssd_alloc_active_block(-1, elem_num, s);
 #else
-	    _ssd_alloc_active_block(-1, elem_num, s, 1);
+            _ssd_alloc_active_block(-1, elem_num, s, 1);
 #endif
         }
     }
@@ -1666,7 +1667,7 @@ static double ssd_write_one_active_page(int blkno, int count, int elem_num, ssd_
  * computes the time taken to read/write data in a flash element
  * using just one active page.
  */
-static void ssd_compute_access_time_one_active_page
+void ssd_compute_access_time_one_active_page
 (ssd_req **reqs, int total, int elem_num, ssd_t *s)
 {
     // we assume that requests have been broken down into page sized chunks
@@ -1755,7 +1756,7 @@ void ssd_compute_access_time(ssd_t *s, int elem_num, ssd_req **reqs, int total)
     }
 }
 
-static void ssd_free_timing_element(ssd_timing_t *t)
+void ssd_free_timing_element(ssd_timing_t *t)
 {
     free(t);
 }
