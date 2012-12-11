@@ -8,6 +8,7 @@
 #include "ssd_utils.h"
 #include "modules/ssdmodel_ssd_param.h"
 #include "disksim_global.h"
+#include "adivim.h"
 
 struct my_timing_t {
     ssd_timing_t          t;

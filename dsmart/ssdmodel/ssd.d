@@ -37,4 +37,4 @@ ssd.o: ssd.c ssd.h ../src//disksim_global.h ../src//disksim_rand48.h \
   ../diskmodel/include/diskmodel/dm_types.h /usr/include/inttypes.h \
   /usr/include/stdint.h /usr/include/bits/wchar.h ../src//disksim_bus.h \
   ../src//config.h ssd_timing.h ssd_clean.h modules/ssdmodel_ssd_param.h \
-  ssd_gang.h ssd_init.h adivim.h ../ssdmodel/ssd_timing.h
+  ssd_gang.h ssd_init.h adivim.h
