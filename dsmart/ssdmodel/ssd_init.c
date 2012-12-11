@@ -465,7 +465,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
     switch(currdisk->params.copy_back) {
         case SSD_COPY_BACK_DISABLE:
             bitpos = ssd_block_to_bitpos(currdisk, active_block);
-            ssd_set_bit(metadata->free_blocks, bitpos);
+            ssd_set_bit((unsigned char *) metadata->free_blocks, bitpos);
             metadata->block_usage[active_block].state = SSD_BLOCK_INUSE;
             metadata->block_usage[active_block].bsn = bsn ++;
             break;
@@ -475,7 +475,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 int plane_active_block = SSD_PAGE_TO_BLOCK(metadata->plane_meta[i].active_page, currdisk);
                 
                 bitpos = ssd_block_to_bitpos(currdisk, plane_active_block);
-                ssd_set_bit(metadata->free_blocks, bitpos);
+                ssd_set_bit((unsigned char *) metadata->free_blocks, bitpos);
                 metadata->block_usage[plane_active_block].state = SSD_BLOCK_INUSE;
                 metadata->block_usage[plane_active_block].bsn = bsn ++;
                 metadata->tot_free_blocks --;
@@ -613,7 +613,7 @@ void ssd_initialize (void)
     ssd_setcallbacks();
 #ifdef ADIVIM
     adivim_init ();
-#end if
+#endif
     
     // fprintf(stdout, "MAXDEVICES = %d, numssds %d\n", MAXDEVICES, numssds);
     // vp - changing the MAXDEVICES in the below 'for' loop to numssds

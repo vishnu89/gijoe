@@ -1,0 +1,15 @@
+#!/bin/sh
+
+
+cp $1/Makefile $2/Makefile
+cp $1/ssdmodel/Makefile $2/ssdmodel/Makefile
+cp $1/ssdmodel/adivim.h $2/ssdmodel/adivim.h
+cp $1/ssdmodel/adivim.c $2/ssdmodel/adivim.c
+cp $1/ssdmodel/ssd.h $2/ssdmodel/ssd.h
+cp $1/ssdmodel/ssd.c $2/ssdmodel/ssd.c
+cp $1/ssdmodel/ssd_clean.h $2/ssdmodel/ssd_clean.h
+cp $1/ssdmodel/ssd_clean.c $2/ssdmodel/ssd_clean.c
+cp $1/ssdmodel/ssd_timing.h $2/ssdmodel/ssd_timing.h
+cp $1/ssdmodel/ssd_timing.c $2/ssdmodel/ssd_timing.c
+cp $1/ssdmodel/ssd_init.h $2/ssdmodel/ssd_init.h
+cp $1/ssdmodel/ssd_init.c $2/ssdmodel/ssd_init.c
