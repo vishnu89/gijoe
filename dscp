@@ -14,3 +14,4 @@ cp $1/ssdmodel/ssd_timing.h $2/ssdmodel/ssd_timing.h
 cp $1/ssdmodel/ssd_timing.c $2/ssdmodel/ssd_timing.c
 cp $1/ssdmodel/ssd_init.h $2/ssdmodel/ssd_init.h
 cp $1/ssdmodel/ssd_init.c $2/ssdmodel/ssd_init.c
+cp $1/test/study.trace $2/test/study.trace
