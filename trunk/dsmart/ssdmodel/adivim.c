@@ -5,9 +5,9 @@
 #include "disksim_global.h"
 
 #ifdef ADIVIM
-#define ADIVIM_INIT_TYPE ADIVIM_HOT
-#define ADIVIM_ALLOC_INIT_HAPN(length) adivim_alloc_apn(*adivim_free_hapn_list, length)
-#define ADIVIM_ALLOC_INIT_CAPN(length) (ADIVIM_APN) -1
+#define ADIVIM_INIT_TYPE ADIVIM_COLD
+#define ADIVIM_ALLOC_INIT_HAPN(length) (ADIVIM_APN) -1
+#define ADIVIM_ALLOC_INIT_CAPN(length) adivim_alloc_apn(*adivim_free_capn_list, length)
 //#include "disksim_global.h"
 #include <stdbool.h>
 #include "adivim.h"

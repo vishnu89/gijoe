@@ -2170,3 +2170,82 @@ struct device_header ssd_hdr_initializer = {
   ssd_bus_delay_complete,
   ssd_bus_ownership_grant
 };
+
+#ifdef ADIVIM
+void print (char c, int n)
+{
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        printf ("%c", c);
+    }
+    printf ("\n");
+}
+void adivim_ssd_print_image (ssd_t * s)
+{
+    /*
+     e0
+     =======================================
+     p0                 | p1 ...
+     ---------------------------------------
+     HOT block1         | COLD block2
+     pageno->apn        | pageno->apn
+     pageno->apn        | ...
+     ...                | ...
+     ---------------------------------------
+     
+     e1
+     ...
+     */
+    int elem, block, page, row, column;
+    
+    for (elem = 0; elem < s->params.nelements; elem++)
+    {
+        printf ("e%d\n", elem);
+        print ('=', s->params.planes_per_pkg * 12);
+        
+        // print header
+        for (column = 0; column < s->params.planes_per_pkg; column++)
+        {
+            if (row == 0)
+            {
+                printf ("p%d\t\t\t| ", column);
+            }
+        }
+        
+        for (row = 0; row < (s->params.blocks_per_plane * s->params.pages_per_block); row++)
+        {
+            // print header
+            if (row % s->params.pages_per_block == 0)
+            {
+                print ('-', s->params.planes_per_pkg * 12);
+                
+                for (column = 0; column < s->params.planes_per_pkg; column++)
+                {
+                    block = (row / s->params.pages_per_block) * s->params.planes_per_pkg + column;
+                    page = block * s->params.pages_per_block + (row % s->params.pages_per_block);
+                    
+                    if (s->elements[elem].metadata.block_usage[block].type == 0)
+                    {
+                        printf ("COLD ");
+                    }
+                    else
+                    {
+                        printf ("HOT ");
+                    }
+                    printf ("block%d\t\t\t| ", block);
+                }
+            }
+            
+            for (column = 0; column < s->params.planes_per_pkg; column++)
+            {
+                block = (row / s->params.pages_per_block) * s->params.planes_per_pkg + column;
+                page = block * s->params.pages_per_block + (row % s->params.pages_per_block);
+                
+                printf ("%d->%d\t\t| ", page, s->elements[elem].metadata.block_usage[block].page[page % s->params.pages_per_block]);
+            }
+            
+        }
+    }
+}
+#endif
