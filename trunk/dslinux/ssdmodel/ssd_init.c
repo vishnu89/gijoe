@@ -514,7 +514,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 metadata->block_usage[plane_active_block].bsn = bsn ++;
                 metadata->block_usage[plane_active_block].type = 1;
 
-		metadata->tot_free_blocks --;
+                metadata->tot_free_blocks --;
                 metadata->plane_meta[i].free_blocks --;
                 
                 plane_active_block = metadata->plane_meta[i].cold_active_block;
@@ -524,7 +524,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 metadata->block_usage[plane_active_block].bsn = bsn ++;
                 metadata->block_usage[plane_active_block].type = 0;
 
-		metadata->tot_free_blocks --;
+                metadata->tot_free_blocks --;
                 metadata->plane_meta[i].free_blocks --;
             }
             break;
