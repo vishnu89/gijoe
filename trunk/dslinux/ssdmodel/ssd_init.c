@@ -379,8 +379,9 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
         if (ssd_last_page_in_block(ppage, currdisk)) {
             // leave this physical page for summary page and
             // seal the block
-            metadata->block_usage[block].state = SSD_BLOCK_SEALED;
-            
+#ifndef ADIVIM
+	    metadata->block_usage[block].state = SSD_BLOCK_SEALED;
+#endif
             // go to next block
             ppage ++;
             block = SSD_PAGE_TO_BLOCK(ppage, currdisk);
@@ -441,10 +442,12 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
         // it is enough if we set it once while working on the first phy page.
         // also increment the block sequence number.
         if (pp_index == 0) {
+#ifndef ADIVM
             bitpos = ssd_block_to_bitpos(currdisk, block);
             ssd_set_bit((unsigned char *) metadata->free_blocks, bitpos);
             metadata->block_usage[block].state = SSD_BLOCK_INUSE;
-            metadata->block_usage[block].bsn = bsn ++;
+#endif
+	    metadata->block_usage[block].bsn = bsn ++;
         }
 #ifndef ADIVIM
         // increase the usage count per block
@@ -514,7 +517,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 metadata->block_usage[plane_active_block].bsn = bsn ++;
                 metadata->block_usage[plane_active_block].type = 1;
 
-                metadata->tot_free_blocks --;
+		metadata->tot_free_blocks --;
                 metadata->plane_meta[i].free_blocks --;
                 
                 plane_active_block = metadata->plane_meta[i].cold_active_block;
@@ -524,7 +527,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 metadata->block_usage[plane_active_block].bsn = bsn ++;
                 metadata->block_usage[plane_active_block].type = 0;
 
-                metadata->tot_free_blocks --;
+		metadata->tot_free_blocks --;
                 metadata->plane_meta[i].free_blocks --;
             }
             break;

@@ -589,6 +589,7 @@ static void ssd_activate_elem(ssd_t *currdisk, int elem_num)
         if (write_total > 0) {
             // next issue the write requests
             ssd_compute_access_time(currdisk, elem_num, write_reqs, write_total);
+            currdisk->is_updated = true;
             
             // add an event for each request completion.
             // note that we can issue the writes only after all the reads above are
@@ -1441,10 +1442,55 @@ static void ssd_access_complete_element(ioreq_event *curr)
     int elem_num;
     ssd_element  *elem;
     ioreq_event *x;
+#ifdef ADIVIM
+
+    int flag;
+    unsigned int apn;
+    unsigned int cbn;
+   
+#endif
     
     currdisk = getssd (curr->devno);
+
+#ifndef ADIVIM
+    
     elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, curr->blkno);
+#else
+
+    adivim_assign_flag_by_blkno (currdisk->timing_t, curr->blkno, &flag);
+
+    switch(flag){
+	    case 0 : //cold -> cold
+	    case 3 : //hot -> cold
+	    	apn = adivim_get_judgement_by_blkno(currdisk->timing_t, curr->blkno).adivim_capn;
+		cbn = apn / (currdisk->params.pages_per_block -1);
+		elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+		 
+		break;
+	    case 1 : // hot -> hot
+	    case 2 : // cold->hot
+	    	apn = adivim_get_judgement_by_blkno(currdisk->timing_t, curr->blkno).adivim_hapn;
+		elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, apn);
+	   	break;
+	    default :
+	    	fprintf(stderr, "Wrong hot/cold type\n");
+		exit(1);
+	    	break;
+    }
+    
+#endif
+
+#ifndef ADIVIM
     ASSERT(elem_num == curr->ssd_elem_num);
+#else
+    if(elem_num != curr->ssd_elem_num)
+    {
+	    fprintf(stderr, "curr->blkno : %d\n", curr->blkno);
+	    fprintf(stderr, "elem_num : %d\ncurr->ssd_elem_num : %d\n", elem_num, curr->ssd_elem_num);
+	    exit(1);
+    }
+#endif
+
     elem = &currdisk->elements[elem_num];
     
     if ((x = ioqueue_physical_access_done(elem->queue,curr)) == NULL) {
@@ -2094,7 +2140,7 @@ void ssd_printstats (void)
     }
     fprintf(outputfile_adv, "Total Write Count : \t%d\n", write_page_sum);
     fprintf(outputfile_adv, "Total Write Req : \t%d\n", write_req_sum);
-    if (write_req_sum != 0) fprintf(outputfile_adv, "Write Amplification Factor : \t%d\n", write_page_sum/write_req_sum);
+    if (write_req_sum != 0) fprintf(outputfile_adv, "Write Amplification Factor : \t%f\n", (float) write_page_sum/ (float) write_req_sum);
     
 #endif
     
@@ -2218,7 +2264,7 @@ void print (char c, int n)
         printf ("%c", c);
     }
 }
-void adivim_ssd_print_image (ssd_t * s)
+void adivim_ssd_print_image (ssd_t *s)
 {
     /*
      e0
@@ -2237,27 +2283,24 @@ void adivim_ssd_print_image (ssd_t * s)
     int elem, block, page, blockno, pageno, mapped_lpn, column, columnwidth=19;
     bool skip;
     
+    // print only if mapping is modified.
+    if (!s->is_updated)
+    {
+        return;
+    }
+   
+    // now... shall we go?
+    s->is_updated = false;
+    
     for (elem = 0; elem < s->params.nelements; elem++)
     {
-        printf ("e%d\n", elem);
-        print ('=', s->params.planes_per_pkg * columnwidth); printf ("\n");
-        for (column = 0; column < s->params.planes_per_pkg; column++)
-        {
-            print (' ', 6);
-            printf ("%d plane", column);
-            print (' ', 5);
-            printf ("|");
-        }
-        printf ("\n");
-        
-        // print block
+        // skip check
+        skip = true;
         for (block = 0; block < s->params.blocks_per_plane; block++)
         {
-            // skip check
-            skip = true;
-            for (column = 0; column < s->params.planes_per_pkg; column++)
+            for (page = 0; page < s->params.pages_per_block; page++)
             {
-                for (page = 0; page < s->params.pages_per_block; page++)
+                for (column = 0; column < s->params.planes_per_pkg; column++)
                 {
                     blockno = block * s->params.planes_per_pkg + column;
                     pageno = blockno * s->params.pages_per_block + page;
@@ -2269,33 +2312,30 @@ void adivim_ssd_print_image (ssd_t * s)
                     }
                 }
             }
-            
-            // print block
-            if (!skip)
+        }
+        
+        if (!skip)
+        {
+            // print element header
+            printf ("e%d\n", elem);
+            print ('=', s->params.planes_per_pkg * columnwidth); printf ("\n");
+            for (column = 0; column < s->params.planes_per_pkg; column++)
             {
-                // print block header
-                print ('-', s->params.planes_per_pkg * columnwidth); printf ("\n");
+                print (' ', 6);
+                printf ("%d plane", column);
+                print (' ', 5);
+                printf ("|");
+            }
+            printf ("\n");
+         
+            // print block
+            for (block = 0; block < s->params.blocks_per_plane; block++)
+            {
+                // skip check
+                skip = true;
                 for (column = 0; column < s->params.planes_per_pkg; column++)
                 {
-                    blockno = block * s->params.planes_per_pkg + column;
-                    printf (" %5d block", blockno);
-                    if (s->elements[elem].metadata.block_usage[blockno].type == 0)
-                    {
-                        printf (" COLD |");
-                    }
-                    else
-                    {
-                        printf (" HOT  |");
-                    }
-                }
-                printf ("\n");
-                
-                // print page
-                for (page = 0; page < s->params.pages_per_block; page++)
-                {
-                    // skip check
-                    skip = true;
-                    for (column = 0; column < s->params.planes_per_pkg; column++)
+                    for (page = 0; page < s->params.pages_per_block; page++)
                     {
                         blockno = block * s->params.planes_per_pkg + column;
                         pageno = blockno * s->params.pages_per_block + page;
@@ -2306,10 +2346,33 @@ void adivim_ssd_print_image (ssd_t * s)
                             skip = false;
                         }
                     }
-                    
-                    // print
-                    if (!skip)
+                }
+                
+                // print block
+                if (!skip)
+                {
+                    // print block header
+                    print ('-', s->params.planes_per_pkg * columnwidth); printf ("\n");
+                    for (column = 0; column < s->params.planes_per_pkg; column++)
                     {
+                        blockno = block * s->params.planes_per_pkg + column;
+                        printf (" %5d block", blockno);
+                        if (s->elements[elem].metadata.block_usage[blockno].type == 0)
+                        {
+                            printf (" COLD |");
+                        }
+                        else
+                        {
+                            printf (" HOT  |");
+                        }
+                    }
+                    printf ("\n");
+                    
+                    // print page
+                    for (page = 0; page < s->params.pages_per_block; page++)
+                    {
+                        // skip check
+                        skip = true;
                         for (column = 0; column < s->params.planes_per_pkg; column++)
                         {
                             blockno = block * s->params.planes_per_pkg + column;
@@ -2318,21 +2381,37 @@ void adivim_ssd_print_image (ssd_t * s)
                             
                             if (mapped_lpn != -1)
                             {
-                                printf (" %7d->%7d |", pageno, mapped_lpn);
-                            }
-                            else
-                            {
-                                print (' ', 18);
-                                printf ("|");
+                                skip = false;
                             }
                         }
-                        printf ("\n");
+                        
+                        // print
+                        if (!skip)
+                        {
+                            for (column = 0; column < s->params.planes_per_pkg; column++)
+                            {
+                                blockno = block * s->params.planes_per_pkg + column;
+                                pageno = blockno * s->params.pages_per_block + page;
+                                mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
+                                
+                                if (mapped_lpn != -1)
+                                {
+                                    printf (" %7d->%7d |", pageno, mapped_lpn);
+                                }
+                                else
+                                {
+                                    print (' ', 18);
+                                    printf ("|");
+                                }
+                            }
+                            printf ("\n");
+                        }
                     }
                 }
             }
+            
+            print ('=', s->params.planes_per_pkg * columnwidth); printf ("\n\n");
         }
-        
-        print ('=', s->params.planes_per_pkg * columnwidth); printf ("\n\n");
     }
 }
 #endif
