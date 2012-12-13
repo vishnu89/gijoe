@@ -932,7 +932,15 @@ void disksim_setup_disksim (int argc, char **argv)
   disksim_setup_outputfile (argv[2], "w");
   fprintf (outputfile, "\n*** Output file name: %s\n", argv[2]); 
   fflush (outputfile); 
-   
+  
+
+#ifdef ADIVIM
+	if ((outputfile_adv = fopen("adivim.out","w")) == NULL) {
+		fprintf(stderr, "adivim outputfile cannot be opened\n");
+		exit(1);
+	}
+#endif
+
   if(strcmp (argv[3], "external") == 0) {
     disksim->external_control = 1;
   } 
@@ -1081,7 +1089,13 @@ void disksim_cleanup(void)
   {
     fclose (outputfile);
   }
-  
+
+#ifdef ADIVIM
+   if (outputfile_adv)
+	{
+		fclose(outputfile_adv);
+	}
+#endif
   
   if (disksim->iotracefile) 
   {
