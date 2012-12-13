@@ -405,7 +405,7 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
         ssd_assert_page_version(prev_page, active_page, metadata, s);
         
         if (metadata->block_usage[prev_block].page[pagepos_in_prev_block] != lpn) {
-            fprintf(stderr, "Error: lpn %d not found in prev block %d pos %d\n",
+            fprintf(stderr, "_ssd_write_page_osr: lpn %d not found in prev block %d pos %d\n",
                     lpn, prev_block, pagepos_in_prev_block);
             ASSERT(0);
         } else {
@@ -430,7 +430,7 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
     
     // some sanity checking
     if (metadata->block_usage[active_block].num_valid >= s->params.pages_per_block) {
-        fprintf(stderr, "Error: len %d of block %d is greater than or equal to pages per block %d\n",
+        fprintf(stderr, "_ssd_write_page_osr: len %d of block %d is greater than or equal to pages per block %d\n",
                 metadata->block_usage[active_block].num_valid, active_block, s->params.pages_per_block);
         exit(1);
     }
@@ -483,7 +483,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
         
 		for(i = range ; i > 0 ; i --)
 		{
-			pagepos_in_block = temp_lpn % (s->params.pages_per_block - 1);
+			pagepos_in_block = bucket[range-i] % (s->params.pages_per_block - 1);
             
 			if(metadata->block_usage[prev_block].page[pagepos_in_block] != -1)
 			{
@@ -598,8 +598,6 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 	}
 	else
 	{
-        
-        
 		for(i = range ; i >= 0; i--)
 		{
 			pagepos_in_block = bucket[range-i] % (s->params.pages_per_block - 1);
@@ -834,7 +832,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
             
             adivim_assign_flag_by_blkno (s->timing_t, reqs[i]->blk, &flag);
             switch(flag){
-                case 0 : //cold->colD
+                case 0 : //cold->cold
                     lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_capn;
                     cbn = lpn / s->params.pages_per_block;
                     prev_block = metadata->cold_lba_table[cbn];
