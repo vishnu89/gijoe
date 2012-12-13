@@ -2096,7 +2096,7 @@ void ssd_printstats (void)
    }
    fprintf(outputfile_adv, "Total Write Count : \t%d\n", write_page_sum);
    fprintf(outputfile_adv, "Total Write Req : \t%d\n", write_req_sum);
-   fprintf(outputfile_adv, "Write Amplification Factor : \t%d\n", write_page_sum/write_req_sum);
+   if (write_req_sum != 0) fprintf(outputfile_adv, "Write Amplification Factor : \t%d\n", write_page_sum/write_req_sum);
 
 #endif
 

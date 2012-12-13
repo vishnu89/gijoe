@@ -4,3 +4,709 @@
 *** I/O trace used: study.trace
 *** Synthgen to be used?: 0
 
+disksim_global Global {
+Init Seed = 42,
+Real Seed = 42,
+Stat definition file = statdefs
+} # end of Global spec
+
+disksim_iosim Sim {
+I/O Trace Time Scale = 1.000000
+} # end of Sim spec
+
+disksim_stats Stats {
+iodriver stats = disksim_iodriver_stats {
+Print driver size stats = 1,
+Print driver locality stats = 0,
+Print driver blocking stats = 0,
+Print driver interference stats = 0,
+Print driver queue stats = 1,
+Print driver crit stats = 0,
+Print driver idle stats = 1,
+Print driver intarr stats = 0,
+Print driver streak stats = 1,
+Print driver stamp stats = 1,
+Print driver per-device stats = 0
+   },
+bus stats = disksim_bus_stats {
+Print bus idle stats = 1,
+Print bus arbwait stats = 1
+   },
+ctlr stats = disksim_ctlr_stats {
+Print controller cache stats = 1,
+Print controller size stats = 1,
+Print controller locality stats = 1,
+Print controller blocking stats = 1,
+Print controller interference stats = 1,
+Print controller queue stats = 1,
+Print controller crit stats = 1,
+Print controller idle stats = 1,
+Print controller intarr stats = 0,
+Print controller streak stats = 1,
+Print controller stamp stats = 1,
+Print controller per-device stats = 1
+   },
+device stats = disksim_device_stats {
+Print device queue stats = 1,
+Print device crit stats = 0,
+Print device idle stats = 0,
+Print device intarr stats = 0,
+Print device size stats = 0,
+Print device seek stats = 1,
+Print device latency stats = 1,
+Print device xfer stats = 1,
+Print device acctime stats = 1,
+Print device interfere stats = 0,
+Print device buffer stats = 1
+   },
+process flow stats = disksim_pf_stats {
+Print per-process stats = 0,
+Print per-CPU stats = 0,
+Print all interrupt stats = 0,
+Print sleep stats = 0
+   }
+} # end of Stats spec
+
+disksim_iodriver DRIVER0 {
+type = 1,
+Constant access time = 0.0,
+Scheduler = disksim_ioqueue {
+Scheduling policy = 3,
+Cylinder mapping strategy = 1,
+Write initiation delay = 0.0,
+Read initiation delay = 0.0,
+Sequential stream scheme = 0,
+Maximum concat size = 128,
+Overlapping request scheme = 0,
+Sequential stream diff maximum = 0,
+Scheduling timeout scheme = 0,
+Timeout time/weight = 6,
+Timeout scheduling = 4,
+Scheduling priority scheme = 0,
+Priority scheduling = 4
+   },
+Use queueing in subsystem = 1
+} # end of DRIVER0 spec
+
+disksim_bus BUSTOP {
+type = 1,
+Arbitration type = 1,
+Arbitration time = 0.0,
+Read block transfer time = 0.0,
+Write block transfer time = 0.0,
+Print stats = 1
+} # end of BUSTOP spec
+
+disksim_bus BUSHBA {
+type = 2,
+Arbitration type = 1,
+Arbitration time = 0.001000,
+Read block transfer time = 0.000238,
+Write block transfer time = 0.000238,
+Print stats = 1
+} # end of BUSHBA spec
+
+disksim_ctlr CTLR0 {
+type = 1,
+Scale for delays = 0.0,
+Bulk sector transfer time = 0.0,
+Maximum queue length = 100,
+Print stats = 1
+} # end of CTLR0 spec
+
+ssdmodel_ssd SSD {
+Reserve pages percentage = 15,
+Minimum free blocks percentage = 5,
+Write policy = 2,
+Cleaning policy = 2,
+Planes per package = 8,
+Blocks per plane = 2048,
+Plane block mapping = 3,
+Copy back = 1,
+Number of parallel units = 1,
+Allocation pool logic = 1,
+Elements per gang = 1,
+Gang share = 1,
+Cleaning in background = 0,
+Command overhead = 0.0,
+Bus transaction latency = 0.0,
+Bulk sector transfer time = 0,
+Flash chip elements = 8,
+Page size = 8,
+Pages per block = 64,
+Blocks per element = 16384,
+Element stride pages = 1,
+Never disconnect = 1,
+Print stats = 1,
+Max queue length = 20,
+Scheduler = disksim_ioqueue {
+Scheduling policy = 1,
+Cylinder mapping strategy = 0,
+Write initiation delay = 0,
+Read initiation delay = 0.0,
+Sequential stream scheme = 0,
+Maximum concat size = 0,
+Overlapping request scheme = 0,
+Sequential stream diff maximum = 0,
+Scheduling timeout scheme = 0,
+Timeout time/weight = 0,
+Timeout scheduling = 0,
+Scheduling priority scheme = 0,
+Priority scheduling = 1
+   },
+Timing model = 1,
+Chip xfer latency = 0.000025,
+Page read latency = 0.025000,
+Page write latency = 0.200000,
+Block erase latency = 1.500000
+} # end of SSD spec
+
+instantiate [ 
+   simfoo
+] as Sim
+
+instantiate [ 
+   statfoo
+] as Stats
+
+instantiate [ 
+   ssd0x0
+] as SSD
+
+instantiate [ 
+   bustop
+] as BUSTOP
+
+instantiate [ 
+   busHBA0
+] as BUSHBA
+
+instantiate [ 
+   driver0
+] as DRIVER0
+
+instantiate [ 
+   ctlrHBA0
+] as CTLR0
+
+topospec disksim_iodriver driver0 [ 
+   disksim_bus bustop [ 
+      disksim_ctlr ctlrHBA0 [ 
+         disksim_bus busHBA0 [ 
+            ssdmodel_ssd ssd0x0 [ ]
+         ]
+      ]
+   ]
+]
+
+disksim_logorg org0 {
+Addressing mode = Array,
+Distribution scheme = Striped,
+Redundancy scheme = Noredun,
+devices = [ 
+      ssd0x0
+   ],
+Stripe unit = 128,
+Synch writes for safety = 0,
+Number of copies = 2,
+Copy choice on read = 6,
+RMW vs. reconstruct = 0.500000,
+Parity stripe unit = 128,
+Parity rotation type = 1,
+Time stamp interval = 0.0,
+Time stamp start time = 60000.000000,
+Time stamp stop time = 10000000000.000000,
+Time stamp file name = stamps
+} # end of org0 spec
+
+disksim_pf Proc {
+Number of processors = 1,
+Process-Flow Time Scale = 1.000000
+} # end of Proc spec
+
+disksim_synthio Synthio {
+Number of I/O requests to generate = 10000,
+Maximum time of trace generated = 1000.000000,
+System call/return with each request = 0,
+Think time from call to request = 0.0,
+Think time from request to return = 0.0,
+Generators = [ 
+      disksim_synthgen {
+Storage capacity per device = 6156008,
+devices = [ 
+            org0, 
+            org1, 
+            org2, 
+            org3, 
+            org4, 
+            org5, 
+            org6, 
+            org7, 
+            org8, 
+            org9, 
+            org10, 
+            org11, 
+            org12, 
+            org13
+         ],
+Blocking factor = 8,
+Probability of sequential access = 0.0,
+Probability of local access = 0.0,
+Probability of read access = 0.660000,
+Probability of time-critical request = 0.0,
+Probability of time-limited request = 0.0,
+Time-limited think times = [ 
+            normal, 
+            30.000000, 
+            100.000000
+         ],
+General inter-arrival times = [ 
+            exponential, 
+            0.0, 
+            5.000000
+         ],
+Sequential inter-arrival times = [ 
+            normal, 
+            0.0, 
+            0.0
+         ],
+Local inter-arrival times = [ 
+            exponential, 
+            0.0, 
+            0.0
+         ],
+Local distances = [ 
+            normal, 
+            0.0, 
+            40000.000000
+         ],
+Sizes = [ 
+            exponential, 
+            0.0, 
+            8.000000
+         ]
+      }
+   ]
+} # end of Synthio spec
+
+loadparams complete
+Initialization complete
+Simulation complete
+
+SIMULATION STATISTICS
+---------------------
+
+Total time of run:       0.000000
+
+Warm-up time:            0.000000
+
+
+STORAGE SUBSYSTEM STATISTICS
+----------------------------
+
+OVERALL I/O SYSTEM STATISTICS
+-----------------------------
+
+Overall I/O System Total Requests handled:	0
+Overall I/O System Requests per second:   	-nan
+Overall I/O System Completely idle time:  	0.000000   	-nan
+Overall I/O System Response time average: 	0.000000
+Overall I/O System Response time std.dev.:	0.000000
+Overall I/O System Response time maximum:	0
+Overall I/O System Response time distribution
+   <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
+      0       0       0       0       0       0       0       0       0       0 
+Overall I/O System Overlaps combined:     	0	0.000000
+Overall I/O System Read overlaps combined:	0	0.000000	0.000000
+Overall I/O System Critical Reads:      	     0  	0.000000
+Overall I/O System Critical Read Response time average: 	0.000000
+Overall I/O System Critical Read Response time std.dev.:	0.000000
+Overall I/O System Critical Read Response time maximum:	0
+Overall I/O System Critical Read Response time distribution
+   <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
+      0       0       0       0       0       0       0       0       0       0 
+Overall I/O System Non-Critical Reads:  	     0  	0.000000
+Overall I/O System Non-Critical Read Response time average: 	0.000000
+Overall I/O System Non-Critical Read Response time std.dev.:	0.000000
+Overall I/O System Non-Critical Read Response time maximum:	0
+Overall I/O System Non-Critical Read Response time distribution
+   <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
+      0       0       0       0       0       0       0       0       0       0 
+Overall I/O System Critical Writes:     	     0  	0.000000
+Overall I/O System Critical Write Response time average: 	0.000000
+Overall I/O System Critical Write Response time std.dev.:	0.000000
+Overall I/O System Critical Write Response time maximum:	0
+Overall I/O System Critical Write Response time distribution
+   <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
+      0       0       0       0       0       0       0       0       0       0 
+Overall I/O System Non-Critical Writes: 	     0  	0.000000
+Overall I/O System Non-Critical Write Response time average: 	0.000000
+Overall I/O System Non-Critical Write Response time std.dev.:	0.000000
+Overall I/O System Non-Critical Write Response time maximum:	0
+Overall I/O System Non-Critical Write Response time distribution
+   <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
+      0       0       0       0       0       0       0       0       0       0 
+Overall I/O System Number of reads:         1  	1.000000
+Overall I/O System Number of writes:        0  	0.000000
+Overall I/O System Sequential reads:        0  	0.000000  	0.000000
+Overall I/O System Sequential writes:       0  	0.000000  	0.000000
+Overall I/O System Base SPTF/SDF Different:      0 /      0 	0.000000
+Overall I/O System Timeout SPTF/SDF Different:      0 /      0 	0.000000
+Overall I/O System Priority SPTF/SDF Different:      0 /      0 	0.000000
+Overall I/O System runlistlen:              0.000000
+Overall I/O System runoutstanding:          0.000000
+Overall I/O System simtime:                 0.000000
+Overall I/O System warmuptime:              0.000000
+Overall I/O System setsize:                 1
+Overall I/O System Average # requests:      -nan
+Overall I/O System Maximum # requests:      1
+Overall I/O System End # requests:          1
+Overall I/O System Average queue length:    -nan
+Overall I/O System Maximum queue length:    1
+Overall I/O System End queued requests:     1
+Overall I/O System Queue time average: 	0.000000
+Overall I/O System Queue time std.dev.:	0.000000
+Overall I/O System Queue time maximum:	0
+Overall I/O System Queue time distribution
+   <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
+      0       0       0       0       0       0       0       0       0       0 
+Overall I/O System Avg # read requests:     -nan
+Overall I/O System Max # read requests:     1
+Overall I/O System Avg # write requests:    -nan
+Overall I/O System Max # write requests:    0
+Overall I/O System Physical access time average: 	0.000000
+Overall I/O System Physical access time std.dev.:	0.000000
+Overall I/O System Physical access time maximum:	0
+Overall I/O System Number of batches:  0
+Overall I/O System Batch size average: 	0.000000
+Overall I/O System Batch size std.dev.:	0.000000
+Overall I/O System Batch size maximum:	0
+Overall I/O System Batch size distribution
+   =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
+      0       0       0       0       0       0       0       0       0       0 
+Overall I/O System Inter-arrival time average: 	0.000000
+Overall I/O System Inter-arrival time std.dev.:	0.000000
+Overall I/O System Inter-arrival time maximum:	0
+Overall I/O System Inter-arrival time distribution
+   0  	      0  	0.000000  	0.000000
+   5  	      1  	1.000000  	1.000000
+  10  	      0  	0.000000  	1.000000
+  15  	      0  	0.000000  	1.000000
+  20  	      0  	0.000000  	1.000000
+  25  	      0  	0.000000  	1.000000
+  30  	      0  	0.000000  	1.000000
+  35  	      0  	0.000000  	1.000000
+  40  	      0  	0.000000  	1.000000
+  45  	      0  	0.000000  	1.000000
+  50  	      0  	0.000000  	1.000000
+  55  	      0  	0.000000  	1.000000
+  60  	      0  	0.000000  	1.000000
+  65  	      0  	0.000000  	1.000000
+  70  	      0  	0.000000  	1.000000
+  75  	      0  	0.000000  	1.000000
+  80  	      0  	0.000000  	1.000000
+  85  	      0  	0.000000  	1.000000
+  90  	      0  	0.000000  	1.000000
+  95  	      0  	0.000000  	1.000000
+ 100  	      0  	0.000000  	1.000000
+ 105  	      0  	0.000000  	1.000000
+ 110  	      0  	0.000000  	1.000000
+ 115  	      0  	0.000000  	1.000000
+ 120  	      0  	0.000000  	1.000000
+ 125  	      0  	0.000000  	1.000000
+ 130  	      0  	0.000000  	1.000000
+ 135  	      0  	0.000000  	1.000000
+ 140  	      0  	0.000000  	1.000000
+ 145  	      0  	0.000000  	1.000000
+ 150  	      0  	0.000000  	1.000000
+ 155  	      0  	0.000000  	1.000000
+ 160  	      0  	0.000000  	1.000000
+ 165  	      0  	0.000000  	1.000000
+ 170  	      0  	0.000000  	1.000000
+ 175  	      0  	0.000000  	1.000000
+ 180  	      0  	0.000000  	1.000000
+ 185  	      0  	0.000000  	1.000000
+ 190  	      0  	0.000000  	1.000000
+ 195  	      0  	0.000000  	1.000000
+Overall I/O System Read inter-arrival average: 	0.000000
+Overall I/O System Read inter-arrival std.dev.:	0.000000
+Overall I/O System Read inter-arrival maximum:	0
+Overall I/O System Read inter-arrival distribution
+   <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
+      1       0       0       0       0       0       0       0       0       0 
+Overall I/O System Write inter-arrival average: 	0.000000
+Overall I/O System Write inter-arrival std.dev.:	0.000000
+Overall I/O System Write inter-arrival maximum:	0
+Overall I/O System Write inter-arrival distribution
+   <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
+      0       0       0       0       0       0       0       0       0       0 
+Overall I/O System Number of idle periods:  1
+Overall I/O System Idle period length average: 	0.000000
+Overall I/O System Idle period length std.dev.:	0.000000
+Overall I/O System Idle period length maximum:	0
+Overall I/O System Idle period length distribution
+   <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
+      1       0       0       0       0       0       0       0       0       0 
+Overall I/O System Request size average: 	8.000000
+Overall I/O System Request size std.dev.:	0.000000
+Overall I/O System Request size maximum:	8
+Overall I/O System Request size distribution
+   =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
+      0       0       0       0       0       1       0       0       0       0 
+Overall I/O System Read request size average: 	8.000000
+Overall I/O System Read request size std.dev.:	0.000000
+Overall I/O System Read request size maximum:	8
+Overall I/O System Read request size distribution
+   =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
+      0       0       0       0       0       1       0       0       0       0 
+Overall I/O System Write request size average: 	0.000000
+Overall I/O System Write request size std.dev.:	0.000000
+Overall I/O System Write request size maximum:	0
+Overall I/O System Write request size distribution
+   =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
+      0       0       0       0       0       0       0       0       0       0 
+Overall I/O System Instantaneous queue length average: 	0.000000
+Overall I/O System Instantaneous queue length std.dev.:	0.000000
+Overall I/O System Instantaneous queue length maximum:	0
+Overall I/O System Instantaneous queue length distribution
+   =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
+      0       0       0       0       0       0       0       0       0       0 
+Overall I/O System Sub-optimal mapping penalty average: 	0.000000
+Overall I/O System Sub-optimal mapping penalty std.dev.:	0.000000
+Overall I/O System Sub-optimal mapping penalty maximum:	0
+Overall I/O System Sub-optimal mapping penalty distribution
+   = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
+      0       0       0       0       0       0       0       0       0       0 
+
+SYSTEM-LEVEL LOGORG STATISTICS
+------------------------------
+
+System Logical Organization #0
+System logorg #0 Number of requests:       0
+System logorg #0 Number of read requests:  0  	0.000000
+System logorg #0 Number of accesses:       1
+System logorg #0 Number of read accesses:  1  	1.000000
+System logorg #0 Average outstanding:      -nan
+System logorg #0 Maximum outstanding:      1
+System logorg #0 Avg nonzero outstanding:  none
+System logorg #0 Completely idle time:     0.000000
+System logorg #0 Response time average: 	0.000000
+System logorg #0 Response time std.dev.:	0.000000
+System logorg #0 Response time maximum:	0
+System logorg #0 Response time distribution
+   <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
+      0       0       0       0       0       0       0       0       0       0 
+System logorg #0 Time-critical reads:  0
+System logorg #0 Time-critical writes: 0
+System logorg #0 Number of streaks:		1
+System logorg #0 Streak length average: 	1.000000
+System logorg #0 Streak length std.dev.:	0.000000
+System logorg #0 Streak length maximum:	1
+System logorg #0 Streak length distribution
+   =  1    =  2    =  3    =  4    =  5    =  6    =  7    =  8    =  9     10+
+      1       0       0       0       0       0       0       0       0       0 
+System logorg #0 Timestamped # outstanding distribution (interval = 0.000000)
+     0       1       2       3       4       5       6       7       8      9+
+     0       0       0       0       0       0       0       0       0       0
+System logorg #0 Timestamped avg # outstanding difference distribution
+   <.5      <1    <1.5      <2    <2.5      <3      <4      <5      <6      6+
+     0       0       0       0       0       0       0       0       0       0
+System logorg #0 Timestamped max # outstanding difference distribution
+   <.5      <1    <1.5      <2    <2.5      <3      <4      <5      <6      6+
+     0       0       0       0       0       0       0       0       0       0
+System logorg #0 Request size average: 	8.000000
+System logorg #0 Request size std.dev.:	0.000000
+System logorg #0 Request size maximum:	8
+System logorg #0 Request size distribution
+   =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
+      0       0       0       0       0       1       0       0       0       0 
+System logorg #0 Read request size average: 	8.000000
+System logorg #0 Read request size std.dev.:	0.000000
+System logorg #0 Read request size maximum:	8
+System logorg #0 Read request size distribution
+   =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
+      0       0       0       0       0       1       0       0       0       0 
+System logorg #0 Write request size average: 	0.000000
+System logorg #0 Write request size std.dev.:	0.000000
+System logorg #0 Write request size maximum:	0
+System logorg #0 Write request size distribution
+   =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
+      0       0       0       0       0       0       0       0       0       0 
+System logorg #0 Number of idle periods:	1
+System logorg #0 Idle period length average: 	0.000000
+System logorg #0 Idle period length std.dev.:	0.000000
+System logorg #0 Idle period length maximum:	0
+System logorg #0 Idle period length distribution
+   <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
+      1       0       0       0       0       0       0       0       0       0 
+
+No ssd requests for members of this set
+
+
+IODRIVER STATISTICS
+-------------------
+
+IOdriver Total Requests handled:	0
+IOdriver Requests per second:   	-nan
+IOdriver Completely idle time:  	0.000000   	-nan
+IOdriver Response time average: 	0.000000
+IOdriver Response time std.dev.:	0.000000
+IOdriver Response time maximum:	0
+IOdriver Response time distribution
+   <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
+      0       0       0       0       0       0       0       0       0       0 
+IOdriver Overlaps combined:     	0	0.000000
+IOdriver Read overlaps combined:	0	0.000000	0.000000
+IOdriver Number of reads:         1  	1.000000
+IOdriver Number of writes:        0  	0.000000
+IOdriver Sequential reads:        0  	0.000000  	0.000000
+IOdriver Sequential writes:       0  	0.000000  	0.000000
+IOdriver Base SPTF/SDF Different:      0 /      1 	0.000000
+IOdriver Timeout SPTF/SDF Different:      0 /      0 	0.000000
+IOdriver Priority SPTF/SDF Different:      0 /      0 	0.000000
+IOdriver runlistlen:              0.000000
+IOdriver runoutstanding:          0.000000
+IOdriver simtime:                 0.000000
+IOdriver warmuptime:              0.000000
+IOdriver setsize:                 1
+IOdriver Average # requests:      -nan
+IOdriver Maximum # requests:      1
+IOdriver End # requests:          1
+IOdriver Average queue length:    -nan
+IOdriver Maximum queue length:    1
+IOdriver End queued requests:     0
+IOdriver Queue time average: 	0.000000
+IOdriver Queue time std.dev.:	0.000000
+IOdriver Queue time maximum:	0
+IOdriver Queue time distribution
+   <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
+      1       0       0       0       0       0       0       0       0       0 
+IOdriver Avg # read requests:     -nan
+IOdriver Max # read requests:     1
+IOdriver Avg # write requests:    -nan
+IOdriver Max # write requests:    0
+IOdriver Physical access time average: 	0.000000
+IOdriver Physical access time std.dev.:	0.000000
+IOdriver Physical access time maximum:	0
+IOdriver Number of batches:  0
+IOdriver Batch size average: 	0.000000
+IOdriver Batch size std.dev.:	0.000000
+IOdriver Batch size maximum:	0
+IOdriver Batch size distribution
+   =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
+      0       0       0       0       0       0       0       0       0       0 
+IOdriver Inter-arrival time average: 	0.000000
+IOdriver Inter-arrival time std.dev.:	0.000000
+IOdriver Inter-arrival time maximum:	0
+IOdriver Read inter-arrival average: 	0.000000
+IOdriver Read inter-arrival std.dev.:	0.000000
+IOdriver Read inter-arrival maximum:	0
+IOdriver Read inter-arrival distribution
+   <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
+      0       0       0       0       0       0       0       0       0       0 
+IOdriver Write inter-arrival average: 	0.000000
+IOdriver Write inter-arrival std.dev.:	0.000000
+IOdriver Write inter-arrival maximum:	0
+IOdriver Write inter-arrival distribution
+   <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
+      0       0       0       0       0       0       0       0       0       0 
+IOdriver Number of idle periods:  1
+IOdriver Idle period length average: 	0.000000
+IOdriver Idle period length std.dev.:	0.000000
+IOdriver Idle period length maximum:	0
+IOdriver Idle period length distribution
+   <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
+      1       0       0       0       0       0       0       0       0       0 
+IOdriver Request size average: 	8.000000
+IOdriver Request size std.dev.:	0.000000
+IOdriver Request size maximum:	8
+IOdriver Request size distribution
+   =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
+      0       0       0       0       0       1       0       0       0       0 
+IOdriver Read request size average: 	8.000000
+IOdriver Read request size std.dev.:	0.000000
+IOdriver Read request size maximum:	8
+IOdriver Read request size distribution
+   =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
+      0       0       0       0       0       1       0       0       0       0 
+IOdriver Write request size average: 	0.000000
+IOdriver Write request size std.dev.:	0.000000
+IOdriver Write request size maximum:	0
+IOdriver Write request size distribution
+   =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
+      0       0       0       0       0       0       0       0       0       0 
+IOdriver Instantaneous queue length average: 	1.000000
+IOdriver Instantaneous queue length std.dev.:	0.000000
+IOdriver Instantaneous queue length maximum:	1
+IOdriver Instantaneous queue length distribution
+   =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
+      1       0       0       0       0       0       0       0       0       0 
+IOdriver Sub-optimal mapping penalty average: 	0.000000
+IOdriver Sub-optimal mapping penalty std.dev.:	0.000000
+IOdriver Sub-optimal mapping penalty maximum:	0
+IOdriver Sub-optimal mapping penalty distribution
+   = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
+      0       0       0       0       0       0       0       0       0       0 
+
+DISK STATISTICS
+---------------
+
+No disk requests encountered
+
+SIMPLEDISK STATISTICS
+---------------------
+
+No simpledisk requests encountered
+
+MEMS STATISTICS
+----------------
+
+No mems requests encountered (1)
+
+SSD STATISTICS
+---------------------
+
+No ssd requests encountered
+
+CONTROLLER STATISTICS
+---------------------
+
+Controller #0 
+
+Total controller bus wait time: 0.000000
+
+BUS STATISTICS
+--------------
+
+Bus #0
+Bus #0 Total utilization time: 	0.00   	  -nan
+Bus #0 (bustop) Bus idle period length average: 	0.000000
+Bus #0 (bustop) Bus idle period length std.dev.:	0.000000
+Bus #0 (bustop) Bus idle period length maximum:	0
+Bus #0 (bustop) Bus idle period length distribution
+   <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
+      1       0       0       0       0       0       0       0       0       0 
+Bus #0 Number of arbitrations: 	0
+Bus #0 (bustop) Arbitration wait time average: 	0.000000
+Bus #0 (bustop) Arbitration wait time std.dev.:	0.000000
+Bus #0 (bustop) Arbitration wait time maximum:	0
+Bus #0 (bustop) Arbitration wait time distribution
+   =  0    <  1    <  2    <  5    < 10    < 15    < 25    < 40    < 60     60+
+      0       0       0       0       0       0       0       0       0       0 
+
+Bus #1
+Bus #1 Total utilization time: 	0.00   	  -nan
+Bus #1 (busHBA0) Bus idle period length average: 	0.000000
+Bus #1 (busHBA0) Bus idle period length std.dev.:	0.000000
+Bus #1 (busHBA0) Bus idle period length maximum:	0
+Bus #1 (busHBA0) Bus idle period length distribution
+   <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
+      1       0       0       0       0       0       0       0       0       0 
+Bus #1 Number of arbitrations: 	0
+Bus #1 (busHBA0) Arbitration wait time average: 	0.000000
+Bus #1 (busHBA0) Arbitration wait time std.dev.:	0.000000
+Bus #1 (busHBA0) Arbitration wait time maximum:	0
+Bus #1 (busHBA0) Arbitration wait time distribution
+   =  0    <  1    <  2    <  5    < 10    < 15    < 25    < 40    < 60     60+
+      0       0       0       0       0       0       0       0       0       0 
+
