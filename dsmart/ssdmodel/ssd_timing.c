@@ -777,8 +777,8 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_capn;
                     cbn = lpn / s->params.pages_per_block;
                     prev_block = metadata->cold_lba_table[cbn];
-                    prev_page = prev_block + (lpn % s->params.pages_per_block);
-                    ASSERT(prev_page != -1);
+                    ASSERT(prev_block != -1) 
+		    prev_page = prev_block + (lpn % s->params.pages_per_block);
                     break;
                 case 1 ://hot->hot
                 case 2 ://cold->hot
@@ -877,26 +877,28 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
             adivim_assign_flag_by_blkno (s->timing_t, reqs[i]->blk, &flag);
             switch(flag){
                 case 0 : //cold->cold
+		case 3 :
                     lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_capn;
                     cbn = lpn / s->params.pages_per_block;
                     prev_block = metadata->cold_lba_table[cbn];
                     prev_page = prev_block + (lpn % s->params.pages_per_block);
                     prev_bsn = metadata->block_usage[prev_block].bsn;
-                    //ASSERT(prev_page != -1);
-                    break;
+                    
+		    //ASSERT(prev_page != -1);
+                    
+		    break;
                 case 1 ://hot->hot
+		case 2 :
                     lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_hapn;
                     prev_page = metadata->hot_lba_table[lpn];
+
                     //ASSERT(prev_page != -1);
+
                     prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
                     prev_bsn = metadata->block_usage[prev_block].bsn;
                     break;
-                case 2 ://cold->hot
-                    break;
-                case 3 ://hot->cold
-                    break;
                 default :
-                    fprintf(stderr, "Error : Wrong hot/cold type\n");
+                    fprintf(stderr, "Error : Wrong hot/cold type - %d\n", flag);
             }
              */
 #endif
@@ -942,14 +944,17 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                         case 3 ://hot->cold
                             active_block = pm->cold_active_block;
                             active_bsn = metadata->block_usage[active_block].bsn;
-                            break;
+			    break;
+
                         case 1 ://hot -> hot
                         case 2 ://cold->hot
                             active_block = SSD_PAGE_TO_BLOCK(pm->hot_active_page, s);
                             active_bsn = metadata->block_usage[active_block].bsn;
-                            break;
+			    
+			    break;
+
                         default :
-                            fprintf(stderr, "Error : Wrong hot/cold type\n");
+                            fprintf(stderr, "Error : Wrong hot/cold type - - - %d\n", _flag);
                     }
                      */
 #endif
@@ -1145,7 +1150,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                             }
                             break;
                         default :
-                            fprintf(stderr, "Error : Wrong hot/cold type\n");
+                            fprintf(stderr, "Error : Wrong hot/cold type - - %d\n", _flag);
                     }*/
 #endif
                     // check out the next plane

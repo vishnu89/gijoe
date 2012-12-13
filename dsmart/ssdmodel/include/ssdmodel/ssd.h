@@ -411,12 +411,6 @@ typedef struct ssd_info {
 
 /* request structure */
 typedef struct _ssd_req {
-    
-#ifdef ADIVIM
-    int hc_flag;
-    int range;
-    int perform;
-#endif
     int blk;
     int count;
     int is_read;
@@ -426,6 +420,11 @@ typedef struct _ssd_req {
     double schtime;         // when to schedule this event?
     int include;            // should we include its cost in acctime stats
     // if we're getting parallel ios, then we don't need to include all of 'em
+#ifdef ADIVIM
+    int hc_flag;
+    int range;
+    int perform;
+#endif
 } ssd_req;
 
 /* some more definitions */
@@ -498,6 +497,8 @@ double  ssd_read_policy_simple(int count, ssd_t *s);
 void    ssd_complete_parent(ioreq_event *curr, ssd_t *currdisk);
 double _ssd_invoke_element_cleaning(int elem_num, ssd_t *s);
 int     ssd_already_present(ssd_req **reqs, int total, ioreq_event *req);
-
+#ifdef ADIVIM
+void    adivim_ssd_print_image (ssd_t *s);
+#endif
 #endif   /* DISKSIM_ssd_H */
 
