@@ -1,7 +1,7 @@
 
-*** Output file name: ssdmodel/valid/ssd-iozone.outv
+*** Output file name: ssd-iozone.outv
 *** Input trace format: ascii
-*** I/O trace used: ssdmodel/valid/ssd-iozone-aligned2-100K.trace
+*** I/O trace used: ssd-iozone-aligned2-100K.trace
 *** Synthgen to be used?: 0
 
 disksim_global Global {

@@ -411,12 +411,6 @@ typedef struct ssd_info {
 
 /* request structure */
 typedef struct _ssd_req {
-    
-#ifdef ADIVIM
-    int hc_flag;
-    int range;
-    int perform;
-#endif
     int blk;
     int count;
     int is_read;
@@ -426,6 +420,11 @@ typedef struct _ssd_req {
     double schtime;         // when to schedule this event?
     int include;            // should we include its cost in acctime stats
     // if we're getting parallel ios, then we don't need to include all of 'em
+#ifdef ADIVIM
+    int hc_flag;
+    int range;
+    int perform;
+#endif
 } ssd_req;
 
 /* some more definitions */
