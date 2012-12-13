@@ -325,7 +325,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
         metadata->block_usage[i].block_num = i;
         metadata->block_usage[i].page = (int*)malloc(sizeof(int) * currdisk->params.pages_per_block);
         
-        for (j = 0; j < currdisk->params.pages_per_block; j ++) {
+        for (j = 0; j < currdisk->params.pages_per_block; j++) {
             metadata->block_usage[i].page[j] = -1;
         }
         
