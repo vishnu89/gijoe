@@ -2219,7 +2219,6 @@ void print (char c, int n)
     {
         printf ("%c", c);
     }
-    printf ("\n");
 }
 void adivim_ssd_print_image (ssd_t * s)
 {
@@ -2237,16 +2236,19 @@ void adivim_ssd_print_image (ssd_t * s)
      e1
      ...
      */
-    int elem, block, page, blockno, pageno, mapped_lpn, column, columnwidth=24;
+    int elem, block, page, blockno, pageno, mapped_lpn, column, columnwidth=19;
     bool skip;
     
     for (elem = 0; elem < s->params.nelements; elem++)
     {
-        printf ("\ne%d\n", elem);
-        print ('=', s->params.planes_per_pkg * columnwidth);
+        printf ("e%d\n", elem);
+        print ('=', s->params.planes_per_pkg * columnwidth); printf ("\n");
         for (column = 0; column < s->params.planes_per_pkg; column++)
         {
-            printf ("%7d plane\t\t| ", column);
+            print (' ', 6);
+            printf ("%d plane", column);
+            print (' ', 5);
+            printf ("|");
         }
         printf ("\n");
         
@@ -2274,17 +2276,19 @@ void adivim_ssd_print_image (ssd_t * s)
             if (!skip)
             {
                 // print block header
-                print ('-', s->params.planes_per_pkg * columnwidth);
-                blockno = block * s->params.planes_per_pkg + column;
-                printf ("%7d block", blockno);
-                
-                if (s->elements[elem].metadata.block_usage[blockno].type == 0)
+                print ('-', s->params.planes_per_pkg * columnwidth); printf ("\n");
+                for (column = 0; column < s->params.planes_per_pkg; column++)
                 {
-                    printf (" COLD\t| ");
-                }
-                else
-                {
-                    printf (" HOT\t| ");
+                    blockno = block * s->params.planes_per_pkg + column;
+                    printf (" %5d block", blockno);
+                    if (s->elements[elem].metadata.block_usage[blockno].type == 0)
+                    {
+                        printf (" COLD |");
+                    }
+                    else
+                    {
+                        printf (" HOT  |");
+                    }
                 }
                 printf ("\n");
                 
@@ -2316,11 +2320,12 @@ void adivim_ssd_print_image (ssd_t * s)
                             
                             if (mapped_lpn != -1)
                             {
-                                printf ("%7d->%7d\t| ", pageno, mapped_lpn);
+                                printf (" %7d->%7d |", pageno, mapped_lpn);
                             }
                             else
                             {
-                                printf ("\t\t\t\t| ");
+                                print (' ', 18);
+                                printf ("|");
                             }
                         }
                         printf ("\n");
@@ -2328,6 +2333,8 @@ void adivim_ssd_print_image (ssd_t * s)
                 }
             }
         }
+        
+        print ('=', s->params.planes_per_pkg * columnwidth); printf ("\n\n");
     }
 }
 #endif
