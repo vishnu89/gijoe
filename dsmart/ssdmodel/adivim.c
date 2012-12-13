@@ -81,6 +81,8 @@ void adivim_section_job (listnode *start, ADIVIM_SECTION *arg);
 bool _adivim_alloc_apn (listnode *start, listnode *target, void *arg);
 ADIVIM_APN adivim_alloc_apn (listnode *start, ADIVIM_APN size);
 bool _adivim_section_lookup (listnode *start,listnode *target, void *arg);
+bool _adivim_print_section (listnode *start, listnode *target, void *arg);
+void adivim_print_section ();
 ADIVIM_JUDGEMENT adivim_section_lookup (listnode *start, ADIVIM_APN pg);
 
 struct my_timing_t {
@@ -109,6 +111,7 @@ void adivim_assign_judgement (void *t, ioreq_event *req)
     }
     
     adivim_section_job (*adivim_section_list, section);
+    adivim_print_section ();
 }
 
 void adivim_assign_flag_by_blkno (void *t, int blkno, int *flag)
@@ -161,7 +164,7 @@ void adivim_init ()
     adivim_free_capn_list = (listnode **) malloc (sizeof (listnode *));
     
     ll_create (adivim_section_list);
-    adivim_empty_section->starting = -1;
+    adivim_empty_section->starting = ADIVIM_APN_INFINITY;
     adivim_empty_section->length = 0;
     ll_insert_at_head (*adivim_section_list, adivim_empty_section);
     
@@ -473,7 +476,7 @@ bool _adivim_section_lookup (listnode *start,listnode *target, void *arg)
     ADIVIM_SECTION *data = (ADIVIM_SECTION *) target->data;
     ADIVIM_APN pg = *((ADIVIM_APN *) arg);
 
-    if (data->starting < pg && pg < data->starting + data->length)
+    if (data->starting <= pg && pg <= data->starting + data->length)
     {
         ADIVIM_JUDGEMENT *datajudge = &(data->adivim_judgement);
         ADIVIM_JUDGEMENT *copy = (ADIVIM_JUDGEMENT *) malloc (sizeof (ADIVIM_JUDGEMENT));
@@ -505,6 +508,20 @@ ADIVIM_JUDGEMENT adivim_section_lookup (listnode *start, ADIVIM_APN pg)
     
     free (arg);
     return ret;
+}
+
+bool _adivim_print_section (listnode *start, listnode *target, void *arg)
+{
+    ADIVIM_SECTION *data = (ADIVIM_SECTION *) target->data;
+    printf ("->(%d, %d, %d, %d, %d, %d, %d)", data->starting, data->length, data->adivim_access_log.read_count, data->adivim_access_log.write_count, data->adivim_judgement.adivim_type, data->adivim_judgement.adivim_hapn, data->adivim_judgement.adivim_capn);
+    
+    return true;
+}
+
+void adivim_print_section ()
+{
+    printf ("(starting, length, rcount, wcount, type, hapn, capn)");
+    adivim_ll_apply (*adivim_section_list, _adivim_print_section, NULL);
 }
 
 ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section)
