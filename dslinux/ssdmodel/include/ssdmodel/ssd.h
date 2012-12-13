@@ -7,7 +7,10 @@
 #include "disksim_ioqueue.h"
 #include "disksim_bus.h"
 #include "config.h"
+#ifdef ADIVIM
 #include "adivim.h"
+#include <stdbool.h>
+#endif
 
 #ifndef DISKSIM_SSD_H
 #define DISKSIM_SSD_H
@@ -401,6 +404,9 @@ typedef struct ssd {
     
     int printstats;
     ssd_stat_t stat;
+#ifdef ADIVIM
+    bool is_updated;
+#endif
 } ssd_t;
 
 typedef struct ssd_info {
