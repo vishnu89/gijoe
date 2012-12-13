@@ -815,6 +815,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
 #ifdef ADIVIM
             int cbn;
             int flag;
+            ADIVIM_JUDGEMENT judgement;
 #endif
             plane_num = -1;
             
@@ -827,6 +828,52 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
 #else
             //section = get_from_ADIVIM(reqs[i]->blkno);
             
+            // set prev_block, prev_page, prev_bsn for following code
+            judgement = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk));
+            
+            switch (judgement.adivim_type)
+            {
+                case ADIVIM_HOT:
+                    if (judgement.adivim_capn == -1)
+                    {
+                        // pure hot
+                        prev_page = -1;
+                        prev_block = -1;
+                        prev_bsn = -1;
+                    }
+                    else
+                    {
+                        // cold to hot
+                        ADIVIM_APN capn = judgement.adivim_capn;
+                        prev_block = metadata->cold_lba_table[capn / (s->params.pages_per_block - 1)];
+                        ASSERT(prev_block != -1);
+                        prev_page = prev_block * s->params.pages_per_block + capn % (s->params.pages_per_block - 1);
+                        prev_bsn = metadata->block_usage[prev_block].bsn;
+                    }
+                    break;
+                case ADIVIM_COLD:
+                    if (judgement.adivim_hapn == -1)
+                    {
+                        // pure cold
+                        prev_page = -1;
+                        prev_block = -1;
+                        prev_bsn = -1;
+                    }
+                    else
+                    {
+                        // hot to cold
+                        ADIVIM_APN hapn = judgement.adivim_hapn;
+                        prev_page = metadata->hot_lba_table [hapn];
+                        ASSERT(prev_page != -1);
+                        prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
+                        prev_bsn = metadata->block_usage[prev_block].bsn;
+                    }
+                    break;
+                default:
+                    fprintf(stderr, "ssd_pick_parunits: Wrong hot/cold type\n");
+            }
+            
+            /*
             adivim_assign_flag_by_blkno (s->timing_t, reqs[i]->blk, &flag);
             switch(flag){
                 case 0 : //cold->cold
@@ -851,11 +898,13 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                 default :
                     fprintf(stderr, "Error : Wrong hot/cold type\n");
             }
+             */
 #endif
             
             if (s->params.alloc_pool_logic == SSD_ALLOC_POOL_PLANE) {
                 plane_num = metadata->block_usage[prev_block].plane_num;
-            } else {
+            } else
+            {
                 // find a plane with the max no of free blocks
                 j = metadata->plane_to_write;
                 do {
@@ -863,11 +912,30 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     int active_bsn;
                     int _flag;
                     plane_metadata *pm = &metadata->plane_meta[j];
+#ifdef ADIVIM
+                    int active_page; // will be one of either hot_active_page or cold_active_page
+#endif
                     
 #ifndef ADIVIM
                     active_block = SSD_PAGE_TO_BLOCK(pm->active_page, s);
                     active_bsn = metadata->block_usage[active_block].bsn;
 #else
+                    // set active_block and active_bsn
+                    switch (judgement.adivim_type)
+                    {
+                        case ADIVIM_HOT:
+                            active_page = pm->hot_active_page;
+                            active_block = SSD_PAGE_TO_BLOCK (pm->hot_active_page, s);
+                            break;
+                        case ADIVIM_COLD:
+                            active_block = pm->cold_active_block;
+                            active_page = active_block * s->params.pages_per_block + judgement.adivim_capn % (s->params.pages_per_block - 1);
+                            break;
+                        default:
+                            fprintf(stderr, "ssd_pick_parunits: Wrong hot/cold type\n");
+                    }
+                    active_bsn = metadata->block_usage[active_block].bsn;
+                    /*
                     adivim_assign_flag_by_blkno (s->timing_t, reqs[i]->blk, &_flag);
                     switch(_flag){
                         case 0 ://cold -> cold
@@ -883,6 +951,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                         default :
                             fprintf(stderr, "Error : Wrong hot/cold type\n");
                     }
+                     */
 #endif
                     
 #ifndef ADIVIM
@@ -931,6 +1000,63 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                         }
                     }
 #else
+                    // tiny block sanity check
+                    if (prev_page == -1 || (prev_page != -1 && ((active_bsn > prev_bsn) ||
+                        ((active_bsn == prev_bsn) && (active_page > (unsigned int)prev_page))))
+                        )
+                    {
+                        int free_pages_in_act_blk;
+                        int k;
+                        int p;
+                        int tmp;
+                        int size;
+                        int additive = 0;
+                        int hot_additive = 0, cold_additive = 0, hot_free_blocks = 0, cold_free_blocks = 0;
+                        
+                        p = metadata->plane_meta[j].parunit_num;
+                        size = ll_get_size(parunits[p]);
+                        
+                        // check if this plane has been already selected for writing
+                        // in this parallel unit
+                        for (k = 0; k < size; k ++) {
+                            ssd_req *r;
+                            listnode *n = ll_get_nth_node(parunits[p], k);
+                            ASSERT(n != NULL);
+                            
+                            r = ((ssd_req *)n->data);
+                            
+                            // is this plane has been already selected for writing?
+                            if ((r->plane_num == j) &&
+                                (!r->is_read)) {
+                                if (r->hc_flag == 0 || r->hc_flag == 3)
+                                {
+                                    cold_additive++;
+                                }
+                                else
+                                {
+                                    hot_additive++;
+                                }
+                            }
+                        }
+                        additive = judgement.adivim_type==ADIVIM_HOT ? hot_additive : cold_additive;
+                        
+                        // select a plane with the most no of free pages
+                        free_pages_in_act_blk = s->params.pages_per_block - ((active_page%s->params.pages_per_block) + additive);
+                        tmp = pm->free_blocks * s->params.pages_per_block + free_pages_in_act_blk;
+                        
+                        if (plane_num == -1) {
+                            // this is the first plane that satisfies the above criterion
+                            min_valid = tmp;
+                            plane_num = j;
+                        } else
+                        {
+                            if (min_valid < tmp) {
+                                min_valid = tmp;
+                                plane_num = j;
+                            }
+                        }
+                    }
+                    /*
                     int free_pages_in_act_blk;
                     int k;
                     int p;
@@ -1020,7 +1146,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                             break;
                         default :
                             fprintf(stderr, "Error : Wrong hot/cold type\n");
-                    }
+                    }*/
 #endif
                     // check out the next plane
                     j = (j+1) % s->params.planes_per_pkg;
