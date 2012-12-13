@@ -51,7 +51,8 @@ disksim_device.o: disksim_device.c disksim_global.h disksim_rand48.h \
  ../memsmodel/include/memsmodel/mems_disksim.h \
  ../ssdmodel/include/ssdmodel/ssd.h disksim_ioqueue.h disksim_bus.h \
  config.h inline.h disksim_iosim.h disksim_global.h disksim_stat.h \
- config.h ../ssdmodel/include/ssdmodel/adivim.h modules/modules.h \
+ config.h ../ssdmodel/include/ssdmodel/adivim.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include/stdbool.h modules/modules.h \
  modules/disksim_bus_param.h modules/disksim_bus_stats_param.h \
  modules/disksim_cachedev_param.h modules/disksim_cachemem_param.h \
  modules/disksim_ctlr_param.h modules/disksim_ctlr_stats_param.h \

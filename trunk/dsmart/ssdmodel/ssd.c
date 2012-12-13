@@ -1462,19 +1462,19 @@ static void ssd_access_complete_element(ioreq_event *curr)
     switch(flag){
 	    case 0 : //cold -> cold
 	    case 3 : //hot -> cold
-	    	apn = adivim_get_judgement_by_blkno(currdisk->timing_t, curr->blkno).adivim_capn;
-		cbn = apn / (currdisk->params.pages_per_block -1);
-		elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+            apn = adivim_get_judgement_by_blkno(currdisk->timing_t, curr->blkno).adivim_capn;
+            cbn = apn / (currdisk->params.pages_per_block -1);
+            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
 		 
 		break;
 	    case 1 : // hot -> hot
 	    case 2 : // cold->hot
-	    	apn = adivim_get_judgement_by_blkno(currdisk->timing_t, curr->blkno).adivim_hapn;
-		elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, apn);
+            apn = adivim_get_judgement_by_blkno(currdisk->timing_t, curr->blkno).adivim_hapn;
+            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, apn);
 	   	break;
 	    default :
-	    	fprintf(stderr, "Wrong hot/cold type\n");
-		exit(1);
+            fprintf(stderr, "Wrong hot/cold type\n");
+            exit(1);
 	    	break;
     }
     
