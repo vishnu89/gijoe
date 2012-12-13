@@ -166,6 +166,11 @@ void adivim_init ()
     ll_create (adivim_section_list);
     adivim_empty_section->starting = ADIVIM_APN_INFINITY;
     adivim_empty_section->length = 0;
+    adivim_empty_section->adivim_access_log.read_count = -1;
+    adivim_empty_section->adivim_access_log.write_count = -1;
+    adivim_empty_section->adivim_judgement.adivim_type = -1;
+    adivim_empty_section->adivim_judgement.adivim_hapn = -1;
+    adivim_empty_section->adivim_judgement.adivim_capn = -1;
     ll_insert_at_head (*adivim_section_list, adivim_empty_section);
     
     ll_create (adivim_free_hapn_list);
@@ -496,7 +501,7 @@ bool _adivim_section_lookup (listnode *start,listnode *target, void *arg)
 
 ADIVIM_JUDGEMENT adivim_section_lookup (listnode *start, ADIVIM_APN pg)
 {
-    ADIVIM_APN **arg = (ADIVIM_APN *) malloc (sizeof (ADIVIM_APN));
+    ADIVIM_APN *arg = (ADIVIM_APN *) malloc (sizeof (ADIVIM_APN));
     ADIVIM_JUDGEMENT ret;
     *arg = pg;
     
@@ -520,7 +525,7 @@ bool _adivim_print_section (listnode *start, listnode *target, void *arg)
 
 void adivim_print_section ()
 {
-    printf ("section list: (starting, length, rcount, wcount, type, hapn, capn)");
+    printf ("section list(starting, length, rcount, wcount, type, hapn, capn): |");
     adivim_ll_apply (*adivim_section_list, _adivim_print_section, NULL);
 }
 
