@@ -490,8 +490,6 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 				found = 1;
 				break;
 			}
-            
-			
 		}
         
 		if(found == 1)
@@ -564,7 +562,6 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
                 _ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
             }
 		}
-        
 		else
 		{
 			ASSERT(prev_block == metadata->cold_active_block);
@@ -598,7 +595,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 	}
 	else
 	{
-		for(i = range ; i >= 0; i--)
+		for(i = range ; i > 0; i--)
 		{
 			pagepos_in_block = bucket[range-i] % (s->params.pages_per_block - 1);
 			metadata->block_usage[metadata->cold_active_block].page[pagepos_in_block] = bucket[range-i];
@@ -838,12 +835,12 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     prev_block = metadata->cold_lba_table[cbn];
                     prev_page = prev_block + (lpn % s->params.pages_per_block);
                     prev_bsn = metadata->block_usage[prev_block].bsn;
-                    ASSERT(prev_page != -1);
+                    //ASSERT(prev_page != -1);
                     break;
                 case 1 ://hot->hot
                     lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_hapn;
                     prev_page = metadata->hot_lba_table[lpn];
-                    ASSERT(prev_page != -1);
+                    //ASSERT(prev_page != -1);
                     prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
                     prev_bsn = metadata->block_usage[prev_block].bsn;
                     break;
@@ -877,10 +874,12 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                         case 3 ://hot->cold
                             active_block = pm->cold_active_block;
                             active_bsn = metadata->block_usage[active_block].bsn;
+                            break;
                         case 1 ://hot -> hot
                         case 2 ://cold->hot
                             active_block = SSD_PAGE_TO_BLOCK(pm->hot_active_page, s);
                             active_bsn = metadata->block_usage[active_block].bsn;
+                            break;
                         default :
                             fprintf(stderr, "Error : Wrong hot/cold type\n");
                     }
