@@ -464,7 +464,7 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
 #endif
 
 #ifdef ADIVIM
-double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_num, int* bucket, int range)
+double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_num, int *bucket, int range)
 {
 	double cost = 0;
 	int i, j;
@@ -518,12 +518,12 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 							metadata->block_usage[metadata->cold_active_block].num_valid++;
 						}
                         
-                        
 						metadata->block_usage[metadata->cold_active_block].page[i] =
                         metadata->block_usage[prev_block].page[i];
 					}
 				}
-				else{
+				else
+                {
 					if(metadata->block_usage[prev_block].page[i] != -1)
 					{
 						metadata->block_usage[metadata->cold_active_block].num_valid++;
@@ -547,7 +547,8 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 			metadata->cold_lba_table[cbn] = metadata->cold_active_block;
             
 			
-			if(metadata->block_usage[metadata->cold_active_block].num_valid == (s->params.pages_per_block - 1)){
+			if(metadata->block_usage[metadata->cold_active_block].num_valid == (s->params.pages_per_block - 1))
+            {
                 // cost of transferring the summary page data
         		cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
                 
@@ -1115,7 +1116,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 				{
 					bucket[b_size-jj] = save_lpn[ii-jj];
 				}
-				cost += _ssd_write_block_osr(s, metadata, act_elem_num, bucket, b_size);
+				cost += _ssd_write_block_osr(s, metadata, act_elem_num, (int *) bucket, b_size);
 				free(bucket);		
 				b_size = 1;
 			}
@@ -1131,7 +1132,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 			bucket[b_size-jj] = save_lpn[ii-jj];
 		}
 		
-		cost += _ssd_write_block_osr(s, metadata, elem_num, bucket, b_size);
+		cost += _ssd_write_block_osr(s, metadata, elem_num, (int *) bucket, b_size);
 					
 		free(bucket);
 		free(save_lpn);
@@ -1430,7 +1431,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 							{
 								bucket[b_size-jj] = save_lpn[ii-jj];
 							}
-							parunit_op_cost[i] += _ssd_write_block_osr(s, metadata, elem_num, bucket, b_size);
+							parunit_op_cost[i] += _ssd_write_block_osr(s, metadata, elem_num, (int *) bucket, b_size);
 							free(bucket);		
 							b_size = 1;
 						}
@@ -1443,7 +1444,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 					{
 						bucket[b_size-jj] = save_lpn[ii-jj];
 					}
-					parunit_op_cost[i] += _ssd_write_block_osr(s, metadata, elem_num, bucket, b_size);
+					parunit_op_cost[i] += _ssd_write_block_osr(s, metadata, elem_num, (int *) bucket, b_size);
 					
 					free(bucket);
 					free(save_lpn);
@@ -1510,7 +1511,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 							{
 								bucket[b_size-jj] = save_lpn[ii-jj];
 							}
-							parunit_op_cost[i] += _ssd_write_block_osr(s, metadata, elem_num, bucket, b_size);
+							parunit_op_cost[i] += _ssd_write_block_osr(s, metadata, elem_num, (int *) bucket, b_size);
 							free(bucket);		
 							b_size = 1;
 						}
@@ -1523,7 +1524,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
 					{
 						bucket[b_size-jj] = save_lpn[ii-jj];
 					}
-					parunit_op_cost[i] += _ssd_write_block_osr(s, metadata, elem_num, bucket, b_size);
+					parunit_op_cost[i] += _ssd_write_block_osr(s, metadata, elem_num, (int *) bucket, b_size);
 					
 					free(bucket);
 					free(save_lpn);

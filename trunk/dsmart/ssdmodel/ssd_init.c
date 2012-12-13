@@ -430,7 +430,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
         pp_index = ppage % currdisk->params.pages_per_block;
         
         // populate the lba table
-#ifndef ADIVM
+#ifndef ADIVIM
         metadata->lba_table[i] = ppage;
 #endif
         pgnum_in_gang = elem_index * export_size + i;

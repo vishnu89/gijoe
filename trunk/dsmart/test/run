@@ -15,8 +15,8 @@ GDB open.
            gdb --args ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0;
            break;;
         --)
-           echo "../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0"; 
-           ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0;
+           echo "../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0 > out.txt";
+           ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0 > out.txt;
            break;;
     esac
 done

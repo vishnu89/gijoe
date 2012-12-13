@@ -155,6 +155,10 @@ void adivim_init ()
     ADIVIM_APN_ALLOC *adivim_hapn_alloc = (ADIVIM_APN_ALLOC *) malloc (sizeof (ADIVIM_APN_ALLOC));
     ADIVIM_APN_ALLOC *adivim_capn_alloc = (ADIVIM_APN_ALLOC *) malloc (sizeof (ADIVIM_APN_ALLOC));
     
+    adivim_section_list = (listnode **) malloc (sizeof (listnode *));
+    adivim_free_hapn_list = (listnode **) malloc (sizeof (listnode *));
+    adivim_free_capn_list = (listnode **) malloc (sizeof (listnode *));
+    
     ll_create (adivim_section_list);
     
     ll_create (adivim_free_hapn_list);
