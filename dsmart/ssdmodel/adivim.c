@@ -343,6 +343,11 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
     ADIVIM_SECTION *data = (ADIVIM_SECTION *) target->data;
     ADIVIM_SECTION *toinsert = (ADIVIM_SECTION *) arg;
     
+    if (toinsert->starting < 0 || toinsert->length <= 0)
+    {
+        return false;
+    }
+    
     if (data->starting + data->length < toinsert->starting)
     {
         return true;
@@ -518,20 +523,21 @@ ADIVIM_JUDGEMENT adivim_section_lookup (listnode *start, ADIVIM_APN pg)
 bool _adivim_print_section (listnode *start, listnode *target, void *arg)
 {
     ADIVIM_SECTION *data = (ADIVIM_SECTION *) target->data;
-    printf ("->(%d, %d, %d, %d, %d, %d, %d)", data->starting, data->length, data->adivim_access_log.read_count, data->adivim_access_log.write_count, data->adivim_judgement.adivim_type, data->adivim_judgement.adivim_hapn, data->adivim_judgement.adivim_capn);
+    printf ("->((%d, %d), (%d, %d), (%d, %d, %d))", data->starting, data->length, data->adivim_access_log.read_count, data->adivim_access_log.write_count, data->adivim_judgement.adivim_type, data->adivim_judgement.adivim_hapn, data->adivim_judgement.adivim_capn);
     
     return true;
 }
 
 void adivim_print_section ()
 {
-    printf ("section list(starting, length, rcount, wcount, type, hapn, capn): |");
+    printf ("section list((starting, length), (rcount, wcount), (type, hapn, capn)): |");
     adivim_ll_apply (*adivim_section_list, _adivim_print_section, NULL);
+    printf ("\n");
 }
 
 ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section)
 {
-    if (section->adivim_access_log.read_count > 1 && section->adivim_access_log.write_count > 1) // Section will be hot
+    if (section->adivim_access_log.read_count > 0 && section->adivim_access_log.write_count > 0) // Section will be hot
     {
         // Assign ADIVIM_TYPE and allocation ADIVIM_APNs
         switch (section->adivim_judgement.adivim_type)

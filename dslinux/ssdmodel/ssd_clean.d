@@ -49,5 +49,6 @@ ssd_clean.o: ssd_clean.c ssd.h ../src//disksim_global.h \
  ../diskmodel/include/diskmodel/dm_types.h /usr/include/inttypes.h \
  /usr/lib/gcc/i686-linux-gnu/4.6/include/stdint.h /usr/include/stdint.h \
  /usr/include/i386-linux-gnu/bits/wchar.h ../src//disksim_bus.h \
- ../src//config.h adivim.h ssd_clean.h modules/ssdmodel_ssd_param.h \
- ssd_utils.h
+ ../src//config.h adivim.h \
+ /usr/lib/gcc/i686-linux-gnu/4.6/include/stdbool.h ssd_clean.h \
+ modules/ssdmodel_ssd_param.h ssd_utils.h
