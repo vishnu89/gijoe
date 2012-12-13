@@ -403,6 +403,9 @@ typedef struct disksim {
    FILE * iotracefile;
    FILE * statdeffile;
    FILE * outputfile;
+#ifdef ADIVIM
+    FILE * outputfile_adv;
+#endif
    FILE * outios;
    char   iotracefilename[256];
    char   outputfilename[256];
@@ -467,17 +470,15 @@ typedef struct disksim {
 
 extern disksim_t *disksim;
 
-#ifdef ADIVIM
-	FILE *outputfile_adv;
-#endif
-
 /* remapping #defines for some of the variables in disksim_t */
 #define warmuptime       (disksim->warmuptime)
 #define simtime	         (disksim->simtime)
 #define statdeffile      (disksim->statdeffile)
 #define outputfile       (disksim->outputfile)
 #define outios           (disksim->outios)
-
+#ifdef ADIVIM
+#define outputfile_adv (disksim->outputfile_adv)
+#endif
 
 #ifndef _WIN32
 #define	min(x,y)	((x) < (y) ? (x) : (y))

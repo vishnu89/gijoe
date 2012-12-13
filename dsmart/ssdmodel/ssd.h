@@ -499,7 +499,7 @@ void    ssd_complete_parent(ioreq_event *curr, ssd_t *currdisk);
 double _ssd_invoke_element_cleaning(int elem_num, ssd_t *s);
 int     ssd_already_present(ssd_req **reqs, int total, ioreq_event *req);
 #ifdef ADIVIM
-void    adivim_ssd_print_image (ssd_t * s);
+void    adivim_ssd_print_image (ssd_t *s);
 #endif
 #endif   /* DISKSIM_ssd_H */
 

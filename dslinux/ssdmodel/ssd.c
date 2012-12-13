@@ -8,7 +8,9 @@
 #include "ssd_init.h"
 #include "modules/ssdmodel_ssd_param.h"
 #include "disksim_global.h"
-//#include "adivim.h"
+#ifdef ADIVIM
+#include <stdbool.h>
+#endif
 
 #ifndef sprintf_s
 #define sprintf_s3(x,y,z) sprintf(x,z)
@@ -1555,7 +1557,45 @@ void ssd_event_arrive (ioreq_event *curr)
    // fprintf (outputfile, " - devno %d, blkno %d, type %d, cause %d, read = %d\n", curr->devno, curr->blkno, curr->type, curr->cause, curr->flags & READ);
 
    currdisk = getssd (curr->devno);
-
+#ifdef ADIVIM
+    adivim_ssd_print_image (currdisk);
+    switch (curr->type) {
+            
+        case IO_ACCESS_ARRIVE:
+            printf ("ssd_event_arrive: IO_ACCESS_ARRIVE\n");
+            break;
+            
+        case DEVICE_OVERHEAD_COMPLETE:
+            printf ("ssd_event_arrive: DEVICE_OVERHEAD_COMPLETE\n");
+            break;
+            
+        case DEVICE_ACCESS_COMPLETE:
+            printf ("ssd_event_arrive: DEVICE_ACCESS_COMPLETE\n");
+            break;
+            
+        case DEVICE_DATA_TRANSFER_COMPLETE:
+            printf ("ssd_event_arrive: DEVICE_DATA_TRANSFER_COMPLETE\n");
+            break;
+            
+        case IO_INTERRUPT_COMPLETE:
+            printf ("ssd_event_arrive: IO_INTERRUPT_COMPLETE\n");
+            break;
+            
+        case IO_QLEN_MAXCHECK:
+            /* Used only at initialization time to set up queue stuff */
+            printf ("ssd_event_arrive: IO_QLEN_MAXCHECK\n");
+            break;
+            
+        case SSD_CLEAN_GANG:
+            printf ("ssd_event_arrive: SSD_CLEAN_GANG\n");
+            break;
+            
+        case SSD_CLEAN_ELEMENT:
+            printf ("ssd_event_arrive: SSD_CLEAN_ELEMENT\n");
+            break;
+    }
+#endif
+    
    switch (curr->type) {
 
       case IO_ACCESS_ARRIVE:
@@ -2197,54 +2237,96 @@ void adivim_ssd_print_image (ssd_t * s)
      e1
      ...
      */
-    int elem, block, page, row, column;
+    int elem, block, page, blockno, pageno, mapped_lpn, column, columnwidth=24;
+    bool skip;
     
     for (elem = 0; elem < s->params.nelements; elem++)
     {
-        printf ("e%d\n", elem);
-        print ('=', s->params.planes_per_pkg * 12);
-        
-        // print header
+        printf ("\ne%d\n", elem);
+        print ('=', s->params.planes_per_pkg * columnwidth);
         for (column = 0; column < s->params.planes_per_pkg; column++)
         {
-            if (row == 0)
-            {
-                printf ("p%d\t\t\t| ", column);
-            }
+            printf ("%7d plane\t\t| ", column);
         }
+        printf ("\n");
         
-        for (row = 0; row < (s->params.blocks_per_plane * s->params.pages_per_block); row++)
+        // print block
+        for (block = 0; block < s->params.blocks_per_plane; block++)
         {
-            // print header
-            if (row % s->params.pages_per_block == 0)
+            // skip check
+            skip = true;
+            for (column = 0; column < s->params.planes_per_pkg; column++)
             {
-                print ('-', s->params.planes_per_pkg * 12);
-                
-                for (column = 0; column < s->params.planes_per_pkg; column++)
+                for (page = 0; page < s->params.pages_per_block; page++)
                 {
-                    block = (row / s->params.pages_per_block) * s->params.planes_per_pkg + column;
-                    page = block * s->params.pages_per_block + (row % s->params.pages_per_block);
+                    blockno = block * s->params.planes_per_pkg + column;
+                    pageno = blockno * s->params.pages_per_block + page;
+                    mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
                     
-                    if (s->elements[elem].metadata.block_usage[block].type == 0)
+                    if (mapped_lpn != -1)
                     {
-                        printf ("COLD ");
+                        skip = false;
                     }
-                    else
-                    {
-                        printf ("HOT ");
-                    }
-                    printf ("block%d\t\t\t| ", block);
                 }
             }
             
-            for (column = 0; column < s->params.planes_per_pkg; column++)
+            // print block
+            if (!skip)
             {
-                block = (row / s->params.pages_per_block) * s->params.planes_per_pkg + column;
-                page = block * s->params.pages_per_block + (row % s->params.pages_per_block);
+                // print block header
+                print ('-', s->params.planes_per_pkg * columnwidth);
+                blockno = block * s->params.planes_per_pkg + column;
+                printf ("%7d block", blockno);
                 
-                printf ("%d->%d\t\t| ", page, s->elements[elem].metadata.block_usage[block].page[page % s->params.pages_per_block]);
+                if (s->elements[elem].metadata.block_usage[blockno].type == 0)
+                {
+                    printf (" COLD\t| ");
+                }
+                else
+                {
+                    printf (" HOT\t| ");
+                }
+                printf ("\n");
+                
+                // print page
+                for (page = 0; page < s->params.pages_per_block; page++)
+                {
+                    // skip check
+                    skip = true;
+                    for (column = 0; column < s->params.planes_per_pkg; column++)
+                    {
+                        blockno = block * s->params.planes_per_pkg + column;
+                        pageno = blockno * s->params.pages_per_block + page;
+                        mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
+                        
+                        if (mapped_lpn != -1)
+                        {
+                            skip = false;
+                        }
+                    }
+                    
+                    // print
+                    if (!skip)
+                    {
+                        for (column = 0; column < s->params.planes_per_pkg; column++)
+                        {
+                            blockno = block * s->params.planes_per_pkg + column;
+                            pageno = blockno * s->params.pages_per_block + page;
+                            mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
+                            
+                            if (mapped_lpn != -1)
+                            {
+                                printf ("%7d->%7d\t| ", pageno, mapped_lpn);
+                            }
+                            else
+                            {
+                                printf ("\t\t\t\t| ");
+                            }
+                        }
+                        printf ("\n");
+                    }
+                }
             }
-            
         }
     }
 }

@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 cp $1/Makefile $2/Makefile
 cp $1/src/disksim_global.h $2/src/disksim_global.h
 cp $1/ssdmodel/Makefile $2/ssdmodel/Makefile
@@ -15,3 +14,10 @@ cp $1/ssdmodel/ssd_timing.c $2/ssdmodel/ssd_timing.c
 cp $1/ssdmodel/ssd_init.h $2/ssdmodel/ssd_init.h
 cp $1/ssdmodel/ssd_init.c $2/ssdmodel/ssd_init.c
 cp $1/test/study.trace $2/test/study.trace
+cp $1/test/run $2/test/run
+
+cd $2
+clear; clear; make | grep error
+
+cd test
+./run $3
