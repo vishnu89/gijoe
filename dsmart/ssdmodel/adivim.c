@@ -152,6 +152,7 @@ ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (void *t, int blkno)
 
 void adivim_init ()
 {
+    ADIVIM_SECTION *adivim_empty_section = (ADIVIM_SECTION *) malloc (sizeof (ADIVIM_SECTION));
     ADIVIM_APN_ALLOC *adivim_hapn_alloc = (ADIVIM_APN_ALLOC *) malloc (sizeof (ADIVIM_APN_ALLOC));
     ADIVIM_APN_ALLOC *adivim_capn_alloc = (ADIVIM_APN_ALLOC *) malloc (sizeof (ADIVIM_APN_ALLOC));
     
@@ -160,6 +161,9 @@ void adivim_init ()
     adivim_free_capn_list = (listnode **) malloc (sizeof (listnode *));
     
     ll_create (adivim_section_list);
+    adivim_empty_section->starting = -1;
+    adivim_empty_section->length = 0;
+    ll_insert_at_head (*adivim_section_list, adivim_empty_section);
     
     ll_create (adivim_free_hapn_list);
     adivim_hapn_alloc->starting = 0;

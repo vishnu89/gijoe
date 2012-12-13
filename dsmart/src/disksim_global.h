@@ -261,7 +261,7 @@ typedef struct foo {
 #ifndef ADIVIM
 #define DISKSIM_EVENT_SIZE	128
 #else 
-#define DISKSIM_EVENT_SIZE	172
+#define DISKSIM_EVENT_SIZE	140
 #endif
     
 #define DISKSIM_EVENT_SPACESIZE	(DISKSIM_EVENT_SIZE - sizeof(struct foo))
@@ -292,14 +292,6 @@ typedef struct ev {
 #endif
     
 typedef struct ioreq_ev {
-#ifdef ADIVIM
-    int   hc_flag; 	//0 : cold -> cold
-                    //1 : hot -> hot
-                    //2 : cold -> hot
-                    //3 : hot -> cold
-    int   range;	//cold block write page range
-    int   perform;	//hot/cold invalid perform
-#endif
    double time;
    int    type;
    struct ioreq_ev *next;
@@ -327,6 +319,14 @@ typedef struct ioreq_ev {
    int    batch_size;
    struct ioreq_ev *batch_next;
    struct ioreq_ev *batch_prev;
+#ifdef ADIVIM
+    int   hc_flag; 	//0 : cold -> cold
+    //1 : hot -> hot
+    //2 : cold -> hot
+    //3 : hot -> cold
+    int   range;	//cold block write page range
+    int   perform;	//hot/cold invalid perform
+#endif
 } ioreq_event;
 
 typedef struct timer_ev {
