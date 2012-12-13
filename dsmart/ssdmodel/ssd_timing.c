@@ -1185,11 +1185,11 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
             
             /*doubt logic about initialisze*/
             /*so, to begin with cover by comment*/
-            /*if(temp->block_usage[temp_block].num_valid == 0)
+            if(temp->block_usage[temp_block].num_valid == 0)
             {
                 temp->cold_lba_table[temp_cbn] = -1;
             }
-            */
+           
         }
 
         if(flag == 1)
