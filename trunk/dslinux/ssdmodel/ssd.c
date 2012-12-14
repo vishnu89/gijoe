@@ -2335,6 +2335,15 @@ void adivim_ssd_print_image (ssd_t *s)
             // print block
             for (block = 0; block < s->params.blocks_per_plane; block++)
             {
+                // want to skip printing block header when whole block can be skippable
+                bool skip_block_header[s->params.planes_per_pkg];
+                
+                // initialize skip_block_header
+                for (column = 0; column < s->params.planes_per_pkg; column++)
+                {
+                    skip_block_header[column] = true;
+                }
+                
                 // skip check
                 skip = true;
                 for (column = 0; column < s->params.planes_per_pkg; column++)
@@ -2348,6 +2357,7 @@ void adivim_ssd_print_image (ssd_t *s)
                         if (!skippable (mapped_lpn))
                         {
                             skip = false;
+                            skip_block_header[column] = false;
                         }
                     }
                 }
@@ -2359,16 +2369,27 @@ void adivim_ssd_print_image (ssd_t *s)
                     print ('-', s->params.planes_per_pkg * columnwidth); printf ("\n");
                     for (column = 0; column < s->params.planes_per_pkg; column++)
                     {
-                        blockno = block * s->params.planes_per_pkg + column;
-                        printf (" %5d block", blockno);
-                        if (s->elements[elem].metadata.block_usage[blockno].type == 0)
+                        // print block header
+                        if (!skip_block_header[column])
                         {
-                            printf (" COLD |");
+                            blockno = block * s->params.planes_per_pkg + column;
+                            printf (" %5d block", blockno);
+                            if (s->elements[elem].metadata.block_usage[blockno].type == 0)
+                            {
+                                printf (" COLD |");
+                            }
+                            else
+                            {
+                                printf (" HOT  |");
+                            }
                         }
+                        // skip
                         else
                         {
-                            printf (" HOT  |");
+                            print (' ', 18);
+                            printf ("|");
                         }
+
                     }
                     printf ("\n");
                     
@@ -2447,9 +2468,9 @@ void adivim_ssd_print_image (ssd_t *s)
                                 // print ommiting dot
                                 if (ommiting_dot_printing[column])
                                 {
-                                    print (' ', 9);
-                                    printf (".");
                                     print (' ', 8);
+                                    printf ("...");
+                                    print (' ', 7);
                                     printf ("|");
                                 }
                                 else if (!skippable (mapped_lpn))
