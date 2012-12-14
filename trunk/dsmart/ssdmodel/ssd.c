@@ -2284,7 +2284,7 @@ void adivim_ssd_print_image (ssd_t *s)
      e1
      ...
      */
-    int elem, block, page, blockno, pageno, mapped_lpn, column, columnwidth=19;
+    int elem, block, page, blockno, pageno, mapped_lpn, column, columnwidth=153;
     bool skip;
     
     // print only if mapping is modified.
@@ -2322,9 +2322,10 @@ void adivim_ssd_print_image (ssd_t *s)
         {
             // print element header
             printf ("e%d\n", elem);
-            print ('=', s->params.planes_per_pkg * columnwidth); printf ("\n");
+            print ('=', columnwidth); printf ("\n");
             for (column = 0; column < s->params.planes_per_pkg; column++)
             {
+                if (column == 0) printf("|");
                 print (' ', 6);
                 printf ("%d plane", column);
                 print (' ', 5);
@@ -2366,9 +2367,11 @@ void adivim_ssd_print_image (ssd_t *s)
                 if (!skip)
                 {
                     // print block header
-                    print ('-', s->params.planes_per_pkg * columnwidth); printf ("\n");
+                    print ('-', columnwidth); printf ("\n");
                     for (column = 0; column < s->params.planes_per_pkg; column++)
                     {
+                        if (column == 0) printf("|");
+                        
                         // print block header
                         if (!skip_block_header[column])
                         {
@@ -2465,6 +2468,8 @@ void adivim_ssd_print_image (ssd_t *s)
                                 mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
                                 //diff = ((page==0 || (page>(s->params.pages_per_block - 2))) ? -1 : s->elements[elem].metadata.block_usage[blockno].page[(pageno+1) % s->params.pages_per_block]) - mapped_lpn;
                                 
+                                if (column == 0) printf("|");
+                                
                                 // print ommiting dot
                                 if (ommiting_dot_printing[column])
                                 {
@@ -2489,7 +2494,7 @@ void adivim_ssd_print_image (ssd_t *s)
                 }
             }
             
-            print ('=', s->params.planes_per_pkg * columnwidth); printf ("\n\n");
+            print ('=', columnwidth); printf ("\n\n");
         }
     }
 }

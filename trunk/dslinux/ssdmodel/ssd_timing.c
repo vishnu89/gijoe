@@ -845,7 +845,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                 case 2 ://cold->hot
                     lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_hapn;
                     prev_page = metadata->hot_lba_table[lpn];
-                    ASSERT(prev_page != -1);
+                    //ASSERT(prev_page != -1);  //because of convert, it can be -1
                     prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
                     break;
                 default :
@@ -1352,7 +1352,7 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
 	int plane_num = 0;
     
 	if(perform == 1)
-    {
+    	{
         //element unknown.......
         //assuming elem_num.....
         for(i=0; i<=range ; i++)
@@ -1380,6 +1380,8 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
             }
             
         }
+
+	}
         
         if(flag == 1)
         {
@@ -1416,7 +1418,7 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
             //	blk += s->params.page_size;
             // }
         }
-    }
+    
 }
 #endif
 
@@ -1553,7 +1555,9 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
                             break;
                         case 2://cold->hot
                             
-                            cold_invalid (s, metadata, r->blk, r->range, 1 , r->perform, elem_num, plane_num);
+                      
+
+			    cold_invalid (s, metadata, r->blk, r->range, 1 , r->perform, elem_num, plane_num);
                             
                             
                             parunit_op_cost[i] = s->params.page_read_latency;
