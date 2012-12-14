@@ -485,6 +485,12 @@ bool _adivim_section_lookup (listnode *start,listnode *target, void *arg)
 {
     ADIVIM_SECTION *data = (ADIVIM_SECTION *) target->data;
     ADIVIM_APN pg = **((ADIVIM_APN **) arg);
+    
+    if (data->starting == ADIVIM_APN_INFINITY)
+    {
+        printf ("_adivim_section_lookup: lookup fail. no such page %d.", pg);
+        ASSERT (data->starting != ADIVIM_APN_INFINITY);
+    }
 
     if (data->starting <= pg && pg < data->starting + data->length)
     {
