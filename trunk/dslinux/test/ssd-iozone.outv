@@ -296,7 +296,7 @@ Simulation complete
 SIMULATION STATISTICS
 ---------------------
 
-Total time of run:       6133.313000
+Total time of run:       5333.313000
 
 Warm-up time:            0.000000
 
@@ -307,15 +307,15 @@ STORAGE SUBSYSTEM STATISTICS
 OVERALL I/O SYSTEM STATISTICS
 -----------------------------
 
-Overall I/O System Total Requests handled:	8
-Overall I/O System Requests per second:   	1.304352
-Overall I/O System Completely idle time:  	5111.311000   	0.833369
-Overall I/O System Response time average: 	0.933430
-Overall I/O System Response time std.dev.:	0.350000
-Overall I/O System Response time maximum:	1.283430
+Overall I/O System Total Requests handled:	1
+Overall I/O System Requests per second:   	0.187501
+Overall I/O System Completely idle time:  	5111.311000   	0.958374
+Overall I/O System Response time average: 	0.583430
+Overall I/O System Response time std.dev.:	0.000000
+Overall I/O System Response time maximum:	0.583430
 Overall I/O System Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-      8       0       0       0       0       0       0       0       0       0 
+      1       0       0       0       0       0       0       0       0       0 
 Overall I/O System Overlaps combined:     	0	0.000000
 Overall I/O System Read overlaps combined:	0	0.000000	0.000000
 Overall I/O System Critical Reads:      	     0  	0.000000
@@ -325,13 +325,13 @@ Overall I/O System Critical Read Response time maximum:	0
 Overall I/O System Critical Read Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
       0       0       0       0       0       0       0       0       0       0 
-Overall I/O System Non-Critical Reads:  	     4  	0.363636
+Overall I/O System Non-Critical Reads:  	     1  	0.166667
 Overall I/O System Non-Critical Read Response time average: 	0.583430
 Overall I/O System Non-Critical Read Response time std.dev.:	0.000000
 Overall I/O System Non-Critical Read Response time maximum:	0.583430
 Overall I/O System Non-Critical Read Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-      4       0       0       0       0       0       0       0       0       0 
+      1       0       0       0       0       0       0       0       0       0 
 Overall I/O System Critical Writes:     	     0  	0.000000
 Overall I/O System Critical Write Response time average: 	0.000000
 Overall I/O System Critical Write Response time std.dev.:	0.000000
@@ -339,47 +339,47 @@ Overall I/O System Critical Write Response time maximum:	0
 Overall I/O System Critical Write Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
       0       0       0       0       0       0       0       0       0       0 
-Overall I/O System Non-Critical Writes: 	     4  	0.363636
-Overall I/O System Non-Critical Write Response time average: 	1.283430
+Overall I/O System Non-Critical Writes: 	     0  	0.000000
+Overall I/O System Non-Critical Write Response time average: 	0.000000
 Overall I/O System Non-Critical Write Response time std.dev.:	0.000000
-Overall I/O System Non-Critical Write Response time maximum:	1.283430
+Overall I/O System Non-Critical Write Response time maximum:	0
 Overall I/O System Non-Critical Write Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-      4       0       0       0       0       0       0       0       0       0 
-Overall I/O System Number of reads:         4  	0.363636
-Overall I/O System Number of writes:        7  	0.636364
+      0       0       0       0       0       0       0       0       0       0 
+Overall I/O System Number of reads:         3  	0.500000
+Overall I/O System Number of writes:        3  	0.500000
 Overall I/O System Sequential reads:        0  	0.000000  	0.000000
 Overall I/O System Sequential writes:       0  	0.000000  	0.000000
 Overall I/O System Base SPTF/SDF Different:      0 /      0 	0.000000
 Overall I/O System Timeout SPTF/SDF Different:      0 /      0 	0.000000
 Overall I/O System Priority SPTF/SDF Different:      0 /      0 	0.000000
-Overall I/O System runlistlen:              1429.469443
+Overall I/O System runlistlen:              222.585430
 Overall I/O System runoutstanding:          0.000000
-Overall I/O System simtime:                 6133.313000
+Overall I/O System simtime:                 5333.313000
 Overall I/O System warmuptime:              0.000000
 Overall I/O System setsize:                 1
-Overall I/O System Average # requests:      0.233066
-Overall I/O System Maximum # requests:      3
-Overall I/O System End # requests:          3
-Overall I/O System Average queue length:    0.233066
-Overall I/O System Maximum queue length:    3
-Overall I/O System End queued requests:     3
-Overall I/O System Queue time average: 	0.933430
-Overall I/O System Queue time std.dev.:	0.350000
-Overall I/O System Queue time maximum:	1.283430
+Overall I/O System Average # requests:      0.041735
+Overall I/O System Maximum # requests:      5
+Overall I/O System End # requests:          5
+Overall I/O System Average queue length:    0.041735
+Overall I/O System Maximum queue length:    5
+Overall I/O System End queued requests:     5
+Overall I/O System Queue time average: 	0.583430
+Overall I/O System Queue time std.dev.:	0.000000
+Overall I/O System Queue time maximum:	0.583430
 Overall I/O System Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-      8       0       0       0       0       0       0       0       0       0 
-Overall I/O System Avg # read requests:     0.000380
-Overall I/O System Max # read requests:     1
-Overall I/O System Avg # write requests:    0.232686
+      1       0       0       0       0       0       0       0       0       0 
+Overall I/O System Avg # read requests:     0.000109
+Overall I/O System Max # read requests:     2
+Overall I/O System Avg # write requests:    0.041626
 Overall I/O System Max # write requests:    3
 Overall I/O System Physical access time average: 	0.000000
 Overall I/O System Physical access time std.dev.:	0.000000
 Overall I/O System Physical access time maximum:	0
 Overall I/O System Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
- 0.001  	      8  	1.000000  	1.000000
+ 0.001  	      1  	1.000000  	1.000000
  0.002  	      0  	0.000000  	1.000000
  0.003  	      0  	0.000000  	1.000000
  0.004  	      0  	0.000000  	1.000000
@@ -2135,62 +2135,62 @@ Overall I/O System Batch size maximum:	0
 Overall I/O System Batch size distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
       0       0       0       0       0       0       0       0       0       0 
-Overall I/O System Inter-arrival time average: 	557.573909
-Overall I/O System Inter-arrival time std.dev.:	1440.024219
+Overall I/O System Inter-arrival time average: 	888.885500
+Overall I/O System Inter-arrival time std.dev.:	1888.978471
 Overall I/O System Inter-arrival time maximum:	5111.311000
 Overall I/O System Inter-arrival time distribution
    0  	      0  	0.000000  	0.000000
-   5  	      0  	0.000000  	0.000000
-  10  	      0  	0.000000  	0.000000
-  15  	      0  	0.000000  	0.000000
-  20  	      0  	0.000000  	0.000000
-  25  	      0  	0.000000  	0.000000
-  30  	      0  	0.000000  	0.000000
-  35  	      0  	0.000000  	0.000000
-  40  	      0  	0.000000  	0.000000
-  45  	      0  	0.000000  	0.000000
-  50  	      0  	0.000000  	0.000000
-  55  	      0  	0.000000  	0.000000
-  60  	      0  	0.000000  	0.000000
-  65  	      0  	0.000000  	0.000000
-  70  	      0  	0.000000  	0.000000
-  75  	      0  	0.000000  	0.000000
-  80  	      0  	0.000000  	0.000000
-  85  	      0  	0.000000  	0.000000
-  90  	      0  	0.000000  	0.000000
-  95  	      0  	0.000000  	0.000000
- 100  	      0  	0.000000  	0.000000
- 105  	      8  	0.727273  	0.727273
- 110  	      0  	0.000000  	0.727273
- 115  	      2  	0.181818  	0.909091
- 120  	      0  	0.000000  	0.909091
- 125  	      0  	0.000000  	0.909091
- 130  	      0  	0.000000  	0.909091
- 135  	      0  	0.000000  	0.909091
- 140  	      0  	0.000000  	0.909091
- 145  	      0  	0.000000  	0.909091
- 150  	      0  	0.000000  	0.909091
- 155  	      0  	0.000000  	0.909091
- 160  	      0  	0.000000  	0.909091
- 165  	      0  	0.000000  	0.909091
- 170  	      0  	0.000000  	0.909091
- 175  	      0  	0.000000  	0.909091
- 180  	      0  	0.000000  	0.909091
- 185  	      0  	0.000000  	0.909091
- 190  	      0  	0.000000  	0.909091
- 195  	      1  	0.090909  	1.000000
-Overall I/O System Read inter-arrival average: 	1483.328250
-Overall I/O System Read inter-arrival std.dev.:	2164.706277
+   5  	      3  	0.500000  	0.500000
+  10  	      0  	0.000000  	0.500000
+  15  	      0  	0.000000  	0.500000
+  20  	      0  	0.000000  	0.500000
+  25  	      0  	0.000000  	0.500000
+  30  	      0  	0.000000  	0.500000
+  35  	      0  	0.000000  	0.500000
+  40  	      0  	0.000000  	0.500000
+  45  	      0  	0.000000  	0.500000
+  50  	      0  	0.000000  	0.500000
+  55  	      0  	0.000000  	0.500000
+  60  	      0  	0.000000  	0.500000
+  65  	      0  	0.000000  	0.500000
+  70  	      0  	0.000000  	0.500000
+  75  	      0  	0.000000  	0.500000
+  80  	      0  	0.000000  	0.500000
+  85  	      0  	0.000000  	0.500000
+  90  	      0  	0.000000  	0.500000
+  95  	      0  	0.000000  	0.500000
+ 100  	      0  	0.000000  	0.500000
+ 105  	      0  	0.000000  	0.500000
+ 110  	      0  	0.000000  	0.500000
+ 115  	      2  	0.333333  	0.833333
+ 120  	      0  	0.000000  	0.833333
+ 125  	      0  	0.000000  	0.833333
+ 130  	      0  	0.000000  	0.833333
+ 135  	      0  	0.000000  	0.833333
+ 140  	      0  	0.000000  	0.833333
+ 145  	      0  	0.000000  	0.833333
+ 150  	      0  	0.000000  	0.833333
+ 155  	      0  	0.000000  	0.833333
+ 160  	      0  	0.000000  	0.833333
+ 165  	      0  	0.000000  	0.833333
+ 170  	      0  	0.000000  	0.833333
+ 175  	      0  	0.000000  	0.833333
+ 180  	      0  	0.000000  	0.833333
+ 185  	      0  	0.000000  	0.833333
+ 190  	      0  	0.000000  	0.833333
+ 195  	      1  	0.166667  	1.000000
+Overall I/O System Read inter-arrival average: 	1777.771000
+Overall I/O System Read inter-arrival std.dev.:	2436.079820
 Overall I/O System Read inter-arrival maximum:	5222.312000
 Overall I/O System Read inter-arrival distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
-      0       0       0       0       0       0       0       0       0       4 
-Overall I/O System Write inter-arrival average: 	876.187571
-Overall I/O System Write inter-arrival std.dev.:	1731.442537
+      1       0       0       0       0       0       0       0       0       2 
+Overall I/O System Write inter-arrival average: 	1777.771000
+Overall I/O System Write inter-arrival std.dev.:	2358.910472
 Overall I/O System Write inter-arrival maximum:	5111.311000
 Overall I/O System Write inter-arrival distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
-      0       0       0       0       0       0       0       0       0       7 
+      1       0       0       0       0       0       0       0       0       2 
 Overall I/O System Number of idle periods:  1
 Overall I/O System Idle period length average: 	5111.311000
 Overall I/O System Idle period length std.dev.:	0.000000
@@ -2203,25 +2203,25 @@ Overall I/O System Request size std.dev.:	0.000000
 Overall I/O System Request size maximum:	256
 Overall I/O System Request size distribution
    =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
-      0       0       0       0       0       0       0       0       0      11 
+      0       0       0       0       0       0       0       0       0       6 
 Overall I/O System Read request size average: 	256.000000
 Overall I/O System Read request size std.dev.:	0.000000
 Overall I/O System Read request size maximum:	256
 Overall I/O System Read request size distribution
    =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
-      0       0       0       0       0       0       0       0       0       4 
+      0       0       0       0       0       0       0       0       0       3 
 Overall I/O System Write request size average: 	256.000000
 Overall I/O System Write request size std.dev.:	0.000000
 Overall I/O System Write request size maximum:	256
 Overall I/O System Write request size distribution
    =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
-      0       0       0       0       0       0       0       0       0       7 
-Overall I/O System Instantaneous queue length average: 	2.375000
-Overall I/O System Instantaneous queue length std.dev.:	0.484123
-Overall I/O System Instantaneous queue length maximum:	3
+      0       0       0       0       0       0       0       0       0       3 
+Overall I/O System Instantaneous queue length average: 	2.000000
+Overall I/O System Instantaneous queue length std.dev.:	0.000000
+Overall I/O System Instantaneous queue length maximum:	2
 Overall I/O System Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-      0       5       3       0       0       0       0       0       0       0 
+      0       1       0       0       0       0       0       0       0       0 
 Overall I/O System Sub-optimal mapping penalty average: 	0.000000
 Overall I/O System Sub-optimal mapping penalty std.dev.:	0.000000
 Overall I/O System Sub-optimal mapping penalty maximum:	0
@@ -2235,27 +2235,27 @@ SYSTEM-LEVEL LOGORG STATISTICS
 System Logical Organization #0
 System logorg #0 Number of requests:       0
 System logorg #0 Number of read requests:  0  	0.000000
-System logorg #0 Number of accesses:       11
-System logorg #0 Number of read accesses:  4  	0.363636
-System logorg #0 Average outstanding:      0.233066
-System logorg #0 Maximum outstanding:      3
-System logorg #0 Avg nonzero outstanding:  1.398695
+System logorg #0 Number of accesses:       6
+System logorg #0 Number of read accesses:  3  	0.500000
+System logorg #0 Average outstanding:      0.041735
+System logorg #0 Maximum outstanding:      5
+System logorg #0 Avg nonzero outstanding:  1.002628
 System logorg #0 Completely idle time:     5111.311000
-System logorg #0 Response time average: 	0.933430
-System logorg #0 Response time std.dev.:	0.350000
-System logorg #0 Response time maximum:	1.283430
+System logorg #0 Response time average: 	0.583430
+System logorg #0 Response time std.dev.:	0.000000
+System logorg #0 Response time maximum:	0.583430
 System logorg #0 Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-      8       0       0       0       0       0       0       0       0       0 
+      1       0       0       0       0       0       0       0       0       0 
 System logorg #0 Time-critical reads:  0
 System logorg #0 Time-critical writes: 0
 System logorg #0 Number of streaks:		1
-System logorg #0 Streak length average: 	11.000000
+System logorg #0 Streak length average: 	6.000000
 System logorg #0 Streak length std.dev.:	0.000000
-System logorg #0 Streak length maximum:	11
+System logorg #0 Streak length maximum:	6
 System logorg #0 Streak length distribution
    =  1    =  2    =  3    =  4    =  5    =  6    =  7    =  8    =  9     10+
-      0       0       0       0       0       0       0       0       0       1 
+      0       0       0       0       0       1       0       0       0       0 
 System logorg #0 Timestamped # outstanding distribution (interval = 0.000000)
      0       1       2       3       4       5       6       7       8      9+
      0       0       0       0       0       0       0       0       0       0
@@ -2270,19 +2270,19 @@ System logorg #0 Request size std.dev.:	0.000000
 System logorg #0 Request size maximum:	256
 System logorg #0 Request size distribution
    =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
-      0       0       0       0       0       0       0       0       0      11 
+      0       0       0       0       0       0       0       0       0       6 
 System logorg #0 Read request size average: 	256.000000
 System logorg #0 Read request size std.dev.:	0.000000
 System logorg #0 Read request size maximum:	256
 System logorg #0 Read request size distribution
    =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
-      0       0       0       0       0       0       0       0       0       4 
+      0       0       0       0       0       0       0       0       0       3 
 System logorg #0 Write request size average: 	256.000000
 System logorg #0 Write request size std.dev.:	0.000000
 System logorg #0 Write request size maximum:	256
 System logorg #0 Write request size distribution
    =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
-      0       0       0       0       0       0       0       0       0       7 
+      0       0       0       0       0       0       0       0       0       3 
 System logorg #0 Number of idle periods:	1
 System logorg #0 Idle period length average: 	5111.311000
 System logorg #0 Idle period length std.dev.:	0.000000
@@ -2290,31 +2290,31 @@ System logorg #0 Idle period length maximum:	5111.311000
 System logorg #0 Idle period length distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
       0       0       0       0       0       0       0       0       0       1 
-System logorg #0 ssd Total Requests handled:	8
-System logorg #0 ssd Requests per second:   	1.304352
-System logorg #0 ssd Completely idle time:  	5111.311000   	0.833369
-System logorg #0 ssd Response time average: 	0.933430
-System logorg #0 ssd Response time std.dev.:	0.350000
-System logorg #0 ssd Response time maximum:	1.283430
+System logorg #0 ssd Total Requests handled:	1
+System logorg #0 ssd Requests per second:   	0.187501
+System logorg #0 ssd Completely idle time:  	5111.311000   	0.958374
+System logorg #0 ssd Response time average: 	0.583430
+System logorg #0 ssd Response time std.dev.:	0.000000
+System logorg #0 ssd Response time maximum:	0.583430
 System logorg #0 ssd Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-      8       0       0       0       0       0       0       0       0       0 
+      1       0       0       0       0       0       0       0       0       0 
 System logorg #0 ssd Overlaps combined:     	0	0.000000
 System logorg #0 ssd Read overlaps combined:	0	0.000000	0.000000
-System logorg #0 ssd Number of reads:         4  	0.400000
-System logorg #0 ssd Number of writes:        6  	0.600000
+System logorg #0 ssd Number of reads:         2  	0.666667
+System logorg #0 ssd Number of writes:        1  	0.333333
 System logorg #0 ssd Sequential reads:        0  	0.000000  	0.000000
 System logorg #0 ssd Sequential writes:       0  	0.000000  	0.000000
-System logorg #0 ssd Base SPTF/SDF Different:      0 /     10 	0.000000
+System logorg #0 ssd Base SPTF/SDF Different:      0 /      3 	0.000000
 System logorg #0 ssd Timeout SPTF/SDF Different:      0 /      0 	0.000000
 System logorg #0 ssd Priority SPTF/SDF Different:      0 /      0 	0.000000
-System logorg #0 ssd runlistlen:              1232.036304
-System logorg #0 ssd runoutstanding:          1232.036304
-System logorg #0 ssd simtime:                 6133.313000
+System logorg #0 ssd runlistlen:              222.585430
+System logorg #0 ssd runoutstanding:          222.585430
+System logorg #0 ssd simtime:                 5333.313000
 System logorg #0 ssd warmuptime:              0.000000
 System logorg #0 ssd setsize:                 1
-System logorg #0 ssd Average # requests:      0.200876
-System logorg #0 ssd Maximum # requests:      3
+System logorg #0 ssd Average # requests:      0.041735
+System logorg #0 ssd Maximum # requests:      2
 System logorg #0 ssd End # requests:          2
 System logorg #0 ssd Average queue length:    0.000000
 System logorg #0 ssd Maximum queue length:    1
@@ -2324,14 +2324,14 @@ System logorg #0 ssd Queue time std.dev.:	0.000000
 System logorg #0 ssd Queue time maximum:	0
 System logorg #0 ssd Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     10       0       0       0       0       0       0       0       0       0 
-System logorg #0 ssd Avg # read requests:     0.000380
+      3       0       0       0       0       0       0       0       0       0 
+System logorg #0 ssd Avg # read requests:     0.000109
 System logorg #0 ssd Max # read requests:     1
-System logorg #0 ssd Avg # write requests:    0.200496
-System logorg #0 ssd Max # write requests:    3
-System logorg #0 ssd Physical access time average: 	0.933430
-System logorg #0 ssd Physical access time std.dev.:	0.350000
-System logorg #0 ssd Physical access time maximum:	1.283430
+System logorg #0 ssd Avg # write requests:    0.041626
+System logorg #0 ssd Max # write requests:    1
+System logorg #0 ssd Physical access time average: 	0.583430
+System logorg #0 ssd Physical access time std.dev.:	0.000000
+System logorg #0 ssd Physical access time maximum:	0.583430
 System logorg #0 ssd Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -2576,82 +2576,82 @@ System logorg #0 ssd Physical access time distribution
  0.568  	      0  	0.000000  	0.000000
  0.574  	      0  	0.000000  	0.000000
  0.580  	      0  	0.000000  	0.000000
- 0.586  	      4  	0.500000  	0.500000
- 0.592  	      0  	0.000000  	0.500000
- 0.598  	      0  	0.000000  	0.500000
- 0.604  	      0  	0.000000  	0.500000
- 0.611  	      0  	0.000000  	0.500000
- 0.618  	      0  	0.000000  	0.500000
- 0.625  	      0  	0.000000  	0.500000
- 0.632  	      0  	0.000000  	0.500000
- 0.639  	      0  	0.000000  	0.500000
- 0.646  	      0  	0.000000  	0.500000
- 0.653  	      0  	0.000000  	0.500000
- 0.660  	      0  	0.000000  	0.500000
- 0.667  	      0  	0.000000  	0.500000
- 0.674  	      0  	0.000000  	0.500000
- 0.681  	      0  	0.000000  	0.500000
- 0.688  	      0  	0.000000  	0.500000
- 0.695  	      0  	0.000000  	0.500000
- 0.702  	      0  	0.000000  	0.500000
- 0.710  	      0  	0.000000  	0.500000
- 0.718  	      0  	0.000000  	0.500000
- 0.726  	      0  	0.000000  	0.500000
- 0.734  	      0  	0.000000  	0.500000
- 0.742  	      0  	0.000000  	0.500000
- 0.750  	      0  	0.000000  	0.500000
- 0.758  	      0  	0.000000  	0.500000
- 0.766  	      0  	0.000000  	0.500000
- 0.774  	      0  	0.000000  	0.500000
- 0.782  	      0  	0.000000  	0.500000
- 0.790  	      0  	0.000000  	0.500000
- 0.798  	      0  	0.000000  	0.500000
- 0.806  	      0  	0.000000  	0.500000
- 0.815  	      0  	0.000000  	0.500000
- 0.824  	      0  	0.000000  	0.500000
- 0.833  	      0  	0.000000  	0.500000
- 0.842  	      0  	0.000000  	0.500000
- 0.851  	      0  	0.000000  	0.500000
- 0.860  	      0  	0.000000  	0.500000
- 0.869  	      0  	0.000000  	0.500000
- 0.878  	      0  	0.000000  	0.500000
- 0.887  	      0  	0.000000  	0.500000
- 0.896  	      0  	0.000000  	0.500000
- 0.905  	      0  	0.000000  	0.500000
- 0.915  	      0  	0.000000  	0.500000
- 0.925  	      0  	0.000000  	0.500000
- 0.935  	      0  	0.000000  	0.500000
- 0.945  	      0  	0.000000  	0.500000
- 0.955  	      0  	0.000000  	0.500000
- 0.965  	      0  	0.000000  	0.500000
- 0.975  	      0  	0.000000  	0.500000
- 0.985  	      0  	0.000000  	0.500000
- 0.995  	      0  	0.000000  	0.500000
- 1.005  	      0  	0.000000  	0.500000
- 1.016  	      0  	0.000000  	0.500000
- 1.027  	      0  	0.000000  	0.500000
- 1.038  	      0  	0.000000  	0.500000
- 1.049  	      0  	0.000000  	0.500000
- 1.060  	      0  	0.000000  	0.500000
- 1.071  	      0  	0.000000  	0.500000
- 1.082  	      0  	0.000000  	0.500000
- 1.093  	      0  	0.000000  	0.500000
- 1.104  	      0  	0.000000  	0.500000
- 1.116  	      0  	0.000000  	0.500000
- 1.128  	      0  	0.000000  	0.500000
- 1.140  	      0  	0.000000  	0.500000
- 1.152  	      0  	0.000000  	0.500000
- 1.164  	      0  	0.000000  	0.500000
- 1.176  	      0  	0.000000  	0.500000
- 1.188  	      0  	0.000000  	0.500000
- 1.200  	      0  	0.000000  	0.500000
- 1.213  	      0  	0.000000  	0.500000
- 1.226  	      0  	0.000000  	0.500000
- 1.239  	      0  	0.000000  	0.500000
- 1.252  	      0  	0.000000  	0.500000
- 1.265  	      0  	0.000000  	0.500000
- 1.278  	      0  	0.000000  	0.500000
- 1.291  	      4  	0.500000  	1.000000
+ 0.586  	      1  	1.000000  	1.000000
+ 0.592  	      0  	0.000000  	1.000000
+ 0.598  	      0  	0.000000  	1.000000
+ 0.604  	      0  	0.000000  	1.000000
+ 0.611  	      0  	0.000000  	1.000000
+ 0.618  	      0  	0.000000  	1.000000
+ 0.625  	      0  	0.000000  	1.000000
+ 0.632  	      0  	0.000000  	1.000000
+ 0.639  	      0  	0.000000  	1.000000
+ 0.646  	      0  	0.000000  	1.000000
+ 0.653  	      0  	0.000000  	1.000000
+ 0.660  	      0  	0.000000  	1.000000
+ 0.667  	      0  	0.000000  	1.000000
+ 0.674  	      0  	0.000000  	1.000000
+ 0.681  	      0  	0.000000  	1.000000
+ 0.688  	      0  	0.000000  	1.000000
+ 0.695  	      0  	0.000000  	1.000000
+ 0.702  	      0  	0.000000  	1.000000
+ 0.710  	      0  	0.000000  	1.000000
+ 0.718  	      0  	0.000000  	1.000000
+ 0.726  	      0  	0.000000  	1.000000
+ 0.734  	      0  	0.000000  	1.000000
+ 0.742  	      0  	0.000000  	1.000000
+ 0.750  	      0  	0.000000  	1.000000
+ 0.758  	      0  	0.000000  	1.000000
+ 0.766  	      0  	0.000000  	1.000000
+ 0.774  	      0  	0.000000  	1.000000
+ 0.782  	      0  	0.000000  	1.000000
+ 0.790  	      0  	0.000000  	1.000000
+ 0.798  	      0  	0.000000  	1.000000
+ 0.806  	      0  	0.000000  	1.000000
+ 0.815  	      0  	0.000000  	1.000000
+ 0.824  	      0  	0.000000  	1.000000
+ 0.833  	      0  	0.000000  	1.000000
+ 0.842  	      0  	0.000000  	1.000000
+ 0.851  	      0  	0.000000  	1.000000
+ 0.860  	      0  	0.000000  	1.000000
+ 0.869  	      0  	0.000000  	1.000000
+ 0.878  	      0  	0.000000  	1.000000
+ 0.887  	      0  	0.000000  	1.000000
+ 0.896  	      0  	0.000000  	1.000000
+ 0.905  	      0  	0.000000  	1.000000
+ 0.915  	      0  	0.000000  	1.000000
+ 0.925  	      0  	0.000000  	1.000000
+ 0.935  	      0  	0.000000  	1.000000
+ 0.945  	      0  	0.000000  	1.000000
+ 0.955  	      0  	0.000000  	1.000000
+ 0.965  	      0  	0.000000  	1.000000
+ 0.975  	      0  	0.000000  	1.000000
+ 0.985  	      0  	0.000000  	1.000000
+ 0.995  	      0  	0.000000  	1.000000
+ 1.005  	      0  	0.000000  	1.000000
+ 1.016  	      0  	0.000000  	1.000000
+ 1.027  	      0  	0.000000  	1.000000
+ 1.038  	      0  	0.000000  	1.000000
+ 1.049  	      0  	0.000000  	1.000000
+ 1.060  	      0  	0.000000  	1.000000
+ 1.071  	      0  	0.000000  	1.000000
+ 1.082  	      0  	0.000000  	1.000000
+ 1.093  	      0  	0.000000  	1.000000
+ 1.104  	      0  	0.000000  	1.000000
+ 1.116  	      0  	0.000000  	1.000000
+ 1.128  	      0  	0.000000  	1.000000
+ 1.140  	      0  	0.000000  	1.000000
+ 1.152  	      0  	0.000000  	1.000000
+ 1.164  	      0  	0.000000  	1.000000
+ 1.176  	      0  	0.000000  	1.000000
+ 1.188  	      0  	0.000000  	1.000000
+ 1.200  	      0  	0.000000  	1.000000
+ 1.213  	      0  	0.000000  	1.000000
+ 1.226  	      0  	0.000000  	1.000000
+ 1.239  	      0  	0.000000  	1.000000
+ 1.252  	      0  	0.000000  	1.000000
+ 1.265  	      0  	0.000000  	1.000000
+ 1.278  	      0  	0.000000  	1.000000
+ 1.291  	      0  	0.000000  	1.000000
  1.304  	      0  	0.000000  	1.000000
  1.318  	      0  	0.000000  	1.000000
  1.332  	      0  	0.000000  	1.000000
@@ -4095,51 +4095,51 @@ System logorg #0 ssd Instantaneous queue length std.dev.:	0.000000
 System logorg #0 ssd Instantaneous queue length maximum:	1
 System logorg #0 ssd Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     10       0       0       0       0       0       0       0       0       0 
+      3       0       0       0       0       0       0       0       0       0 
 System logorg #0 ssd Sub-optimal mapping penalty average: 	0.000000
 System logorg #0 ssd Sub-optimal mapping penalty std.dev.:	0.000000
 System logorg #0 ssd Sub-optimal mapping penalty maximum:	0
 System logorg #0 ssd Sub-optimal mapping penalty distribution
    = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
       0       0       0       0       0       0       0       0       0       0 
-System logorg #0 ssd Access time average: 	0.217228
-System logorg #0 ssd Access time std.dev.:	0.087717
-System logorg #0 ssd Access time maximum:	0.305600
+System logorg #0 ssd Access time average: 	0.129990
+System logorg #0 ssd Access time std.dev.:	0.003856
+System logorg #0 ssd Access time maximum:	0.130600
 System logorg #0 ssd Access time distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
-    258       0       0       0       0       0       0       0       0       0 
+     41       0       0       0       0       0       0       0       0       0 
 System logorg #0 ssd Total bus wait time: 0.000000
 System logorg #0 ssd Number of bus waits: 0
 
 IODRIVER STATISTICS
 -------------------
 
-IOdriver Total Requests handled:	8
-IOdriver Requests per second:   	1.304352
-IOdriver Completely idle time:  	5111.311000   	0.833369
-IOdriver Response time average: 	0.933430
-IOdriver Response time std.dev.:	0.350000
-IOdriver Response time maximum:	1.283430
+IOdriver Total Requests handled:	1
+IOdriver Requests per second:   	0.187501
+IOdriver Completely idle time:  	5111.311000   	0.958374
+IOdriver Response time average: 	0.583430
+IOdriver Response time std.dev.:	0.000000
+IOdriver Response time maximum:	0.583430
 IOdriver Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-      8       0       0       0       0       0       0       0       0       0 
+      1       0       0       0       0       0       0       0       0       0 
 IOdriver Overlaps combined:     	0	0.000000
 IOdriver Read overlaps combined:	0	0.000000	0.000000
-IOdriver Number of reads:         4  	0.363636
-IOdriver Number of writes:        7  	0.636364
+IOdriver Number of reads:         3  	0.500000
+IOdriver Number of writes:        3  	0.500000
 IOdriver Sequential reads:        0  	0.000000  	0.000000
 IOdriver Sequential writes:       0  	0.000000  	0.000000
-IOdriver Base SPTF/SDF Different:      0 /     11 	0.000000
+IOdriver Base SPTF/SDF Different:      0 /      6 	0.000000
 IOdriver Timeout SPTF/SDF Different:      0 /      0 	0.000000
 IOdriver Priority SPTF/SDF Different:      0 /      0 	0.000000
-IOdriver runlistlen:              1429.469443
-IOdriver runoutstanding:          1429.469443
-IOdriver simtime:                 6133.313000
+IOdriver runlistlen:              222.585430
+IOdriver runoutstanding:          222.585430
+IOdriver simtime:                 5333.313000
 IOdriver warmuptime:              0.000000
 IOdriver setsize:                 1
-IOdriver Average # requests:      0.233066
-IOdriver Maximum # requests:      3
-IOdriver End # requests:          3
+IOdriver Average # requests:      0.041735
+IOdriver Maximum # requests:      5
+IOdriver End # requests:          5
 IOdriver Average queue length:    0.000000
 IOdriver Maximum queue length:    1
 IOdriver End queued requests:     0
@@ -4148,14 +4148,14 @@ IOdriver Queue time std.dev.:	0.000000
 IOdriver Queue time maximum:	0
 IOdriver Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     11       0       0       0       0       0       0       0       0       0 
-IOdriver Avg # read requests:     0.000380
-IOdriver Max # read requests:     1
-IOdriver Avg # write requests:    0.232686
+      6       0       0       0       0       0       0       0       0       0 
+IOdriver Avg # read requests:     0.000109
+IOdriver Max # read requests:     2
+IOdriver Avg # write requests:    0.041626
 IOdriver Max # write requests:    3
-IOdriver Physical access time average: 	0.933430
-IOdriver Physical access time std.dev.:	0.350000
-IOdriver Physical access time maximum:	1.283430
+IOdriver Physical access time average: 	0.583430
+IOdriver Physical access time std.dev.:	0.000000
+IOdriver Physical access time maximum:	0.583430
 IOdriver Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -4400,82 +4400,82 @@ IOdriver Physical access time distribution
  0.568  	      0  	0.000000  	0.000000
  0.574  	      0  	0.000000  	0.000000
  0.580  	      0  	0.000000  	0.000000
- 0.586  	      4  	0.500000  	0.500000
- 0.592  	      0  	0.000000  	0.500000
- 0.598  	      0  	0.000000  	0.500000
- 0.604  	      0  	0.000000  	0.500000
- 0.611  	      0  	0.000000  	0.500000
- 0.618  	      0  	0.000000  	0.500000
- 0.625  	      0  	0.000000  	0.500000
- 0.632  	      0  	0.000000  	0.500000
- 0.639  	      0  	0.000000  	0.500000
- 0.646  	      0  	0.000000  	0.500000
- 0.653  	      0  	0.000000  	0.500000
- 0.660  	      0  	0.000000  	0.500000
- 0.667  	      0  	0.000000  	0.500000
- 0.674  	      0  	0.000000  	0.500000
- 0.681  	      0  	0.000000  	0.500000
- 0.688  	      0  	0.000000  	0.500000
- 0.695  	      0  	0.000000  	0.500000
- 0.702  	      0  	0.000000  	0.500000
- 0.710  	      0  	0.000000  	0.500000
- 0.718  	      0  	0.000000  	0.500000
- 0.726  	      0  	0.000000  	0.500000
- 0.734  	      0  	0.000000  	0.500000
- 0.742  	      0  	0.000000  	0.500000
- 0.750  	      0  	0.000000  	0.500000
- 0.758  	      0  	0.000000  	0.500000
- 0.766  	      0  	0.000000  	0.500000
- 0.774  	      0  	0.000000  	0.500000
- 0.782  	      0  	0.000000  	0.500000
- 0.790  	      0  	0.000000  	0.500000
- 0.798  	      0  	0.000000  	0.500000
- 0.806  	      0  	0.000000  	0.500000
- 0.815  	      0  	0.000000  	0.500000
- 0.824  	      0  	0.000000  	0.500000
- 0.833  	      0  	0.000000  	0.500000
- 0.842  	      0  	0.000000  	0.500000
- 0.851  	      0  	0.000000  	0.500000
- 0.860  	      0  	0.000000  	0.500000
- 0.869  	      0  	0.000000  	0.500000
- 0.878  	      0  	0.000000  	0.500000
- 0.887  	      0  	0.000000  	0.500000
- 0.896  	      0  	0.000000  	0.500000
- 0.905  	      0  	0.000000  	0.500000
- 0.915  	      0  	0.000000  	0.500000
- 0.925  	      0  	0.000000  	0.500000
- 0.935  	      0  	0.000000  	0.500000
- 0.945  	      0  	0.000000  	0.500000
- 0.955  	      0  	0.000000  	0.500000
- 0.965  	      0  	0.000000  	0.500000
- 0.975  	      0  	0.000000  	0.500000
- 0.985  	      0  	0.000000  	0.500000
- 0.995  	      0  	0.000000  	0.500000
- 1.005  	      0  	0.000000  	0.500000
- 1.016  	      0  	0.000000  	0.500000
- 1.027  	      0  	0.000000  	0.500000
- 1.038  	      0  	0.000000  	0.500000
- 1.049  	      0  	0.000000  	0.500000
- 1.060  	      0  	0.000000  	0.500000
- 1.071  	      0  	0.000000  	0.500000
- 1.082  	      0  	0.000000  	0.500000
- 1.093  	      0  	0.000000  	0.500000
- 1.104  	      0  	0.000000  	0.500000
- 1.116  	      0  	0.000000  	0.500000
- 1.128  	      0  	0.000000  	0.500000
- 1.140  	      0  	0.000000  	0.500000
- 1.152  	      0  	0.000000  	0.500000
- 1.164  	      0  	0.000000  	0.500000
- 1.176  	      0  	0.000000  	0.500000
- 1.188  	      0  	0.000000  	0.500000
- 1.200  	      0  	0.000000  	0.500000
- 1.213  	      0  	0.000000  	0.500000
- 1.226  	      0  	0.000000  	0.500000
- 1.239  	      0  	0.000000  	0.500000
- 1.252  	      0  	0.000000  	0.500000
- 1.265  	      0  	0.000000  	0.500000
- 1.278  	      0  	0.000000  	0.500000
- 1.291  	      4  	0.500000  	1.000000
+ 0.586  	      1  	1.000000  	1.000000
+ 0.592  	      0  	0.000000  	1.000000
+ 0.598  	      0  	0.000000  	1.000000
+ 0.604  	      0  	0.000000  	1.000000
+ 0.611  	      0  	0.000000  	1.000000
+ 0.618  	      0  	0.000000  	1.000000
+ 0.625  	      0  	0.000000  	1.000000
+ 0.632  	      0  	0.000000  	1.000000
+ 0.639  	      0  	0.000000  	1.000000
+ 0.646  	      0  	0.000000  	1.000000
+ 0.653  	      0  	0.000000  	1.000000
+ 0.660  	      0  	0.000000  	1.000000
+ 0.667  	      0  	0.000000  	1.000000
+ 0.674  	      0  	0.000000  	1.000000
+ 0.681  	      0  	0.000000  	1.000000
+ 0.688  	      0  	0.000000  	1.000000
+ 0.695  	      0  	0.000000  	1.000000
+ 0.702  	      0  	0.000000  	1.000000
+ 0.710  	      0  	0.000000  	1.000000
+ 0.718  	      0  	0.000000  	1.000000
+ 0.726  	      0  	0.000000  	1.000000
+ 0.734  	      0  	0.000000  	1.000000
+ 0.742  	      0  	0.000000  	1.000000
+ 0.750  	      0  	0.000000  	1.000000
+ 0.758  	      0  	0.000000  	1.000000
+ 0.766  	      0  	0.000000  	1.000000
+ 0.774  	      0  	0.000000  	1.000000
+ 0.782  	      0  	0.000000  	1.000000
+ 0.790  	      0  	0.000000  	1.000000
+ 0.798  	      0  	0.000000  	1.000000
+ 0.806  	      0  	0.000000  	1.000000
+ 0.815  	      0  	0.000000  	1.000000
+ 0.824  	      0  	0.000000  	1.000000
+ 0.833  	      0  	0.000000  	1.000000
+ 0.842  	      0  	0.000000  	1.000000
+ 0.851  	      0  	0.000000  	1.000000
+ 0.860  	      0  	0.000000  	1.000000
+ 0.869  	      0  	0.000000  	1.000000
+ 0.878  	      0  	0.000000  	1.000000
+ 0.887  	      0  	0.000000  	1.000000
+ 0.896  	      0  	0.000000  	1.000000
+ 0.905  	      0  	0.000000  	1.000000
+ 0.915  	      0  	0.000000  	1.000000
+ 0.925  	      0  	0.000000  	1.000000
+ 0.935  	      0  	0.000000  	1.000000
+ 0.945  	      0  	0.000000  	1.000000
+ 0.955  	      0  	0.000000  	1.000000
+ 0.965  	      0  	0.000000  	1.000000
+ 0.975  	      0  	0.000000  	1.000000
+ 0.985  	      0  	0.000000  	1.000000
+ 0.995  	      0  	0.000000  	1.000000
+ 1.005  	      0  	0.000000  	1.000000
+ 1.016  	      0  	0.000000  	1.000000
+ 1.027  	      0  	0.000000  	1.000000
+ 1.038  	      0  	0.000000  	1.000000
+ 1.049  	      0  	0.000000  	1.000000
+ 1.060  	      0  	0.000000  	1.000000
+ 1.071  	      0  	0.000000  	1.000000
+ 1.082  	      0  	0.000000  	1.000000
+ 1.093  	      0  	0.000000  	1.000000
+ 1.104  	      0  	0.000000  	1.000000
+ 1.116  	      0  	0.000000  	1.000000
+ 1.128  	      0  	0.000000  	1.000000
+ 1.140  	      0  	0.000000  	1.000000
+ 1.152  	      0  	0.000000  	1.000000
+ 1.164  	      0  	0.000000  	1.000000
+ 1.176  	      0  	0.000000  	1.000000
+ 1.188  	      0  	0.000000  	1.000000
+ 1.200  	      0  	0.000000  	1.000000
+ 1.213  	      0  	0.000000  	1.000000
+ 1.226  	      0  	0.000000  	1.000000
+ 1.239  	      0  	0.000000  	1.000000
+ 1.252  	      0  	0.000000  	1.000000
+ 1.265  	      0  	0.000000  	1.000000
+ 1.278  	      0  	0.000000  	1.000000
+ 1.291  	      0  	0.000000  	1.000000
  1.304  	      0  	0.000000  	1.000000
  1.318  	      0  	0.000000  	1.000000
  1.332  	      0  	0.000000  	1.000000
@@ -5941,25 +5941,25 @@ IOdriver Request size std.dev.:	0.000000
 IOdriver Request size maximum:	256
 IOdriver Request size distribution
    =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
-      0       0       0       0       0       0       0       0       0      11 
+      0       0       0       0       0       0       0       0       0       6 
 IOdriver Read request size average: 	256.000000
 IOdriver Read request size std.dev.:	0.000000
 IOdriver Read request size maximum:	256
 IOdriver Read request size distribution
    =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
-      0       0       0       0       0       0       0       0       0       4 
+      0       0       0       0       0       0       0       0       0       3 
 IOdriver Write request size average: 	256.000000
 IOdriver Write request size std.dev.:	0.000000
 IOdriver Write request size maximum:	256
 IOdriver Write request size distribution
    =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
-      0       0       0       0       0       0       0       0       0       7 
+      0       0       0       0       0       0       0       0       0       3 
 IOdriver Instantaneous queue length average: 	1.000000
 IOdriver Instantaneous queue length std.dev.:	0.000000
 IOdriver Instantaneous queue length maximum:	1
 IOdriver Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     11       0       0       0       0       0       0       0       0       0 
+      6       0       0       0       0       0       0       0       0       0 
 IOdriver Sub-optimal mapping penalty average: 	0.000000
 IOdriver Sub-optimal mapping penalty std.dev.:	0.000000
 IOdriver Sub-optimal mapping penalty maximum:	0
@@ -5985,31 +5985,31 @@ No mems requests encountered (1)
 SSD STATISTICS
 ---------------------
 
-ssd Total Requests handled:	8
-ssd Requests per second:   	1.304352
-ssd Completely idle time:  	5111.311000   	0.833369
-ssd Response time average: 	0.933430
-ssd Response time std.dev.:	0.350000
-ssd Response time maximum:	1.283430
+ssd Total Requests handled:	1
+ssd Requests per second:   	0.187501
+ssd Completely idle time:  	5111.311000   	0.958374
+ssd Response time average: 	0.583430
+ssd Response time std.dev.:	0.000000
+ssd Response time maximum:	0.583430
 ssd Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-      8       0       0       0       0       0       0       0       0       0 
+      1       0       0       0       0       0       0       0       0       0 
 ssd Overlaps combined:     	0	0.000000
 ssd Read overlaps combined:	0	0.000000	0.000000
-ssd Number of reads:         4  	0.400000
-ssd Number of writes:        6  	0.600000
+ssd Number of reads:         2  	0.666667
+ssd Number of writes:        1  	0.333333
 ssd Sequential reads:        0  	0.000000  	0.000000
 ssd Sequential writes:       0  	0.000000  	0.000000
-ssd Base SPTF/SDF Different:      0 /     10 	0.000000
+ssd Base SPTF/SDF Different:      0 /      3 	0.000000
 ssd Timeout SPTF/SDF Different:      0 /      0 	0.000000
 ssd Priority SPTF/SDF Different:      0 /      0 	0.000000
-ssd runlistlen:              1232.036304
-ssd runoutstanding:          1232.036304
-ssd simtime:                 6133.313000
+ssd runlistlen:              222.585430
+ssd runoutstanding:          222.585430
+ssd simtime:                 5333.313000
 ssd warmuptime:              0.000000
 ssd setsize:                 1
-ssd Average # requests:      0.200876
-ssd Maximum # requests:      3
+ssd Average # requests:      0.041735
+ssd Maximum # requests:      2
 ssd End # requests:          2
 ssd Average queue length:    0.000000
 ssd Maximum queue length:    1
@@ -6019,14 +6019,14 @@ ssd Queue time std.dev.:	0.000000
 ssd Queue time maximum:	0
 ssd Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     10       0       0       0       0       0       0       0       0       0 
-ssd Avg # read requests:     0.000380
+      3       0       0       0       0       0       0       0       0       0 
+ssd Avg # read requests:     0.000109
 ssd Max # read requests:     1
-ssd Avg # write requests:    0.200496
-ssd Max # write requests:    3
-ssd Physical access time average: 	0.933430
-ssd Physical access time std.dev.:	0.350000
-ssd Physical access time maximum:	1.283430
+ssd Avg # write requests:    0.041626
+ssd Max # write requests:    1
+ssd Physical access time average: 	0.583430
+ssd Physical access time std.dev.:	0.000000
+ssd Physical access time maximum:	0.583430
 ssd Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -6271,82 +6271,82 @@ ssd Physical access time distribution
  0.568  	      0  	0.000000  	0.000000
  0.574  	      0  	0.000000  	0.000000
  0.580  	      0  	0.000000  	0.000000
- 0.586  	      4  	0.500000  	0.500000
- 0.592  	      0  	0.000000  	0.500000
- 0.598  	      0  	0.000000  	0.500000
- 0.604  	      0  	0.000000  	0.500000
- 0.611  	      0  	0.000000  	0.500000
- 0.618  	      0  	0.000000  	0.500000
- 0.625  	      0  	0.000000  	0.500000
- 0.632  	      0  	0.000000  	0.500000
- 0.639  	      0  	0.000000  	0.500000
- 0.646  	      0  	0.000000  	0.500000
- 0.653  	      0  	0.000000  	0.500000
- 0.660  	      0  	0.000000  	0.500000
- 0.667  	      0  	0.000000  	0.500000
- 0.674  	      0  	0.000000  	0.500000
- 0.681  	      0  	0.000000  	0.500000
- 0.688  	      0  	0.000000  	0.500000
- 0.695  	      0  	0.000000  	0.500000
- 0.702  	      0  	0.000000  	0.500000
- 0.710  	      0  	0.000000  	0.500000
- 0.718  	      0  	0.000000  	0.500000
- 0.726  	      0  	0.000000  	0.500000
- 0.734  	      0  	0.000000  	0.500000
- 0.742  	      0  	0.000000  	0.500000
- 0.750  	      0  	0.000000  	0.500000
- 0.758  	      0  	0.000000  	0.500000
- 0.766  	      0  	0.000000  	0.500000
- 0.774  	      0  	0.000000  	0.500000
- 0.782  	      0  	0.000000  	0.500000
- 0.790  	      0  	0.000000  	0.500000
- 0.798  	      0  	0.000000  	0.500000
- 0.806  	      0  	0.000000  	0.500000
- 0.815  	      0  	0.000000  	0.500000
- 0.824  	      0  	0.000000  	0.500000
- 0.833  	      0  	0.000000  	0.500000
- 0.842  	      0  	0.000000  	0.500000
- 0.851  	      0  	0.000000  	0.500000
- 0.860  	      0  	0.000000  	0.500000
- 0.869  	      0  	0.000000  	0.500000
- 0.878  	      0  	0.000000  	0.500000
- 0.887  	      0  	0.000000  	0.500000
- 0.896  	      0  	0.000000  	0.500000
- 0.905  	      0  	0.000000  	0.500000
- 0.915  	      0  	0.000000  	0.500000
- 0.925  	      0  	0.000000  	0.500000
- 0.935  	      0  	0.000000  	0.500000
- 0.945  	      0  	0.000000  	0.500000
- 0.955  	      0  	0.000000  	0.500000
- 0.965  	      0  	0.000000  	0.500000
- 0.975  	      0  	0.000000  	0.500000
- 0.985  	      0  	0.000000  	0.500000
- 0.995  	      0  	0.000000  	0.500000
- 1.005  	      0  	0.000000  	0.500000
- 1.016  	      0  	0.000000  	0.500000
- 1.027  	      0  	0.000000  	0.500000
- 1.038  	      0  	0.000000  	0.500000
- 1.049  	      0  	0.000000  	0.500000
- 1.060  	      0  	0.000000  	0.500000
- 1.071  	      0  	0.000000  	0.500000
- 1.082  	      0  	0.000000  	0.500000
- 1.093  	      0  	0.000000  	0.500000
- 1.104  	      0  	0.000000  	0.500000
- 1.116  	      0  	0.000000  	0.500000
- 1.128  	      0  	0.000000  	0.500000
- 1.140  	      0  	0.000000  	0.500000
- 1.152  	      0  	0.000000  	0.500000
- 1.164  	      0  	0.000000  	0.500000
- 1.176  	      0  	0.000000  	0.500000
- 1.188  	      0  	0.000000  	0.500000
- 1.200  	      0  	0.000000  	0.500000
- 1.213  	      0  	0.000000  	0.500000
- 1.226  	      0  	0.000000  	0.500000
- 1.239  	      0  	0.000000  	0.500000
- 1.252  	      0  	0.000000  	0.500000
- 1.265  	      0  	0.000000  	0.500000
- 1.278  	      0  	0.000000  	0.500000
- 1.291  	      4  	0.500000  	1.000000
+ 0.586  	      1  	1.000000  	1.000000
+ 0.592  	      0  	0.000000  	1.000000
+ 0.598  	      0  	0.000000  	1.000000
+ 0.604  	      0  	0.000000  	1.000000
+ 0.611  	      0  	0.000000  	1.000000
+ 0.618  	      0  	0.000000  	1.000000
+ 0.625  	      0  	0.000000  	1.000000
+ 0.632  	      0  	0.000000  	1.000000
+ 0.639  	      0  	0.000000  	1.000000
+ 0.646  	      0  	0.000000  	1.000000
+ 0.653  	      0  	0.000000  	1.000000
+ 0.660  	      0  	0.000000  	1.000000
+ 0.667  	      0  	0.000000  	1.000000
+ 0.674  	      0  	0.000000  	1.000000
+ 0.681  	      0  	0.000000  	1.000000
+ 0.688  	      0  	0.000000  	1.000000
+ 0.695  	      0  	0.000000  	1.000000
+ 0.702  	      0  	0.000000  	1.000000
+ 0.710  	      0  	0.000000  	1.000000
+ 0.718  	      0  	0.000000  	1.000000
+ 0.726  	      0  	0.000000  	1.000000
+ 0.734  	      0  	0.000000  	1.000000
+ 0.742  	      0  	0.000000  	1.000000
+ 0.750  	      0  	0.000000  	1.000000
+ 0.758  	      0  	0.000000  	1.000000
+ 0.766  	      0  	0.000000  	1.000000
+ 0.774  	      0  	0.000000  	1.000000
+ 0.782  	      0  	0.000000  	1.000000
+ 0.790  	      0  	0.000000  	1.000000
+ 0.798  	      0  	0.000000  	1.000000
+ 0.806  	      0  	0.000000  	1.000000
+ 0.815  	      0  	0.000000  	1.000000
+ 0.824  	      0  	0.000000  	1.000000
+ 0.833  	      0  	0.000000  	1.000000
+ 0.842  	      0  	0.000000  	1.000000
+ 0.851  	      0  	0.000000  	1.000000
+ 0.860  	      0  	0.000000  	1.000000
+ 0.869  	      0  	0.000000  	1.000000
+ 0.878  	      0  	0.000000  	1.000000
+ 0.887  	      0  	0.000000  	1.000000
+ 0.896  	      0  	0.000000  	1.000000
+ 0.905  	      0  	0.000000  	1.000000
+ 0.915  	      0  	0.000000  	1.000000
+ 0.925  	      0  	0.000000  	1.000000
+ 0.935  	      0  	0.000000  	1.000000
+ 0.945  	      0  	0.000000  	1.000000
+ 0.955  	      0  	0.000000  	1.000000
+ 0.965  	      0  	0.000000  	1.000000
+ 0.975  	      0  	0.000000  	1.000000
+ 0.985  	      0  	0.000000  	1.000000
+ 0.995  	      0  	0.000000  	1.000000
+ 1.005  	      0  	0.000000  	1.000000
+ 1.016  	      0  	0.000000  	1.000000
+ 1.027  	      0  	0.000000  	1.000000
+ 1.038  	      0  	0.000000  	1.000000
+ 1.049  	      0  	0.000000  	1.000000
+ 1.060  	      0  	0.000000  	1.000000
+ 1.071  	      0  	0.000000  	1.000000
+ 1.082  	      0  	0.000000  	1.000000
+ 1.093  	      0  	0.000000  	1.000000
+ 1.104  	      0  	0.000000  	1.000000
+ 1.116  	      0  	0.000000  	1.000000
+ 1.128  	      0  	0.000000  	1.000000
+ 1.140  	      0  	0.000000  	1.000000
+ 1.152  	      0  	0.000000  	1.000000
+ 1.164  	      0  	0.000000  	1.000000
+ 1.176  	      0  	0.000000  	1.000000
+ 1.188  	      0  	0.000000  	1.000000
+ 1.200  	      0  	0.000000  	1.000000
+ 1.213  	      0  	0.000000  	1.000000
+ 1.226  	      0  	0.000000  	1.000000
+ 1.239  	      0  	0.000000  	1.000000
+ 1.252  	      0  	0.000000  	1.000000
+ 1.265  	      0  	0.000000  	1.000000
+ 1.278  	      0  	0.000000  	1.000000
+ 1.291  	      0  	0.000000  	1.000000
  1.304  	      0  	0.000000  	1.000000
  1.318  	      0  	0.000000  	1.000000
  1.332  	      0  	0.000000  	1.000000
@@ -7790,19 +7790,19 @@ ssd Instantaneous queue length std.dev.:	0.000000
 ssd Instantaneous queue length maximum:	1
 ssd Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     10       0       0       0       0       0       0       0       0       0 
+      3       0       0       0       0       0       0       0       0       0 
 ssd Sub-optimal mapping penalty average: 	0.000000
 ssd Sub-optimal mapping penalty std.dev.:	0.000000
 ssd Sub-optimal mapping penalty maximum:	0
 ssd Sub-optimal mapping penalty distribution
    = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
       0       0       0       0       0       0       0       0       0       0 
-ssd Access time average: 	0.217228
-ssd Access time std.dev.:	0.087717
-ssd Access time maximum:	0.305600
+ssd Access time average: 	0.129990
+ssd Access time std.dev.:	0.003856
+ssd Access time maximum:	0.130600
 ssd Access time distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
-    258       0       0       0       0       0       0       0       0       0 
+     41       0       0       0       0       0       0       0       0       0 
 ssd Total bus wait time: 0.000000
 ssd Number of bus waits: 0
 
@@ -7810,16 +7810,16 @@ ssd Number of bus waits: 0
 SSD CLEANING STATISTICS
 ---------------------------------------------
 
-ssd  #0 elem #0   Total reqs issued:	34
-ssd  #0 elem #0   Total time taken:	7.190400
-ssd  #0 elem #0   IOPS:	4728.526925
+ssd  #0 elem #0   Total reqs issued:	6
+ssd  #0 elem #0   Total time taken:	0.758600
+ssd  #0 elem #0   IOPS:	7909.306617
 ssd  #0 elem #0   Total cleaning reqs issued:	0
 ssd  #0 elem #0   Total cleaning time taken:	0.000000
 ssd  #0 elem #0   Total migrations:	0
 ssd  #0 elem #0   Total pages migrated:	0
 ssd  #0 elem #0   Total migrations cost:	0.000000
-ssd  #0 elem #0   Overall IOPS:	4728.526925
-ssd  #0 elem #0   Number of free blocks:	2438
+ssd  #0 elem #0   Overall IOPS:	7909.306617
+ssd  #0 elem #0   Number of free blocks:	2439
 ssd  #0 elem #0   Number of cleans:	0
 ssd  #0 elem #0   Pages moved:	0
 ssd  #0 elem #0   Total xfer time:	0.000000
@@ -7834,15 +7834,15 @@ ssd  #0 elem #0   Average of life time:	50.000000
 ssd  #0 elem #0   Variance of life time:	0.000000
 ssd  #0 elem #0   Total dead blocks:	0
 
-ssd  #0 elem #1   Total reqs issued:	32
-ssd  #0 elem #1   Total time taken:	6.979200
-ssd  #0 elem #1   IOPS:	4585.052728
+ssd  #0 elem #1   Total reqs issued:	5
+ssd  #0 elem #1   Total time taken:	0.653000
+ssd  #0 elem #1   IOPS:	7656.967841
 ssd  #0 elem #1   Total cleaning reqs issued:	0
 ssd  #0 elem #1   Total cleaning time taken:	0.000000
 ssd  #0 elem #1   Total migrations:	0
 ssd  #0 elem #1   Total pages migrated:	0
 ssd  #0 elem #1   Total migrations cost:	0.000000
-ssd  #0 elem #1   Overall IOPS:	4585.052728
+ssd  #0 elem #1   Overall IOPS:	7656.967841
 ssd  #0 elem #1   Number of free blocks:	2440
 ssd  #0 elem #1   Number of cleans:	0
 ssd  #0 elem #1   Pages moved:	0
@@ -7858,15 +7858,15 @@ ssd  #0 elem #1   Average of life time:	50.000000
 ssd  #0 elem #1   Variance of life time:	0.000000
 ssd  #0 elem #1   Total dead blocks:	0
 
-ssd  #0 elem #2   Total reqs issued:	32
-ssd  #0 elem #2   Total time taken:	6.979200
-ssd  #0 elem #2   IOPS:	4585.052728
+ssd  #0 elem #2   Total reqs issued:	5
+ssd  #0 elem #2   Total time taken:	0.653000
+ssd  #0 elem #2   IOPS:	7656.967841
 ssd  #0 elem #2   Total cleaning reqs issued:	0
 ssd  #0 elem #2   Total cleaning time taken:	0.000000
 ssd  #0 elem #2   Total migrations:	0
 ssd  #0 elem #2   Total pages migrated:	0
 ssd  #0 elem #2   Total migrations cost:	0.000000
-ssd  #0 elem #2   Overall IOPS:	4585.052728
+ssd  #0 elem #2   Overall IOPS:	7656.967841
 ssd  #0 elem #2   Number of free blocks:	2440
 ssd  #0 elem #2   Number of cleans:	0
 ssd  #0 elem #2   Pages moved:	0
@@ -7882,15 +7882,15 @@ ssd  #0 elem #2   Average of life time:	50.000000
 ssd  #0 elem #2   Variance of life time:	0.000000
 ssd  #0 elem #2   Total dead blocks:	0
 
-ssd  #0 elem #3   Total reqs issued:	32
-ssd  #0 elem #3   Total time taken:	6.979200
-ssd  #0 elem #3   IOPS:	4585.052728
+ssd  #0 elem #3   Total reqs issued:	5
+ssd  #0 elem #3   Total time taken:	0.653000
+ssd  #0 elem #3   IOPS:	7656.967841
 ssd  #0 elem #3   Total cleaning reqs issued:	0
 ssd  #0 elem #3   Total cleaning time taken:	0.000000
 ssd  #0 elem #3   Total migrations:	0
 ssd  #0 elem #3   Total pages migrated:	0
 ssd  #0 elem #3   Total migrations cost:	0.000000
-ssd  #0 elem #3   Overall IOPS:	4585.052728
+ssd  #0 elem #3   Overall IOPS:	7656.967841
 ssd  #0 elem #3   Number of free blocks:	2440
 ssd  #0 elem #3   Number of cleans:	0
 ssd  #0 elem #3   Pages moved:	0
@@ -7906,15 +7906,15 @@ ssd  #0 elem #3   Average of life time:	50.000000
 ssd  #0 elem #3   Variance of life time:	0.000000
 ssd  #0 elem #3   Total dead blocks:	0
 
-ssd  #0 elem #4   Total reqs issued:	32
-ssd  #0 elem #4   Total time taken:	6.979200
-ssd  #0 elem #4   IOPS:	4585.052728
+ssd  #0 elem #4   Total reqs issued:	5
+ssd  #0 elem #4   Total time taken:	0.653000
+ssd  #0 elem #4   IOPS:	7656.967841
 ssd  #0 elem #4   Total cleaning reqs issued:	0
 ssd  #0 elem #4   Total cleaning time taken:	0.000000
 ssd  #0 elem #4   Total migrations:	0
 ssd  #0 elem #4   Total pages migrated:	0
 ssd  #0 elem #4   Total migrations cost:	0.000000
-ssd  #0 elem #4   Overall IOPS:	4585.052728
+ssd  #0 elem #4   Overall IOPS:	7656.967841
 ssd  #0 elem #4   Number of free blocks:	2440
 ssd  #0 elem #4   Number of cleans:	0
 ssd  #0 elem #4   Pages moved:	0
@@ -7930,15 +7930,15 @@ ssd  #0 elem #4   Average of life time:	50.000000
 ssd  #0 elem #4   Variance of life time:	0.000000
 ssd  #0 elem #4   Total dead blocks:	0
 
-ssd  #0 elem #5   Total reqs issued:	32
-ssd  #0 elem #5   Total time taken:	6.979200
-ssd  #0 elem #5   IOPS:	4585.052728
+ssd  #0 elem #5   Total reqs issued:	5
+ssd  #0 elem #5   Total time taken:	0.653000
+ssd  #0 elem #5   IOPS:	7656.967841
 ssd  #0 elem #5   Total cleaning reqs issued:	0
 ssd  #0 elem #5   Total cleaning time taken:	0.000000
 ssd  #0 elem #5   Total migrations:	0
 ssd  #0 elem #5   Total pages migrated:	0
 ssd  #0 elem #5   Total migrations cost:	0.000000
-ssd  #0 elem #5   Overall IOPS:	4585.052728
+ssd  #0 elem #5   Overall IOPS:	7656.967841
 ssd  #0 elem #5   Number of free blocks:	2440
 ssd  #0 elem #5   Number of cleans:	0
 ssd  #0 elem #5   Pages moved:	0
@@ -7954,15 +7954,15 @@ ssd  #0 elem #5   Average of life time:	50.000000
 ssd  #0 elem #5   Variance of life time:	0.000000
 ssd  #0 elem #5   Total dead blocks:	0
 
-ssd  #0 elem #6   Total reqs issued:	32
-ssd  #0 elem #6   Total time taken:	6.979200
-ssd  #0 elem #6   IOPS:	4585.052728
+ssd  #0 elem #6   Total reqs issued:	5
+ssd  #0 elem #6   Total time taken:	0.653000
+ssd  #0 elem #6   IOPS:	7656.967841
 ssd  #0 elem #6   Total cleaning reqs issued:	0
 ssd  #0 elem #6   Total cleaning time taken:	0.000000
 ssd  #0 elem #6   Total migrations:	0
 ssd  #0 elem #6   Total pages migrated:	0
 ssd  #0 elem #6   Total migrations cost:	0.000000
-ssd  #0 elem #6   Overall IOPS:	4585.052728
+ssd  #0 elem #6   Overall IOPS:	7656.967841
 ssd  #0 elem #6   Number of free blocks:	2440
 ssd  #0 elem #6   Number of cleans:	0
 ssd  #0 elem #6   Pages moved:	0
@@ -7978,15 +7978,15 @@ ssd  #0 elem #6   Average of life time:	50.000000
 ssd  #0 elem #6   Variance of life time:	0.000000
 ssd  #0 elem #6   Total dead blocks:	0
 
-ssd  #0 elem #7   Total reqs issued:	32
-ssd  #0 elem #7   Total time taken:	6.979200
-ssd  #0 elem #7   IOPS:	4585.052728
+ssd  #0 elem #7   Total reqs issued:	5
+ssd  #0 elem #7   Total time taken:	0.653000
+ssd  #0 elem #7   IOPS:	7656.967841
 ssd  #0 elem #7   Total cleaning reqs issued:	0
 ssd  #0 elem #7   Total cleaning time taken:	0.000000
 ssd  #0 elem #7   Total migrations:	0
 ssd  #0 elem #7   Total pages migrated:	0
 ssd  #0 elem #7   Total migrations cost:	0.000000
-ssd  #0 elem #7   Overall IOPS:	4585.052728
+ssd  #0 elem #7   Overall IOPS:	7656.967841
 ssd  #0 elem #7   Number of free blocks:	2440
 ssd  #0 elem #7   Number of cleans:	0
 ssd  #0 elem #7   Pages moved:	0
@@ -8003,37 +8003,37 @@ ssd  #0 elem #7   Variance of life time:	0.000000
 ssd  #0 elem #7   Total dead blocks:	0
 
 
-ssd    Total SSD IOPS:	36823.896022
-ssd    Average SSD element IOPS:	4602.987003
+ssd    Total SSD IOPS:	61508.081503
+ssd    Average SSD element IOPS:	7688.510188
 
 
 ssd #0:
 
-ssd #0 Total Requests handled:	8
-ssd #0 Requests per second:   	1.304352
-ssd #0 Completely idle time:  	5111.311000   	0.833369
-ssd #0 Response time average: 	0.933430
-ssd #0 Response time std.dev.:	0.350000
-ssd #0 Response time maximum:	1.283430
+ssd #0 Total Requests handled:	1
+ssd #0 Requests per second:   	0.187501
+ssd #0 Completely idle time:  	5111.311000   	0.958374
+ssd #0 Response time average: 	0.583430
+ssd #0 Response time std.dev.:	0.000000
+ssd #0 Response time maximum:	0.583430
 ssd #0 Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-      8       0       0       0       0       0       0       0       0       0 
+      1       0       0       0       0       0       0       0       0       0 
 ssd #0 Overlaps combined:     	0	0.000000
 ssd #0 Read overlaps combined:	0	0.000000	0.000000
-ssd #0 Number of reads:         4  	0.400000
-ssd #0 Number of writes:        6  	0.600000
+ssd #0 Number of reads:         2  	0.666667
+ssd #0 Number of writes:        1  	0.333333
 ssd #0 Sequential reads:        0  	0.000000  	0.000000
 ssd #0 Sequential writes:       0  	0.000000  	0.000000
-ssd #0 Base SPTF/SDF Different:      0 /     10 	0.000000
+ssd #0 Base SPTF/SDF Different:      0 /      3 	0.000000
 ssd #0 Timeout SPTF/SDF Different:      0 /      0 	0.000000
 ssd #0 Priority SPTF/SDF Different:      0 /      0 	0.000000
-ssd #0 runlistlen:              1232.036304
-ssd #0 runoutstanding:          1232.036304
-ssd #0 simtime:                 6133.313000
+ssd #0 runlistlen:              222.585430
+ssd #0 runoutstanding:          222.585430
+ssd #0 simtime:                 5333.313000
 ssd #0 warmuptime:              0.000000
 ssd #0 setsize:                 1
-ssd #0 Average # requests:      0.200876
-ssd #0 Maximum # requests:      3
+ssd #0 Average # requests:      0.041735
+ssd #0 Maximum # requests:      2
 ssd #0 End # requests:          2
 ssd #0 Average queue length:    0.000000
 ssd #0 Maximum queue length:    1
@@ -8043,14 +8043,14 @@ ssd #0 Queue time std.dev.:	0.000000
 ssd #0 Queue time maximum:	0
 ssd #0 Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     10       0       0       0       0       0       0       0       0       0 
-ssd #0 Avg # read requests:     0.000380
+      3       0       0       0       0       0       0       0       0       0 
+ssd #0 Avg # read requests:     0.000109
 ssd #0 Max # read requests:     1
-ssd #0 Avg # write requests:    0.200496
-ssd #0 Max # write requests:    3
-ssd #0 Physical access time average: 	0.933430
-ssd #0 Physical access time std.dev.:	0.350000
-ssd #0 Physical access time maximum:	1.283430
+ssd #0 Avg # write requests:    0.041626
+ssd #0 Max # write requests:    1
+ssd #0 Physical access time average: 	0.583430
+ssd #0 Physical access time std.dev.:	0.000000
+ssd #0 Physical access time maximum:	0.583430
 ssd #0 Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -8295,82 +8295,82 @@ ssd #0 Physical access time distribution
  0.568  	      0  	0.000000  	0.000000
  0.574  	      0  	0.000000  	0.000000
  0.580  	      0  	0.000000  	0.000000
- 0.586  	      4  	0.500000  	0.500000
- 0.592  	      0  	0.000000  	0.500000
- 0.598  	      0  	0.000000  	0.500000
- 0.604  	      0  	0.000000  	0.500000
- 0.611  	      0  	0.000000  	0.500000
- 0.618  	      0  	0.000000  	0.500000
- 0.625  	      0  	0.000000  	0.500000
- 0.632  	      0  	0.000000  	0.500000
- 0.639  	      0  	0.000000  	0.500000
- 0.646  	      0  	0.000000  	0.500000
- 0.653  	      0  	0.000000  	0.500000
- 0.660  	      0  	0.000000  	0.500000
- 0.667  	      0  	0.000000  	0.500000
- 0.674  	      0  	0.000000  	0.500000
- 0.681  	      0  	0.000000  	0.500000
- 0.688  	      0  	0.000000  	0.500000
- 0.695  	      0  	0.000000  	0.500000
- 0.702  	      0  	0.000000  	0.500000
- 0.710  	      0  	0.000000  	0.500000
- 0.718  	      0  	0.000000  	0.500000
- 0.726  	      0  	0.000000  	0.500000
- 0.734  	      0  	0.000000  	0.500000
- 0.742  	      0  	0.000000  	0.500000
- 0.750  	      0  	0.000000  	0.500000
- 0.758  	      0  	0.000000  	0.500000
- 0.766  	      0  	0.000000  	0.500000
- 0.774  	      0  	0.000000  	0.500000
- 0.782  	      0  	0.000000  	0.500000
- 0.790  	      0  	0.000000  	0.500000
- 0.798  	      0  	0.000000  	0.500000
- 0.806  	      0  	0.000000  	0.500000
- 0.815  	      0  	0.000000  	0.500000
- 0.824  	      0  	0.000000  	0.500000
- 0.833  	      0  	0.000000  	0.500000
- 0.842  	      0  	0.000000  	0.500000
- 0.851  	      0  	0.000000  	0.500000
- 0.860  	      0  	0.000000  	0.500000
- 0.869  	      0  	0.000000  	0.500000
- 0.878  	      0  	0.000000  	0.500000
- 0.887  	      0  	0.000000  	0.500000
- 0.896  	      0  	0.000000  	0.500000
- 0.905  	      0  	0.000000  	0.500000
- 0.915  	      0  	0.000000  	0.500000
- 0.925  	      0  	0.000000  	0.500000
- 0.935  	      0  	0.000000  	0.500000
- 0.945  	      0  	0.000000  	0.500000
- 0.955  	      0  	0.000000  	0.500000
- 0.965  	      0  	0.000000  	0.500000
- 0.975  	      0  	0.000000  	0.500000
- 0.985  	      0  	0.000000  	0.500000
- 0.995  	      0  	0.000000  	0.500000
- 1.005  	      0  	0.000000  	0.500000
- 1.016  	      0  	0.000000  	0.500000
- 1.027  	      0  	0.000000  	0.500000
- 1.038  	      0  	0.000000  	0.500000
- 1.049  	      0  	0.000000  	0.500000
- 1.060  	      0  	0.000000  	0.500000
- 1.071  	      0  	0.000000  	0.500000
- 1.082  	      0  	0.000000  	0.500000
- 1.093  	      0  	0.000000  	0.500000
- 1.104  	      0  	0.000000  	0.500000
- 1.116  	      0  	0.000000  	0.500000
- 1.128  	      0  	0.000000  	0.500000
- 1.140  	      0  	0.000000  	0.500000
- 1.152  	      0  	0.000000  	0.500000
- 1.164  	      0  	0.000000  	0.500000
- 1.176  	      0  	0.000000  	0.500000
- 1.188  	      0  	0.000000  	0.500000
- 1.200  	      0  	0.000000  	0.500000
- 1.213  	      0  	0.000000  	0.500000
- 1.226  	      0  	0.000000  	0.500000
- 1.239  	      0  	0.000000  	0.500000
- 1.252  	      0  	0.000000  	0.500000
- 1.265  	      0  	0.000000  	0.500000
- 1.278  	      0  	0.000000  	0.500000
- 1.291  	      4  	0.500000  	1.000000
+ 0.586  	      1  	1.000000  	1.000000
+ 0.592  	      0  	0.000000  	1.000000
+ 0.598  	      0  	0.000000  	1.000000
+ 0.604  	      0  	0.000000  	1.000000
+ 0.611  	      0  	0.000000  	1.000000
+ 0.618  	      0  	0.000000  	1.000000
+ 0.625  	      0  	0.000000  	1.000000
+ 0.632  	      0  	0.000000  	1.000000
+ 0.639  	      0  	0.000000  	1.000000
+ 0.646  	      0  	0.000000  	1.000000
+ 0.653  	      0  	0.000000  	1.000000
+ 0.660  	      0  	0.000000  	1.000000
+ 0.667  	      0  	0.000000  	1.000000
+ 0.674  	      0  	0.000000  	1.000000
+ 0.681  	      0  	0.000000  	1.000000
+ 0.688  	      0  	0.000000  	1.000000
+ 0.695  	      0  	0.000000  	1.000000
+ 0.702  	      0  	0.000000  	1.000000
+ 0.710  	      0  	0.000000  	1.000000
+ 0.718  	      0  	0.000000  	1.000000
+ 0.726  	      0  	0.000000  	1.000000
+ 0.734  	      0  	0.000000  	1.000000
+ 0.742  	      0  	0.000000  	1.000000
+ 0.750  	      0  	0.000000  	1.000000
+ 0.758  	      0  	0.000000  	1.000000
+ 0.766  	      0  	0.000000  	1.000000
+ 0.774  	      0  	0.000000  	1.000000
+ 0.782  	      0  	0.000000  	1.000000
+ 0.790  	      0  	0.000000  	1.000000
+ 0.798  	      0  	0.000000  	1.000000
+ 0.806  	      0  	0.000000  	1.000000
+ 0.815  	      0  	0.000000  	1.000000
+ 0.824  	      0  	0.000000  	1.000000
+ 0.833  	      0  	0.000000  	1.000000
+ 0.842  	      0  	0.000000  	1.000000
+ 0.851  	      0  	0.000000  	1.000000
+ 0.860  	      0  	0.000000  	1.000000
+ 0.869  	      0  	0.000000  	1.000000
+ 0.878  	      0  	0.000000  	1.000000
+ 0.887  	      0  	0.000000  	1.000000
+ 0.896  	      0  	0.000000  	1.000000
+ 0.905  	      0  	0.000000  	1.000000
+ 0.915  	      0  	0.000000  	1.000000
+ 0.925  	      0  	0.000000  	1.000000
+ 0.935  	      0  	0.000000  	1.000000
+ 0.945  	      0  	0.000000  	1.000000
+ 0.955  	      0  	0.000000  	1.000000
+ 0.965  	      0  	0.000000  	1.000000
+ 0.975  	      0  	0.000000  	1.000000
+ 0.985  	      0  	0.000000  	1.000000
+ 0.995  	      0  	0.000000  	1.000000
+ 1.005  	      0  	0.000000  	1.000000
+ 1.016  	      0  	0.000000  	1.000000
+ 1.027  	      0  	0.000000  	1.000000
+ 1.038  	      0  	0.000000  	1.000000
+ 1.049  	      0  	0.000000  	1.000000
+ 1.060  	      0  	0.000000  	1.000000
+ 1.071  	      0  	0.000000  	1.000000
+ 1.082  	      0  	0.000000  	1.000000
+ 1.093  	      0  	0.000000  	1.000000
+ 1.104  	      0  	0.000000  	1.000000
+ 1.116  	      0  	0.000000  	1.000000
+ 1.128  	      0  	0.000000  	1.000000
+ 1.140  	      0  	0.000000  	1.000000
+ 1.152  	      0  	0.000000  	1.000000
+ 1.164  	      0  	0.000000  	1.000000
+ 1.176  	      0  	0.000000  	1.000000
+ 1.188  	      0  	0.000000  	1.000000
+ 1.200  	      0  	0.000000  	1.000000
+ 1.213  	      0  	0.000000  	1.000000
+ 1.226  	      0  	0.000000  	1.000000
+ 1.239  	      0  	0.000000  	1.000000
+ 1.252  	      0  	0.000000  	1.000000
+ 1.265  	      0  	0.000000  	1.000000
+ 1.278  	      0  	0.000000  	1.000000
+ 1.291  	      0  	0.000000  	1.000000
  1.304  	      0  	0.000000  	1.000000
  1.318  	      0  	0.000000  	1.000000
  1.332  	      0  	0.000000  	1.000000
@@ -9814,55 +9814,55 @@ ssd #0 Instantaneous queue length std.dev.:	0.000000
 ssd #0 Instantaneous queue length maximum:	1
 ssd #0 Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     10       0       0       0       0       0       0       0       0       0 
+      3       0       0       0       0       0       0       0       0       0 
 ssd #0 Sub-optimal mapping penalty average: 	0.000000
 ssd #0 Sub-optimal mapping penalty std.dev.:	0.000000
 ssd #0 Sub-optimal mapping penalty maximum:	0
 ssd #0 Sub-optimal mapping penalty distribution
    = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #0 Total Requests handled:	34
-ssd #0  elem #0 Requests per second:   	5.543497
-ssd #0  elem #0 Completely idle time:  	6027.406030   	0.982733
-ssd #0  elem #0 Response time average: 	0.519388
-ssd #0  elem #0 Response time std.dev.:	0.347430
-ssd #0  elem #0 Response time maximum:	1.222400
+ssd #0  elem #0 Total Requests handled:	5
+ssd #0  elem #0 Requests per second:   	0.937504
+ssd #0  elem #0 Completely idle time:  	5332.685000   	0.999882
+ssd #0  elem #0 Response time average: 	0.282320
+ssd #0  elem #0 Response time std.dev.:	0.157683
+ssd #0  elem #0 Response time maximum:	0.522400
 ssd #0  elem #0 Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     34       0       0       0       0       0       0       0       0       0 
+      5       0       0       0       0       0       0       0       0       0 
 ssd #0  elem #0 Overlaps combined:     	0	0.000000
 ssd #0  elem #0 Read overlaps combined:	0	0.000000	0.000000
-ssd #0  elem #0 Number of reads:        16  	0.470588
-ssd #0  elem #0 Number of writes:       18  	0.529412
+ssd #0  elem #0 Number of reads:         8  	0.888889
+ssd #0  elem #0 Number of writes:        1  	0.111111
 ssd #0  elem #0 Sequential reads:        0  	0.000000  	0.000000
 ssd #0  elem #0 Sequential writes:       0  	0.000000  	0.000000
-ssd #0  elem #0 Base SPTF/SDF Different:      0 /     34 	0.000000
+ssd #0  elem #0 Base SPTF/SDF Different:      0 /      6 	0.000000
 ssd #0  elem #0 Timeout SPTF/SDF Different:      0 /      0 	0.000000
 ssd #0  elem #0 Priority SPTF/SDF Different:      0 /      0 	0.000000
-ssd #0  elem #0 runlistlen:              17.659200
-ssd #0  elem #0 runoutstanding:          7.190400
-ssd #0  elem #0 simtime:                 6133.313000
+ssd #0  elem #0 runlistlen:              1.411600
+ssd #0  elem #0 runoutstanding:          0.628000
+ssd #0  elem #0 simtime:                 5333.313000
 ssd #0  elem #0 warmuptime:              0.000000
 ssd #0  elem #0 setsize:                 1
-ssd #0  elem #0 Average # requests:      0.002879
+ssd #0  elem #0 Average # requests:      0.000265
 ssd #0  elem #0 Maximum # requests:      4
-ssd #0  elem #0 End # requests:          0
-ssd #0  elem #0 Average queue length:    0.001707
+ssd #0  elem #0 End # requests:          4
+ssd #0  elem #0 Average queue length:    0.000147
 ssd #0  elem #0 Maximum queue length:    3
-ssd #0  elem #0 End queued requests:     0
-ssd #0  elem #0 Queue time average: 	0.307906
-ssd #0  elem #0 Queue time std.dev.:	0.295140
-ssd #0  elem #0 Queue time maximum:	0.916800
+ssd #0  elem #0 End queued requests:     3
+ssd #0  elem #0 Queue time average: 	0.130600
+ssd #0  elem #0 Queue time std.dev.:	0.150804
+ssd #0  elem #0 Queue time maximum:	0.391800
 ssd #0  elem #0 Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     34       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #0 Avg # read requests:     0.000852
+      6       0       0       0       0       0       0       0       0       0 
+ssd #0  elem #0 Avg # read requests:     0.000245
 ssd #0  elem #0 Max # read requests:     4
-ssd #0  elem #0 Avg # write requests:    0.002027
-ssd #0  elem #0 Max # write requests:    4
-ssd #0  elem #0 Physical access time average: 	0.211482
-ssd #0  elem #0 Physical access time std.dev.:	0.088919
-ssd #0  elem #0 Physical access time maximum:	0.305600
+ssd #0  elem #0 Avg # write requests:    0.000020
+ssd #0  elem #0 Max # write requests:    1
+ssd #0  elem #0 Physical access time average: 	0.125600
+ssd #0  elem #0 Physical access time std.dev.:	0.010000
+ssd #0  elem #0 Physical access time maximum:	0.130600
 ssd #0  elem #0 Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -9967,89 +9967,89 @@ ssd #0  elem #0 Physical access time distribution
  0.100  	      0  	0.000000  	0.000000
  0.102  	      0  	0.000000  	0.000000
  0.104  	      0  	0.000000  	0.000000
- 0.106  	      2  	0.058824  	0.058824
- 0.108  	      0  	0.000000  	0.058824
- 0.110  	      0  	0.000000  	0.058824
- 0.112  	      0  	0.000000  	0.058824
- 0.114  	      0  	0.000000  	0.058824
- 0.116  	      0  	0.000000  	0.058824
- 0.118  	      0  	0.000000  	0.058824
- 0.120  	      0  	0.000000  	0.058824
- 0.122  	      0  	0.000000  	0.058824
- 0.124  	      0  	0.000000  	0.058824
- 0.126  	      0  	0.000000  	0.058824
- 0.128  	      0  	0.000000  	0.058824
- 0.130  	      0  	0.000000  	0.058824
- 0.132  	     16  	0.470588  	0.529412
- 0.134  	      0  	0.000000  	0.529412
- 0.136  	      0  	0.000000  	0.529412
- 0.138  	      0  	0.000000  	0.529412
- 0.140  	      0  	0.000000  	0.529412
- 0.142  	      0  	0.000000  	0.529412
- 0.144  	      0  	0.000000  	0.529412
- 0.146  	      0  	0.000000  	0.529412
- 0.148  	      0  	0.000000  	0.529412
- 0.150  	      0  	0.000000  	0.529412
- 0.152  	      0  	0.000000  	0.529412
- 0.154  	      0  	0.000000  	0.529412
- 0.156  	      0  	0.000000  	0.529412
- 0.158  	      0  	0.000000  	0.529412
- 0.160  	      0  	0.000000  	0.529412
- 0.162  	      0  	0.000000  	0.529412
- 0.164  	      0  	0.000000  	0.529412
- 0.166  	      0  	0.000000  	0.529412
- 0.168  	      0  	0.000000  	0.529412
- 0.170  	      0  	0.000000  	0.529412
- 0.172  	      0  	0.000000  	0.529412
- 0.174  	      0  	0.000000  	0.529412
- 0.176  	      0  	0.000000  	0.529412
- 0.178  	      0  	0.000000  	0.529412
- 0.180  	      0  	0.000000  	0.529412
- 0.182  	      0  	0.000000  	0.529412
- 0.184  	      0  	0.000000  	0.529412
- 0.186  	      0  	0.000000  	0.529412
- 0.188  	      0  	0.000000  	0.529412
- 0.190  	      0  	0.000000  	0.529412
- 0.192  	      0  	0.000000  	0.529412
- 0.194  	      0  	0.000000  	0.529412
- 0.196  	      0  	0.000000  	0.529412
- 0.198  	      0  	0.000000  	0.529412
- 0.200  	      0  	0.000000  	0.529412
- 0.203  	      0  	0.000000  	0.529412
- 0.206  	      0  	0.000000  	0.529412
- 0.209  	      0  	0.000000  	0.529412
- 0.212  	      0  	0.000000  	0.529412
- 0.215  	      0  	0.000000  	0.529412
- 0.218  	      0  	0.000000  	0.529412
- 0.221  	      0  	0.000000  	0.529412
- 0.224  	      0  	0.000000  	0.529412
- 0.227  	      0  	0.000000  	0.529412
- 0.230  	      0  	0.000000  	0.529412
- 0.233  	      0  	0.000000  	0.529412
- 0.236  	      0  	0.000000  	0.529412
- 0.239  	      0  	0.000000  	0.529412
- 0.242  	      0  	0.000000  	0.529412
- 0.245  	      0  	0.000000  	0.529412
- 0.248  	      0  	0.000000  	0.529412
- 0.251  	      0  	0.000000  	0.529412
- 0.254  	      0  	0.000000  	0.529412
- 0.257  	      0  	0.000000  	0.529412
- 0.260  	      0  	0.000000  	0.529412
- 0.263  	      0  	0.000000  	0.529412
- 0.266  	      0  	0.000000  	0.529412
- 0.269  	      0  	0.000000  	0.529412
- 0.272  	      0  	0.000000  	0.529412
- 0.275  	      0  	0.000000  	0.529412
- 0.278  	      0  	0.000000  	0.529412
- 0.281  	      0  	0.000000  	0.529412
- 0.284  	      0  	0.000000  	0.529412
- 0.287  	      0  	0.000000  	0.529412
- 0.290  	      0  	0.000000  	0.529412
- 0.293  	      0  	0.000000  	0.529412
- 0.296  	      0  	0.000000  	0.529412
- 0.299  	      0  	0.000000  	0.529412
- 0.302  	      0  	0.000000  	0.529412
- 0.306  	     16  	0.470588  	1.000000
+ 0.106  	      1  	0.200000  	0.200000
+ 0.108  	      0  	0.000000  	0.200000
+ 0.110  	      0  	0.000000  	0.200000
+ 0.112  	      0  	0.000000  	0.200000
+ 0.114  	      0  	0.000000  	0.200000
+ 0.116  	      0  	0.000000  	0.200000
+ 0.118  	      0  	0.000000  	0.200000
+ 0.120  	      0  	0.000000  	0.200000
+ 0.122  	      0  	0.000000  	0.200000
+ 0.124  	      0  	0.000000  	0.200000
+ 0.126  	      0  	0.000000  	0.200000
+ 0.128  	      0  	0.000000  	0.200000
+ 0.130  	      0  	0.000000  	0.200000
+ 0.132  	      4  	0.800000  	1.000000
+ 0.134  	      0  	0.000000  	1.000000
+ 0.136  	      0  	0.000000  	1.000000
+ 0.138  	      0  	0.000000  	1.000000
+ 0.140  	      0  	0.000000  	1.000000
+ 0.142  	      0  	0.000000  	1.000000
+ 0.144  	      0  	0.000000  	1.000000
+ 0.146  	      0  	0.000000  	1.000000
+ 0.148  	      0  	0.000000  	1.000000
+ 0.150  	      0  	0.000000  	1.000000
+ 0.152  	      0  	0.000000  	1.000000
+ 0.154  	      0  	0.000000  	1.000000
+ 0.156  	      0  	0.000000  	1.000000
+ 0.158  	      0  	0.000000  	1.000000
+ 0.160  	      0  	0.000000  	1.000000
+ 0.162  	      0  	0.000000  	1.000000
+ 0.164  	      0  	0.000000  	1.000000
+ 0.166  	      0  	0.000000  	1.000000
+ 0.168  	      0  	0.000000  	1.000000
+ 0.170  	      0  	0.000000  	1.000000
+ 0.172  	      0  	0.000000  	1.000000
+ 0.174  	      0  	0.000000  	1.000000
+ 0.176  	      0  	0.000000  	1.000000
+ 0.178  	      0  	0.000000  	1.000000
+ 0.180  	      0  	0.000000  	1.000000
+ 0.182  	      0  	0.000000  	1.000000
+ 0.184  	      0  	0.000000  	1.000000
+ 0.186  	      0  	0.000000  	1.000000
+ 0.188  	      0  	0.000000  	1.000000
+ 0.190  	      0  	0.000000  	1.000000
+ 0.192  	      0  	0.000000  	1.000000
+ 0.194  	      0  	0.000000  	1.000000
+ 0.196  	      0  	0.000000  	1.000000
+ 0.198  	      0  	0.000000  	1.000000
+ 0.200  	      0  	0.000000  	1.000000
+ 0.203  	      0  	0.000000  	1.000000
+ 0.206  	      0  	0.000000  	1.000000
+ 0.209  	      0  	0.000000  	1.000000
+ 0.212  	      0  	0.000000  	1.000000
+ 0.215  	      0  	0.000000  	1.000000
+ 0.218  	      0  	0.000000  	1.000000
+ 0.221  	      0  	0.000000  	1.000000
+ 0.224  	      0  	0.000000  	1.000000
+ 0.227  	      0  	0.000000  	1.000000
+ 0.230  	      0  	0.000000  	1.000000
+ 0.233  	      0  	0.000000  	1.000000
+ 0.236  	      0  	0.000000  	1.000000
+ 0.239  	      0  	0.000000  	1.000000
+ 0.242  	      0  	0.000000  	1.000000
+ 0.245  	      0  	0.000000  	1.000000
+ 0.248  	      0  	0.000000  	1.000000
+ 0.251  	      0  	0.000000  	1.000000
+ 0.254  	      0  	0.000000  	1.000000
+ 0.257  	      0  	0.000000  	1.000000
+ 0.260  	      0  	0.000000  	1.000000
+ 0.263  	      0  	0.000000  	1.000000
+ 0.266  	      0  	0.000000  	1.000000
+ 0.269  	      0  	0.000000  	1.000000
+ 0.272  	      0  	0.000000  	1.000000
+ 0.275  	      0  	0.000000  	1.000000
+ 0.278  	      0  	0.000000  	1.000000
+ 0.281  	      0  	0.000000  	1.000000
+ 0.284  	      0  	0.000000  	1.000000
+ 0.287  	      0  	0.000000  	1.000000
+ 0.290  	      0  	0.000000  	1.000000
+ 0.293  	      0  	0.000000  	1.000000
+ 0.296  	      0  	0.000000  	1.000000
+ 0.299  	      0  	0.000000  	1.000000
+ 0.302  	      0  	0.000000  	1.000000
+ 0.306  	      0  	0.000000  	1.000000
  0.310  	      0  	0.000000  	1.000000
  0.314  	      0  	0.000000  	1.000000
  0.318  	      0  	0.000000  	1.000000
@@ -11621,60 +11621,60 @@ ssd #0  elem #0 Batch size maximum:	0
 ssd #0  elem #0 Batch size distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #0 Instantaneous queue length average: 	1.705882
-ssd #0  elem #0 Instantaneous queue length std.dev.:	0.823529
+ssd #0  elem #0 Instantaneous queue length average: 	1.500000
+ssd #0  elem #0 Instantaneous queue length std.dev.:	0.763763
 ssd #0  elem #0 Instantaneous queue length maximum:	3
 ssd #0  elem #0 Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     18       8       8       0       0       0       0       0       0       0 
+      4       1       1       0       0       0       0       0       0       0 
 ssd #0  elem #0 Sub-optimal mapping penalty average: 	0.000000
 ssd #0  elem #0 Sub-optimal mapping penalty std.dev.:	0.000000
 ssd #0  elem #0 Sub-optimal mapping penalty maximum:	0
 ssd #0  elem #0 Sub-optimal mapping penalty distribution
    = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #1 Total Requests handled:	32
-ssd #0  elem #1 Requests per second:   	5.217409
-ssd #0  elem #1 Completely idle time:  	6027.617230   	0.982767
-ssd #0  elem #1 Response time average: 	0.545250
-ssd #0  elem #1 Response time std.dev.:	0.341879
-ssd #0  elem #1 Response time maximum:	1.222400
+ssd #0  elem #1 Total Requests handled:	4
+ssd #0  elem #1 Requests per second:   	0.750003
+ssd #0  elem #1 Completely idle time:  	5332.790600   	0.999902
+ssd #0  elem #1 Response time average: 	0.326500
+ssd #0  elem #1 Response time std.dev.:	0.146015
+ssd #0  elem #1 Response time maximum:	0.522400
 ssd #0  elem #1 Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
+      4       0       0       0       0       0       0       0       0       0 
 ssd #0  elem #1 Overlaps combined:     	0	0.000000
 ssd #0  elem #1 Read overlaps combined:	0	0.000000	0.000000
-ssd #0  elem #1 Number of reads:        16  	0.500000
-ssd #0  elem #1 Number of writes:       16  	0.500000
+ssd #0  elem #1 Number of reads:         8  	1.000000
+ssd #0  elem #1 Number of writes:        0  	0.000000
 ssd #0  elem #1 Sequential reads:        0  	0.000000  	0.000000
 ssd #0  elem #1 Sequential writes:       0  	0.000000  	0.000000
-ssd #0  elem #1 Base SPTF/SDF Different:      0 /     32 	0.000000
+ssd #0  elem #1 Base SPTF/SDF Different:      0 /      5 	0.000000
 ssd #0  elem #1 Timeout SPTF/SDF Different:      0 /      0 	0.000000
 ssd #0  elem #1 Priority SPTF/SDF Different:      0 /      0 	0.000000
-ssd #0  elem #1 runlistlen:              17.448000
-ssd #0  elem #1 runoutstanding:          6.979200
-ssd #0  elem #1 simtime:                 6133.313000
+ssd #0  elem #1 runlistlen:              1.306000
+ssd #0  elem #1 runoutstanding:          0.522400
+ssd #0  elem #1 simtime:                 5333.313000
 ssd #0  elem #1 warmuptime:              0.000000
 ssd #0  elem #1 setsize:                 1
-ssd #0  elem #1 Average # requests:      0.002845
+ssd #0  elem #1 Average # requests:      0.000245
 ssd #0  elem #1 Maximum # requests:      4
-ssd #0  elem #1 End # requests:          0
-ssd #0  elem #1 Average queue length:    0.001707
+ssd #0  elem #1 End # requests:          4
+ssd #0  elem #1 Average queue length:    0.000147
 ssd #0  elem #1 Maximum queue length:    3
-ssd #0  elem #1 End queued requests:     0
-ssd #0  elem #1 Queue time average: 	0.327150
-ssd #0  elem #1 Queue time std.dev.:	0.293694
-ssd #0  elem #1 Queue time maximum:	0.916800
+ssd #0  elem #1 End queued requests:     3
+ssd #0  elem #1 Queue time average: 	0.156720
+ssd #0  elem #1 Queue time std.dev.:	0.152304
+ssd #0  elem #1 Queue time maximum:	0.391800
 ssd #0  elem #1 Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #1 Avg # read requests:     0.000852
+      5       0       0       0       0       0       0       0       0       0 
+ssd #0  elem #1 Avg # read requests:     0.000245
 ssd #0  elem #1 Max # read requests:     4
-ssd #0  elem #1 Avg # write requests:    0.001993
-ssd #0  elem #1 Max # write requests:    4
-ssd #0  elem #1 Physical access time average: 	0.218100
-ssd #0  elem #1 Physical access time std.dev.:	0.087500
-ssd #0  elem #1 Physical access time maximum:	0.305600
+ssd #0  elem #1 Avg # write requests:    0.000000
+ssd #0  elem #1 Max # write requests:    0
+ssd #0  elem #1 Physical access time average: 	0.130600
+ssd #0  elem #1 Physical access time std.dev.:	0.000000
+ssd #0  elem #1 Physical access time maximum:	0.130600
 ssd #0  elem #1 Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -11792,76 +11792,76 @@ ssd #0  elem #1 Physical access time distribution
  0.126  	      0  	0.000000  	0.000000
  0.128  	      0  	0.000000  	0.000000
  0.130  	      0  	0.000000  	0.000000
- 0.132  	     16  	0.500000  	0.500000
- 0.134  	      0  	0.000000  	0.500000
- 0.136  	      0  	0.000000  	0.500000
- 0.138  	      0  	0.000000  	0.500000
- 0.140  	      0  	0.000000  	0.500000
- 0.142  	      0  	0.000000  	0.500000
- 0.144  	      0  	0.000000  	0.500000
- 0.146  	      0  	0.000000  	0.500000
- 0.148  	      0  	0.000000  	0.500000
- 0.150  	      0  	0.000000  	0.500000
- 0.152  	      0  	0.000000  	0.500000
- 0.154  	      0  	0.000000  	0.500000
- 0.156  	      0  	0.000000  	0.500000
- 0.158  	      0  	0.000000  	0.500000
- 0.160  	      0  	0.000000  	0.500000
- 0.162  	      0  	0.000000  	0.500000
- 0.164  	      0  	0.000000  	0.500000
- 0.166  	      0  	0.000000  	0.500000
- 0.168  	      0  	0.000000  	0.500000
- 0.170  	      0  	0.000000  	0.500000
- 0.172  	      0  	0.000000  	0.500000
- 0.174  	      0  	0.000000  	0.500000
- 0.176  	      0  	0.000000  	0.500000
- 0.178  	      0  	0.000000  	0.500000
- 0.180  	      0  	0.000000  	0.500000
- 0.182  	      0  	0.000000  	0.500000
- 0.184  	      0  	0.000000  	0.500000
- 0.186  	      0  	0.000000  	0.500000
- 0.188  	      0  	0.000000  	0.500000
- 0.190  	      0  	0.000000  	0.500000
- 0.192  	      0  	0.000000  	0.500000
- 0.194  	      0  	0.000000  	0.500000
- 0.196  	      0  	0.000000  	0.500000
- 0.198  	      0  	0.000000  	0.500000
- 0.200  	      0  	0.000000  	0.500000
- 0.203  	      0  	0.000000  	0.500000
- 0.206  	      0  	0.000000  	0.500000
- 0.209  	      0  	0.000000  	0.500000
- 0.212  	      0  	0.000000  	0.500000
- 0.215  	      0  	0.000000  	0.500000
- 0.218  	      0  	0.000000  	0.500000
- 0.221  	      0  	0.000000  	0.500000
- 0.224  	      0  	0.000000  	0.500000
- 0.227  	      0  	0.000000  	0.500000
- 0.230  	      0  	0.000000  	0.500000
- 0.233  	      0  	0.000000  	0.500000
- 0.236  	      0  	0.000000  	0.500000
- 0.239  	      0  	0.000000  	0.500000
- 0.242  	      0  	0.000000  	0.500000
- 0.245  	      0  	0.000000  	0.500000
- 0.248  	      0  	0.000000  	0.500000
- 0.251  	      0  	0.000000  	0.500000
- 0.254  	      0  	0.000000  	0.500000
- 0.257  	      0  	0.000000  	0.500000
- 0.260  	      0  	0.000000  	0.500000
- 0.263  	      0  	0.000000  	0.500000
- 0.266  	      0  	0.000000  	0.500000
- 0.269  	      0  	0.000000  	0.500000
- 0.272  	      0  	0.000000  	0.500000
- 0.275  	      0  	0.000000  	0.500000
- 0.278  	      0  	0.000000  	0.500000
- 0.281  	      0  	0.000000  	0.500000
- 0.284  	      0  	0.000000  	0.500000
- 0.287  	      0  	0.000000  	0.500000
- 0.290  	      0  	0.000000  	0.500000
- 0.293  	      0  	0.000000  	0.500000
- 0.296  	      0  	0.000000  	0.500000
- 0.299  	      0  	0.000000  	0.500000
- 0.302  	      0  	0.000000  	0.500000
- 0.306  	     16  	0.500000  	1.000000
+ 0.132  	      4  	1.000000  	1.000000
+ 0.134  	      0  	0.000000  	1.000000
+ 0.136  	      0  	0.000000  	1.000000
+ 0.138  	      0  	0.000000  	1.000000
+ 0.140  	      0  	0.000000  	1.000000
+ 0.142  	      0  	0.000000  	1.000000
+ 0.144  	      0  	0.000000  	1.000000
+ 0.146  	      0  	0.000000  	1.000000
+ 0.148  	      0  	0.000000  	1.000000
+ 0.150  	      0  	0.000000  	1.000000
+ 0.152  	      0  	0.000000  	1.000000
+ 0.154  	      0  	0.000000  	1.000000
+ 0.156  	      0  	0.000000  	1.000000
+ 0.158  	      0  	0.000000  	1.000000
+ 0.160  	      0  	0.000000  	1.000000
+ 0.162  	      0  	0.000000  	1.000000
+ 0.164  	      0  	0.000000  	1.000000
+ 0.166  	      0  	0.000000  	1.000000
+ 0.168  	      0  	0.000000  	1.000000
+ 0.170  	      0  	0.000000  	1.000000
+ 0.172  	      0  	0.000000  	1.000000
+ 0.174  	      0  	0.000000  	1.000000
+ 0.176  	      0  	0.000000  	1.000000
+ 0.178  	      0  	0.000000  	1.000000
+ 0.180  	      0  	0.000000  	1.000000
+ 0.182  	      0  	0.000000  	1.000000
+ 0.184  	      0  	0.000000  	1.000000
+ 0.186  	      0  	0.000000  	1.000000
+ 0.188  	      0  	0.000000  	1.000000
+ 0.190  	      0  	0.000000  	1.000000
+ 0.192  	      0  	0.000000  	1.000000
+ 0.194  	      0  	0.000000  	1.000000
+ 0.196  	      0  	0.000000  	1.000000
+ 0.198  	      0  	0.000000  	1.000000
+ 0.200  	      0  	0.000000  	1.000000
+ 0.203  	      0  	0.000000  	1.000000
+ 0.206  	      0  	0.000000  	1.000000
+ 0.209  	      0  	0.000000  	1.000000
+ 0.212  	      0  	0.000000  	1.000000
+ 0.215  	      0  	0.000000  	1.000000
+ 0.218  	      0  	0.000000  	1.000000
+ 0.221  	      0  	0.000000  	1.000000
+ 0.224  	      0  	0.000000  	1.000000
+ 0.227  	      0  	0.000000  	1.000000
+ 0.230  	      0  	0.000000  	1.000000
+ 0.233  	      0  	0.000000  	1.000000
+ 0.236  	      0  	0.000000  	1.000000
+ 0.239  	      0  	0.000000  	1.000000
+ 0.242  	      0  	0.000000  	1.000000
+ 0.245  	      0  	0.000000  	1.000000
+ 0.248  	      0  	0.000000  	1.000000
+ 0.251  	      0  	0.000000  	1.000000
+ 0.254  	      0  	0.000000  	1.000000
+ 0.257  	      0  	0.000000  	1.000000
+ 0.260  	      0  	0.000000  	1.000000
+ 0.263  	      0  	0.000000  	1.000000
+ 0.266  	      0  	0.000000  	1.000000
+ 0.269  	      0  	0.000000  	1.000000
+ 0.272  	      0  	0.000000  	1.000000
+ 0.275  	      0  	0.000000  	1.000000
+ 0.278  	      0  	0.000000  	1.000000
+ 0.281  	      0  	0.000000  	1.000000
+ 0.284  	      0  	0.000000  	1.000000
+ 0.287  	      0  	0.000000  	1.000000
+ 0.290  	      0  	0.000000  	1.000000
+ 0.293  	      0  	0.000000  	1.000000
+ 0.296  	      0  	0.000000  	1.000000
+ 0.299  	      0  	0.000000  	1.000000
+ 0.302  	      0  	0.000000  	1.000000
+ 0.306  	      0  	0.000000  	1.000000
  0.310  	      0  	0.000000  	1.000000
  0.314  	      0  	0.000000  	1.000000
  0.318  	      0  	0.000000  	1.000000
@@ -13433,60 +13433,60 @@ ssd #0  elem #1 Batch size maximum:	0
 ssd #0  elem #1 Batch size distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #1 Instantaneous queue length average: 	1.750000
-ssd #0  elem #1 Instantaneous queue length std.dev.:	0.829156
+ssd #0  elem #1 Instantaneous queue length average: 	1.600000
+ssd #0  elem #1 Instantaneous queue length std.dev.:	0.800000
 ssd #0  elem #1 Instantaneous queue length maximum:	3
 ssd #0  elem #1 Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     16       8       8       0       0       0       0       0       0       0 
+      3       1       1       0       0       0       0       0       0       0 
 ssd #0  elem #1 Sub-optimal mapping penalty average: 	0.000000
 ssd #0  elem #1 Sub-optimal mapping penalty std.dev.:	0.000000
 ssd #0  elem #1 Sub-optimal mapping penalty maximum:	0
 ssd #0  elem #1 Sub-optimal mapping penalty distribution
    = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #2 Total Requests handled:	32
-ssd #0  elem #2 Requests per second:   	5.217409
-ssd #0  elem #2 Completely idle time:  	6027.617230   	0.982767
-ssd #0  elem #2 Response time average: 	0.545250
-ssd #0  elem #2 Response time std.dev.:	0.341879
-ssd #0  elem #2 Response time maximum:	1.222400
+ssd #0  elem #2 Total Requests handled:	4
+ssd #0  elem #2 Requests per second:   	0.750003
+ssd #0  elem #2 Completely idle time:  	5332.790600   	0.999902
+ssd #0  elem #2 Response time average: 	0.326500
+ssd #0  elem #2 Response time std.dev.:	0.146015
+ssd #0  elem #2 Response time maximum:	0.522400
 ssd #0  elem #2 Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
+      4       0       0       0       0       0       0       0       0       0 
 ssd #0  elem #2 Overlaps combined:     	0	0.000000
 ssd #0  elem #2 Read overlaps combined:	0	0.000000	0.000000
-ssd #0  elem #2 Number of reads:        16  	0.500000
-ssd #0  elem #2 Number of writes:       16  	0.500000
+ssd #0  elem #2 Number of reads:         8  	1.000000
+ssd #0  elem #2 Number of writes:        0  	0.000000
 ssd #0  elem #2 Sequential reads:        0  	0.000000  	0.000000
 ssd #0  elem #2 Sequential writes:       0  	0.000000  	0.000000
-ssd #0  elem #2 Base SPTF/SDF Different:      0 /     32 	0.000000
+ssd #0  elem #2 Base SPTF/SDF Different:      0 /      5 	0.000000
 ssd #0  elem #2 Timeout SPTF/SDF Different:      0 /      0 	0.000000
 ssd #0  elem #2 Priority SPTF/SDF Different:      0 /      0 	0.000000
-ssd #0  elem #2 runlistlen:              17.448000
-ssd #0  elem #2 runoutstanding:          6.979200
-ssd #0  elem #2 simtime:                 6133.313000
+ssd #0  elem #2 runlistlen:              1.306000
+ssd #0  elem #2 runoutstanding:          0.522400
+ssd #0  elem #2 simtime:                 5333.313000
 ssd #0  elem #2 warmuptime:              0.000000
 ssd #0  elem #2 setsize:                 1
-ssd #0  elem #2 Average # requests:      0.002845
+ssd #0  elem #2 Average # requests:      0.000245
 ssd #0  elem #2 Maximum # requests:      4
-ssd #0  elem #2 End # requests:          0
-ssd #0  elem #2 Average queue length:    0.001707
+ssd #0  elem #2 End # requests:          4
+ssd #0  elem #2 Average queue length:    0.000147
 ssd #0  elem #2 Maximum queue length:    3
-ssd #0  elem #2 End queued requests:     0
-ssd #0  elem #2 Queue time average: 	0.327150
-ssd #0  elem #2 Queue time std.dev.:	0.293694
-ssd #0  elem #2 Queue time maximum:	0.916800
+ssd #0  elem #2 End queued requests:     3
+ssd #0  elem #2 Queue time average: 	0.156720
+ssd #0  elem #2 Queue time std.dev.:	0.152304
+ssd #0  elem #2 Queue time maximum:	0.391800
 ssd #0  elem #2 Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #2 Avg # read requests:     0.000852
+      5       0       0       0       0       0       0       0       0       0 
+ssd #0  elem #2 Avg # read requests:     0.000245
 ssd #0  elem #2 Max # read requests:     4
-ssd #0  elem #2 Avg # write requests:    0.001993
-ssd #0  elem #2 Max # write requests:    4
-ssd #0  elem #2 Physical access time average: 	0.218100
-ssd #0  elem #2 Physical access time std.dev.:	0.087500
-ssd #0  elem #2 Physical access time maximum:	0.305600
+ssd #0  elem #2 Avg # write requests:    0.000000
+ssd #0  elem #2 Max # write requests:    0
+ssd #0  elem #2 Physical access time average: 	0.130600
+ssd #0  elem #2 Physical access time std.dev.:	0.000000
+ssd #0  elem #2 Physical access time maximum:	0.130600
 ssd #0  elem #2 Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -13604,76 +13604,76 @@ ssd #0  elem #2 Physical access time distribution
  0.126  	      0  	0.000000  	0.000000
  0.128  	      0  	0.000000  	0.000000
  0.130  	      0  	0.000000  	0.000000
- 0.132  	     16  	0.500000  	0.500000
- 0.134  	      0  	0.000000  	0.500000
- 0.136  	      0  	0.000000  	0.500000
- 0.138  	      0  	0.000000  	0.500000
- 0.140  	      0  	0.000000  	0.500000
- 0.142  	      0  	0.000000  	0.500000
- 0.144  	      0  	0.000000  	0.500000
- 0.146  	      0  	0.000000  	0.500000
- 0.148  	      0  	0.000000  	0.500000
- 0.150  	      0  	0.000000  	0.500000
- 0.152  	      0  	0.000000  	0.500000
- 0.154  	      0  	0.000000  	0.500000
- 0.156  	      0  	0.000000  	0.500000
- 0.158  	      0  	0.000000  	0.500000
- 0.160  	      0  	0.000000  	0.500000
- 0.162  	      0  	0.000000  	0.500000
- 0.164  	      0  	0.000000  	0.500000
- 0.166  	      0  	0.000000  	0.500000
- 0.168  	      0  	0.000000  	0.500000
- 0.170  	      0  	0.000000  	0.500000
- 0.172  	      0  	0.000000  	0.500000
- 0.174  	      0  	0.000000  	0.500000
- 0.176  	      0  	0.000000  	0.500000
- 0.178  	      0  	0.000000  	0.500000
- 0.180  	      0  	0.000000  	0.500000
- 0.182  	      0  	0.000000  	0.500000
- 0.184  	      0  	0.000000  	0.500000
- 0.186  	      0  	0.000000  	0.500000
- 0.188  	      0  	0.000000  	0.500000
- 0.190  	      0  	0.000000  	0.500000
- 0.192  	      0  	0.000000  	0.500000
- 0.194  	      0  	0.000000  	0.500000
- 0.196  	      0  	0.000000  	0.500000
- 0.198  	      0  	0.000000  	0.500000
- 0.200  	      0  	0.000000  	0.500000
- 0.203  	      0  	0.000000  	0.500000
- 0.206  	      0  	0.000000  	0.500000
- 0.209  	      0  	0.000000  	0.500000
- 0.212  	      0  	0.000000  	0.500000
- 0.215  	      0  	0.000000  	0.500000
- 0.218  	      0  	0.000000  	0.500000
- 0.221  	      0  	0.000000  	0.500000
- 0.224  	      0  	0.000000  	0.500000
- 0.227  	      0  	0.000000  	0.500000
- 0.230  	      0  	0.000000  	0.500000
- 0.233  	      0  	0.000000  	0.500000
- 0.236  	      0  	0.000000  	0.500000
- 0.239  	      0  	0.000000  	0.500000
- 0.242  	      0  	0.000000  	0.500000
- 0.245  	      0  	0.000000  	0.500000
- 0.248  	      0  	0.000000  	0.500000
- 0.251  	      0  	0.000000  	0.500000
- 0.254  	      0  	0.000000  	0.500000
- 0.257  	      0  	0.000000  	0.500000
- 0.260  	      0  	0.000000  	0.500000
- 0.263  	      0  	0.000000  	0.500000
- 0.266  	      0  	0.000000  	0.500000
- 0.269  	      0  	0.000000  	0.500000
- 0.272  	      0  	0.000000  	0.500000
- 0.275  	      0  	0.000000  	0.500000
- 0.278  	      0  	0.000000  	0.500000
- 0.281  	      0  	0.000000  	0.500000
- 0.284  	      0  	0.000000  	0.500000
- 0.287  	      0  	0.000000  	0.500000
- 0.290  	      0  	0.000000  	0.500000
- 0.293  	      0  	0.000000  	0.500000
- 0.296  	      0  	0.000000  	0.500000
- 0.299  	      0  	0.000000  	0.500000
- 0.302  	      0  	0.000000  	0.500000
- 0.306  	     16  	0.500000  	1.000000
+ 0.132  	      4  	1.000000  	1.000000
+ 0.134  	      0  	0.000000  	1.000000
+ 0.136  	      0  	0.000000  	1.000000
+ 0.138  	      0  	0.000000  	1.000000
+ 0.140  	      0  	0.000000  	1.000000
+ 0.142  	      0  	0.000000  	1.000000
+ 0.144  	      0  	0.000000  	1.000000
+ 0.146  	      0  	0.000000  	1.000000
+ 0.148  	      0  	0.000000  	1.000000
+ 0.150  	      0  	0.000000  	1.000000
+ 0.152  	      0  	0.000000  	1.000000
+ 0.154  	      0  	0.000000  	1.000000
+ 0.156  	      0  	0.000000  	1.000000
+ 0.158  	      0  	0.000000  	1.000000
+ 0.160  	      0  	0.000000  	1.000000
+ 0.162  	      0  	0.000000  	1.000000
+ 0.164  	      0  	0.000000  	1.000000
+ 0.166  	      0  	0.000000  	1.000000
+ 0.168  	      0  	0.000000  	1.000000
+ 0.170  	      0  	0.000000  	1.000000
+ 0.172  	      0  	0.000000  	1.000000
+ 0.174  	      0  	0.000000  	1.000000
+ 0.176  	      0  	0.000000  	1.000000
+ 0.178  	      0  	0.000000  	1.000000
+ 0.180  	      0  	0.000000  	1.000000
+ 0.182  	      0  	0.000000  	1.000000
+ 0.184  	      0  	0.000000  	1.000000
+ 0.186  	      0  	0.000000  	1.000000
+ 0.188  	      0  	0.000000  	1.000000
+ 0.190  	      0  	0.000000  	1.000000
+ 0.192  	      0  	0.000000  	1.000000
+ 0.194  	      0  	0.000000  	1.000000
+ 0.196  	      0  	0.000000  	1.000000
+ 0.198  	      0  	0.000000  	1.000000
+ 0.200  	      0  	0.000000  	1.000000
+ 0.203  	      0  	0.000000  	1.000000
+ 0.206  	      0  	0.000000  	1.000000
+ 0.209  	      0  	0.000000  	1.000000
+ 0.212  	      0  	0.000000  	1.000000
+ 0.215  	      0  	0.000000  	1.000000
+ 0.218  	      0  	0.000000  	1.000000
+ 0.221  	      0  	0.000000  	1.000000
+ 0.224  	      0  	0.000000  	1.000000
+ 0.227  	      0  	0.000000  	1.000000
+ 0.230  	      0  	0.000000  	1.000000
+ 0.233  	      0  	0.000000  	1.000000
+ 0.236  	      0  	0.000000  	1.000000
+ 0.239  	      0  	0.000000  	1.000000
+ 0.242  	      0  	0.000000  	1.000000
+ 0.245  	      0  	0.000000  	1.000000
+ 0.248  	      0  	0.000000  	1.000000
+ 0.251  	      0  	0.000000  	1.000000
+ 0.254  	      0  	0.000000  	1.000000
+ 0.257  	      0  	0.000000  	1.000000
+ 0.260  	      0  	0.000000  	1.000000
+ 0.263  	      0  	0.000000  	1.000000
+ 0.266  	      0  	0.000000  	1.000000
+ 0.269  	      0  	0.000000  	1.000000
+ 0.272  	      0  	0.000000  	1.000000
+ 0.275  	      0  	0.000000  	1.000000
+ 0.278  	      0  	0.000000  	1.000000
+ 0.281  	      0  	0.000000  	1.000000
+ 0.284  	      0  	0.000000  	1.000000
+ 0.287  	      0  	0.000000  	1.000000
+ 0.290  	      0  	0.000000  	1.000000
+ 0.293  	      0  	0.000000  	1.000000
+ 0.296  	      0  	0.000000  	1.000000
+ 0.299  	      0  	0.000000  	1.000000
+ 0.302  	      0  	0.000000  	1.000000
+ 0.306  	      0  	0.000000  	1.000000
  0.310  	      0  	0.000000  	1.000000
  0.314  	      0  	0.000000  	1.000000
  0.318  	      0  	0.000000  	1.000000
@@ -15245,60 +15245,60 @@ ssd #0  elem #2 Batch size maximum:	0
 ssd #0  elem #2 Batch size distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #2 Instantaneous queue length average: 	1.750000
-ssd #0  elem #2 Instantaneous queue length std.dev.:	0.829156
+ssd #0  elem #2 Instantaneous queue length average: 	1.600000
+ssd #0  elem #2 Instantaneous queue length std.dev.:	0.800000
 ssd #0  elem #2 Instantaneous queue length maximum:	3
 ssd #0  elem #2 Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     16       8       8       0       0       0       0       0       0       0 
+      3       1       1       0       0       0       0       0       0       0 
 ssd #0  elem #2 Sub-optimal mapping penalty average: 	0.000000
 ssd #0  elem #2 Sub-optimal mapping penalty std.dev.:	0.000000
 ssd #0  elem #2 Sub-optimal mapping penalty maximum:	0
 ssd #0  elem #2 Sub-optimal mapping penalty distribution
    = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #3 Total Requests handled:	32
-ssd #0  elem #3 Requests per second:   	5.217409
-ssd #0  elem #3 Completely idle time:  	6027.617230   	0.982767
-ssd #0  elem #3 Response time average: 	0.545250
-ssd #0  elem #3 Response time std.dev.:	0.341879
-ssd #0  elem #3 Response time maximum:	1.222400
+ssd #0  elem #3 Total Requests handled:	4
+ssd #0  elem #3 Requests per second:   	0.750003
+ssd #0  elem #3 Completely idle time:  	5332.790600   	0.999902
+ssd #0  elem #3 Response time average: 	0.326500
+ssd #0  elem #3 Response time std.dev.:	0.146015
+ssd #0  elem #3 Response time maximum:	0.522400
 ssd #0  elem #3 Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
+      4       0       0       0       0       0       0       0       0       0 
 ssd #0  elem #3 Overlaps combined:     	0	0.000000
 ssd #0  elem #3 Read overlaps combined:	0	0.000000	0.000000
-ssd #0  elem #3 Number of reads:        16  	0.500000
-ssd #0  elem #3 Number of writes:       16  	0.500000
+ssd #0  elem #3 Number of reads:         8  	1.000000
+ssd #0  elem #3 Number of writes:        0  	0.000000
 ssd #0  elem #3 Sequential reads:        0  	0.000000  	0.000000
 ssd #0  elem #3 Sequential writes:       0  	0.000000  	0.000000
-ssd #0  elem #3 Base SPTF/SDF Different:      0 /     32 	0.000000
+ssd #0  elem #3 Base SPTF/SDF Different:      0 /      5 	0.000000
 ssd #0  elem #3 Timeout SPTF/SDF Different:      0 /      0 	0.000000
 ssd #0  elem #3 Priority SPTF/SDF Different:      0 /      0 	0.000000
-ssd #0  elem #3 runlistlen:              17.448000
-ssd #0  elem #3 runoutstanding:          6.979200
-ssd #0  elem #3 simtime:                 6133.313000
+ssd #0  elem #3 runlistlen:              1.306000
+ssd #0  elem #3 runoutstanding:          0.522400
+ssd #0  elem #3 simtime:                 5333.313000
 ssd #0  elem #3 warmuptime:              0.000000
 ssd #0  elem #3 setsize:                 1
-ssd #0  elem #3 Average # requests:      0.002845
+ssd #0  elem #3 Average # requests:      0.000245
 ssd #0  elem #3 Maximum # requests:      4
-ssd #0  elem #3 End # requests:          0
-ssd #0  elem #3 Average queue length:    0.001707
+ssd #0  elem #3 End # requests:          4
+ssd #0  elem #3 Average queue length:    0.000147
 ssd #0  elem #3 Maximum queue length:    3
-ssd #0  elem #3 End queued requests:     0
-ssd #0  elem #3 Queue time average: 	0.327150
-ssd #0  elem #3 Queue time std.dev.:	0.293694
-ssd #0  elem #3 Queue time maximum:	0.916800
+ssd #0  elem #3 End queued requests:     3
+ssd #0  elem #3 Queue time average: 	0.156720
+ssd #0  elem #3 Queue time std.dev.:	0.152304
+ssd #0  elem #3 Queue time maximum:	0.391800
 ssd #0  elem #3 Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #3 Avg # read requests:     0.000852
+      5       0       0       0       0       0       0       0       0       0 
+ssd #0  elem #3 Avg # read requests:     0.000245
 ssd #0  elem #3 Max # read requests:     4
-ssd #0  elem #3 Avg # write requests:    0.001993
-ssd #0  elem #3 Max # write requests:    4
-ssd #0  elem #3 Physical access time average: 	0.218100
-ssd #0  elem #3 Physical access time std.dev.:	0.087500
-ssd #0  elem #3 Physical access time maximum:	0.305600
+ssd #0  elem #3 Avg # write requests:    0.000000
+ssd #0  elem #3 Max # write requests:    0
+ssd #0  elem #3 Physical access time average: 	0.130600
+ssd #0  elem #3 Physical access time std.dev.:	0.000000
+ssd #0  elem #3 Physical access time maximum:	0.130600
 ssd #0  elem #3 Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -15416,76 +15416,76 @@ ssd #0  elem #3 Physical access time distribution
  0.126  	      0  	0.000000  	0.000000
  0.128  	      0  	0.000000  	0.000000
  0.130  	      0  	0.000000  	0.000000
- 0.132  	     16  	0.500000  	0.500000
- 0.134  	      0  	0.000000  	0.500000
- 0.136  	      0  	0.000000  	0.500000
- 0.138  	      0  	0.000000  	0.500000
- 0.140  	      0  	0.000000  	0.500000
- 0.142  	      0  	0.000000  	0.500000
- 0.144  	      0  	0.000000  	0.500000
- 0.146  	      0  	0.000000  	0.500000
- 0.148  	      0  	0.000000  	0.500000
- 0.150  	      0  	0.000000  	0.500000
- 0.152  	      0  	0.000000  	0.500000
- 0.154  	      0  	0.000000  	0.500000
- 0.156  	      0  	0.000000  	0.500000
- 0.158  	      0  	0.000000  	0.500000
- 0.160  	      0  	0.000000  	0.500000
- 0.162  	      0  	0.000000  	0.500000
- 0.164  	      0  	0.000000  	0.500000
- 0.166  	      0  	0.000000  	0.500000
- 0.168  	      0  	0.000000  	0.500000
- 0.170  	      0  	0.000000  	0.500000
- 0.172  	      0  	0.000000  	0.500000
- 0.174  	      0  	0.000000  	0.500000
- 0.176  	      0  	0.000000  	0.500000
- 0.178  	      0  	0.000000  	0.500000
- 0.180  	      0  	0.000000  	0.500000
- 0.182  	      0  	0.000000  	0.500000
- 0.184  	      0  	0.000000  	0.500000
- 0.186  	      0  	0.000000  	0.500000
- 0.188  	      0  	0.000000  	0.500000
- 0.190  	      0  	0.000000  	0.500000
- 0.192  	      0  	0.000000  	0.500000
- 0.194  	      0  	0.000000  	0.500000
- 0.196  	      0  	0.000000  	0.500000
- 0.198  	      0  	0.000000  	0.500000
- 0.200  	      0  	0.000000  	0.500000
- 0.203  	      0  	0.000000  	0.500000
- 0.206  	      0  	0.000000  	0.500000
- 0.209  	      0  	0.000000  	0.500000
- 0.212  	      0  	0.000000  	0.500000
- 0.215  	      0  	0.000000  	0.500000
- 0.218  	      0  	0.000000  	0.500000
- 0.221  	      0  	0.000000  	0.500000
- 0.224  	      0  	0.000000  	0.500000
- 0.227  	      0  	0.000000  	0.500000
- 0.230  	      0  	0.000000  	0.500000
- 0.233  	      0  	0.000000  	0.500000
- 0.236  	      0  	0.000000  	0.500000
- 0.239  	      0  	0.000000  	0.500000
- 0.242  	      0  	0.000000  	0.500000
- 0.245  	      0  	0.000000  	0.500000
- 0.248  	      0  	0.000000  	0.500000
- 0.251  	      0  	0.000000  	0.500000
- 0.254  	      0  	0.000000  	0.500000
- 0.257  	      0  	0.000000  	0.500000
- 0.260  	      0  	0.000000  	0.500000
- 0.263  	      0  	0.000000  	0.500000
- 0.266  	      0  	0.000000  	0.500000
- 0.269  	      0  	0.000000  	0.500000
- 0.272  	      0  	0.000000  	0.500000
- 0.275  	      0  	0.000000  	0.500000
- 0.278  	      0  	0.000000  	0.500000
- 0.281  	      0  	0.000000  	0.500000
- 0.284  	      0  	0.000000  	0.500000
- 0.287  	      0  	0.000000  	0.500000
- 0.290  	      0  	0.000000  	0.500000
- 0.293  	      0  	0.000000  	0.500000
- 0.296  	      0  	0.000000  	0.500000
- 0.299  	      0  	0.000000  	0.500000
- 0.302  	      0  	0.000000  	0.500000
- 0.306  	     16  	0.500000  	1.000000
+ 0.132  	      4  	1.000000  	1.000000
+ 0.134  	      0  	0.000000  	1.000000
+ 0.136  	      0  	0.000000  	1.000000
+ 0.138  	      0  	0.000000  	1.000000
+ 0.140  	      0  	0.000000  	1.000000
+ 0.142  	      0  	0.000000  	1.000000
+ 0.144  	      0  	0.000000  	1.000000
+ 0.146  	      0  	0.000000  	1.000000
+ 0.148  	      0  	0.000000  	1.000000
+ 0.150  	      0  	0.000000  	1.000000
+ 0.152  	      0  	0.000000  	1.000000
+ 0.154  	      0  	0.000000  	1.000000
+ 0.156  	      0  	0.000000  	1.000000
+ 0.158  	      0  	0.000000  	1.000000
+ 0.160  	      0  	0.000000  	1.000000
+ 0.162  	      0  	0.000000  	1.000000
+ 0.164  	      0  	0.000000  	1.000000
+ 0.166  	      0  	0.000000  	1.000000
+ 0.168  	      0  	0.000000  	1.000000
+ 0.170  	      0  	0.000000  	1.000000
+ 0.172  	      0  	0.000000  	1.000000
+ 0.174  	      0  	0.000000  	1.000000
+ 0.176  	      0  	0.000000  	1.000000
+ 0.178  	      0  	0.000000  	1.000000
+ 0.180  	      0  	0.000000  	1.000000
+ 0.182  	      0  	0.000000  	1.000000
+ 0.184  	      0  	0.000000  	1.000000
+ 0.186  	      0  	0.000000  	1.000000
+ 0.188  	      0  	0.000000  	1.000000
+ 0.190  	      0  	0.000000  	1.000000
+ 0.192  	      0  	0.000000  	1.000000
+ 0.194  	      0  	0.000000  	1.000000
+ 0.196  	      0  	0.000000  	1.000000
+ 0.198  	      0  	0.000000  	1.000000
+ 0.200  	      0  	0.000000  	1.000000
+ 0.203  	      0  	0.000000  	1.000000
+ 0.206  	      0  	0.000000  	1.000000
+ 0.209  	      0  	0.000000  	1.000000
+ 0.212  	      0  	0.000000  	1.000000
+ 0.215  	      0  	0.000000  	1.000000
+ 0.218  	      0  	0.000000  	1.000000
+ 0.221  	      0  	0.000000  	1.000000
+ 0.224  	      0  	0.000000  	1.000000
+ 0.227  	      0  	0.000000  	1.000000
+ 0.230  	      0  	0.000000  	1.000000
+ 0.233  	      0  	0.000000  	1.000000
+ 0.236  	      0  	0.000000  	1.000000
+ 0.239  	      0  	0.000000  	1.000000
+ 0.242  	      0  	0.000000  	1.000000
+ 0.245  	      0  	0.000000  	1.000000
+ 0.248  	      0  	0.000000  	1.000000
+ 0.251  	      0  	0.000000  	1.000000
+ 0.254  	      0  	0.000000  	1.000000
+ 0.257  	      0  	0.000000  	1.000000
+ 0.260  	      0  	0.000000  	1.000000
+ 0.263  	      0  	0.000000  	1.000000
+ 0.266  	      0  	0.000000  	1.000000
+ 0.269  	      0  	0.000000  	1.000000
+ 0.272  	      0  	0.000000  	1.000000
+ 0.275  	      0  	0.000000  	1.000000
+ 0.278  	      0  	0.000000  	1.000000
+ 0.281  	      0  	0.000000  	1.000000
+ 0.284  	      0  	0.000000  	1.000000
+ 0.287  	      0  	0.000000  	1.000000
+ 0.290  	      0  	0.000000  	1.000000
+ 0.293  	      0  	0.000000  	1.000000
+ 0.296  	      0  	0.000000  	1.000000
+ 0.299  	      0  	0.000000  	1.000000
+ 0.302  	      0  	0.000000  	1.000000
+ 0.306  	      0  	0.000000  	1.000000
  0.310  	      0  	0.000000  	1.000000
  0.314  	      0  	0.000000  	1.000000
  0.318  	      0  	0.000000  	1.000000
@@ -17057,60 +17057,60 @@ ssd #0  elem #3 Batch size maximum:	0
 ssd #0  elem #3 Batch size distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #3 Instantaneous queue length average: 	1.750000
-ssd #0  elem #3 Instantaneous queue length std.dev.:	0.829156
+ssd #0  elem #3 Instantaneous queue length average: 	1.600000
+ssd #0  elem #3 Instantaneous queue length std.dev.:	0.800000
 ssd #0  elem #3 Instantaneous queue length maximum:	3
 ssd #0  elem #3 Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     16       8       8       0       0       0       0       0       0       0 
+      3       1       1       0       0       0       0       0       0       0 
 ssd #0  elem #3 Sub-optimal mapping penalty average: 	0.000000
 ssd #0  elem #3 Sub-optimal mapping penalty std.dev.:	0.000000
 ssd #0  elem #3 Sub-optimal mapping penalty maximum:	0
 ssd #0  elem #3 Sub-optimal mapping penalty distribution
    = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #4 Total Requests handled:	32
-ssd #0  elem #4 Requests per second:   	5.217409
-ssd #0  elem #4 Completely idle time:  	6027.617230   	0.982767
-ssd #0  elem #4 Response time average: 	0.545250
-ssd #0  elem #4 Response time std.dev.:	0.341879
-ssd #0  elem #4 Response time maximum:	1.222400
+ssd #0  elem #4 Total Requests handled:	4
+ssd #0  elem #4 Requests per second:   	0.750003
+ssd #0  elem #4 Completely idle time:  	5332.790600   	0.999902
+ssd #0  elem #4 Response time average: 	0.326500
+ssd #0  elem #4 Response time std.dev.:	0.146015
+ssd #0  elem #4 Response time maximum:	0.522400
 ssd #0  elem #4 Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
+      4       0       0       0       0       0       0       0       0       0 
 ssd #0  elem #4 Overlaps combined:     	0	0.000000
 ssd #0  elem #4 Read overlaps combined:	0	0.000000	0.000000
-ssd #0  elem #4 Number of reads:        16  	0.500000
-ssd #0  elem #4 Number of writes:       16  	0.500000
+ssd #0  elem #4 Number of reads:         8  	1.000000
+ssd #0  elem #4 Number of writes:        0  	0.000000
 ssd #0  elem #4 Sequential reads:        0  	0.000000  	0.000000
 ssd #0  elem #4 Sequential writes:       0  	0.000000  	0.000000
-ssd #0  elem #4 Base SPTF/SDF Different:      0 /     32 	0.000000
+ssd #0  elem #4 Base SPTF/SDF Different:      0 /      5 	0.000000
 ssd #0  elem #4 Timeout SPTF/SDF Different:      0 /      0 	0.000000
 ssd #0  elem #4 Priority SPTF/SDF Different:      0 /      0 	0.000000
-ssd #0  elem #4 runlistlen:              17.448000
-ssd #0  elem #4 runoutstanding:          6.979200
-ssd #0  elem #4 simtime:                 6133.313000
+ssd #0  elem #4 runlistlen:              1.306000
+ssd #0  elem #4 runoutstanding:          0.522400
+ssd #0  elem #4 simtime:                 5333.313000
 ssd #0  elem #4 warmuptime:              0.000000
 ssd #0  elem #4 setsize:                 1
-ssd #0  elem #4 Average # requests:      0.002845
+ssd #0  elem #4 Average # requests:      0.000245
 ssd #0  elem #4 Maximum # requests:      4
-ssd #0  elem #4 End # requests:          0
-ssd #0  elem #4 Average queue length:    0.001707
+ssd #0  elem #4 End # requests:          4
+ssd #0  elem #4 Average queue length:    0.000147
 ssd #0  elem #4 Maximum queue length:    3
-ssd #0  elem #4 End queued requests:     0
-ssd #0  elem #4 Queue time average: 	0.327150
-ssd #0  elem #4 Queue time std.dev.:	0.293694
-ssd #0  elem #4 Queue time maximum:	0.916800
+ssd #0  elem #4 End queued requests:     3
+ssd #0  elem #4 Queue time average: 	0.156720
+ssd #0  elem #4 Queue time std.dev.:	0.152304
+ssd #0  elem #4 Queue time maximum:	0.391800
 ssd #0  elem #4 Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #4 Avg # read requests:     0.000852
+      5       0       0       0       0       0       0       0       0       0 
+ssd #0  elem #4 Avg # read requests:     0.000245
 ssd #0  elem #4 Max # read requests:     4
-ssd #0  elem #4 Avg # write requests:    0.001993
-ssd #0  elem #4 Max # write requests:    4
-ssd #0  elem #4 Physical access time average: 	0.218100
-ssd #0  elem #4 Physical access time std.dev.:	0.087500
-ssd #0  elem #4 Physical access time maximum:	0.305600
+ssd #0  elem #4 Avg # write requests:    0.000000
+ssd #0  elem #4 Max # write requests:    0
+ssd #0  elem #4 Physical access time average: 	0.130600
+ssd #0  elem #4 Physical access time std.dev.:	0.000000
+ssd #0  elem #4 Physical access time maximum:	0.130600
 ssd #0  elem #4 Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -17228,76 +17228,76 @@ ssd #0  elem #4 Physical access time distribution
  0.126  	      0  	0.000000  	0.000000
  0.128  	      0  	0.000000  	0.000000
  0.130  	      0  	0.000000  	0.000000
- 0.132  	     16  	0.500000  	0.500000
- 0.134  	      0  	0.000000  	0.500000
- 0.136  	      0  	0.000000  	0.500000
- 0.138  	      0  	0.000000  	0.500000
- 0.140  	      0  	0.000000  	0.500000
- 0.142  	      0  	0.000000  	0.500000
- 0.144  	      0  	0.000000  	0.500000
- 0.146  	      0  	0.000000  	0.500000
- 0.148  	      0  	0.000000  	0.500000
- 0.150  	      0  	0.000000  	0.500000
- 0.152  	      0  	0.000000  	0.500000
- 0.154  	      0  	0.000000  	0.500000
- 0.156  	      0  	0.000000  	0.500000
- 0.158  	      0  	0.000000  	0.500000
- 0.160  	      0  	0.000000  	0.500000
- 0.162  	      0  	0.000000  	0.500000
- 0.164  	      0  	0.000000  	0.500000
- 0.166  	      0  	0.000000  	0.500000
- 0.168  	      0  	0.000000  	0.500000
- 0.170  	      0  	0.000000  	0.500000
- 0.172  	      0  	0.000000  	0.500000
- 0.174  	      0  	0.000000  	0.500000
- 0.176  	      0  	0.000000  	0.500000
- 0.178  	      0  	0.000000  	0.500000
- 0.180  	      0  	0.000000  	0.500000
- 0.182  	      0  	0.000000  	0.500000
- 0.184  	      0  	0.000000  	0.500000
- 0.186  	      0  	0.000000  	0.500000
- 0.188  	      0  	0.000000  	0.500000
- 0.190  	      0  	0.000000  	0.500000
- 0.192  	      0  	0.000000  	0.500000
- 0.194  	      0  	0.000000  	0.500000
- 0.196  	      0  	0.000000  	0.500000
- 0.198  	      0  	0.000000  	0.500000
- 0.200  	      0  	0.000000  	0.500000
- 0.203  	      0  	0.000000  	0.500000
- 0.206  	      0  	0.000000  	0.500000
- 0.209  	      0  	0.000000  	0.500000
- 0.212  	      0  	0.000000  	0.500000
- 0.215  	      0  	0.000000  	0.500000
- 0.218  	      0  	0.000000  	0.500000
- 0.221  	      0  	0.000000  	0.500000
- 0.224  	      0  	0.000000  	0.500000
- 0.227  	      0  	0.000000  	0.500000
- 0.230  	      0  	0.000000  	0.500000
- 0.233  	      0  	0.000000  	0.500000
- 0.236  	      0  	0.000000  	0.500000
- 0.239  	      0  	0.000000  	0.500000
- 0.242  	      0  	0.000000  	0.500000
- 0.245  	      0  	0.000000  	0.500000
- 0.248  	      0  	0.000000  	0.500000
- 0.251  	      0  	0.000000  	0.500000
- 0.254  	      0  	0.000000  	0.500000
- 0.257  	      0  	0.000000  	0.500000
- 0.260  	      0  	0.000000  	0.500000
- 0.263  	      0  	0.000000  	0.500000
- 0.266  	      0  	0.000000  	0.500000
- 0.269  	      0  	0.000000  	0.500000
- 0.272  	      0  	0.000000  	0.500000
- 0.275  	      0  	0.000000  	0.500000
- 0.278  	      0  	0.000000  	0.500000
- 0.281  	      0  	0.000000  	0.500000
- 0.284  	      0  	0.000000  	0.500000
- 0.287  	      0  	0.000000  	0.500000
- 0.290  	      0  	0.000000  	0.500000
- 0.293  	      0  	0.000000  	0.500000
- 0.296  	      0  	0.000000  	0.500000
- 0.299  	      0  	0.000000  	0.500000
- 0.302  	      0  	0.000000  	0.500000
- 0.306  	     16  	0.500000  	1.000000
+ 0.132  	      4  	1.000000  	1.000000
+ 0.134  	      0  	0.000000  	1.000000
+ 0.136  	      0  	0.000000  	1.000000
+ 0.138  	      0  	0.000000  	1.000000
+ 0.140  	      0  	0.000000  	1.000000
+ 0.142  	      0  	0.000000  	1.000000
+ 0.144  	      0  	0.000000  	1.000000
+ 0.146  	      0  	0.000000  	1.000000
+ 0.148  	      0  	0.000000  	1.000000
+ 0.150  	      0  	0.000000  	1.000000
+ 0.152  	      0  	0.000000  	1.000000
+ 0.154  	      0  	0.000000  	1.000000
+ 0.156  	      0  	0.000000  	1.000000
+ 0.158  	      0  	0.000000  	1.000000
+ 0.160  	      0  	0.000000  	1.000000
+ 0.162  	      0  	0.000000  	1.000000
+ 0.164  	      0  	0.000000  	1.000000
+ 0.166  	      0  	0.000000  	1.000000
+ 0.168  	      0  	0.000000  	1.000000
+ 0.170  	      0  	0.000000  	1.000000
+ 0.172  	      0  	0.000000  	1.000000
+ 0.174  	      0  	0.000000  	1.000000
+ 0.176  	      0  	0.000000  	1.000000
+ 0.178  	      0  	0.000000  	1.000000
+ 0.180  	      0  	0.000000  	1.000000
+ 0.182  	      0  	0.000000  	1.000000
+ 0.184  	      0  	0.000000  	1.000000
+ 0.186  	      0  	0.000000  	1.000000
+ 0.188  	      0  	0.000000  	1.000000
+ 0.190  	      0  	0.000000  	1.000000
+ 0.192  	      0  	0.000000  	1.000000
+ 0.194  	      0  	0.000000  	1.000000
+ 0.196  	      0  	0.000000  	1.000000
+ 0.198  	      0  	0.000000  	1.000000
+ 0.200  	      0  	0.000000  	1.000000
+ 0.203  	      0  	0.000000  	1.000000
+ 0.206  	      0  	0.000000  	1.000000
+ 0.209  	      0  	0.000000  	1.000000
+ 0.212  	      0  	0.000000  	1.000000
+ 0.215  	      0  	0.000000  	1.000000
+ 0.218  	      0  	0.000000  	1.000000
+ 0.221  	      0  	0.000000  	1.000000
+ 0.224  	      0  	0.000000  	1.000000
+ 0.227  	      0  	0.000000  	1.000000
+ 0.230  	      0  	0.000000  	1.000000
+ 0.233  	      0  	0.000000  	1.000000
+ 0.236  	      0  	0.000000  	1.000000
+ 0.239  	      0  	0.000000  	1.000000
+ 0.242  	      0  	0.000000  	1.000000
+ 0.245  	      0  	0.000000  	1.000000
+ 0.248  	      0  	0.000000  	1.000000
+ 0.251  	      0  	0.000000  	1.000000
+ 0.254  	      0  	0.000000  	1.000000
+ 0.257  	      0  	0.000000  	1.000000
+ 0.260  	      0  	0.000000  	1.000000
+ 0.263  	      0  	0.000000  	1.000000
+ 0.266  	      0  	0.000000  	1.000000
+ 0.269  	      0  	0.000000  	1.000000
+ 0.272  	      0  	0.000000  	1.000000
+ 0.275  	      0  	0.000000  	1.000000
+ 0.278  	      0  	0.000000  	1.000000
+ 0.281  	      0  	0.000000  	1.000000
+ 0.284  	      0  	0.000000  	1.000000
+ 0.287  	      0  	0.000000  	1.000000
+ 0.290  	      0  	0.000000  	1.000000
+ 0.293  	      0  	0.000000  	1.000000
+ 0.296  	      0  	0.000000  	1.000000
+ 0.299  	      0  	0.000000  	1.000000
+ 0.302  	      0  	0.000000  	1.000000
+ 0.306  	      0  	0.000000  	1.000000
  0.310  	      0  	0.000000  	1.000000
  0.314  	      0  	0.000000  	1.000000
  0.318  	      0  	0.000000  	1.000000
@@ -18869,60 +18869,60 @@ ssd #0  elem #4 Batch size maximum:	0
 ssd #0  elem #4 Batch size distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #4 Instantaneous queue length average: 	1.750000
-ssd #0  elem #4 Instantaneous queue length std.dev.:	0.829156
+ssd #0  elem #4 Instantaneous queue length average: 	1.600000
+ssd #0  elem #4 Instantaneous queue length std.dev.:	0.800000
 ssd #0  elem #4 Instantaneous queue length maximum:	3
 ssd #0  elem #4 Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     16       8       8       0       0       0       0       0       0       0 
+      3       1       1       0       0       0       0       0       0       0 
 ssd #0  elem #4 Sub-optimal mapping penalty average: 	0.000000
 ssd #0  elem #4 Sub-optimal mapping penalty std.dev.:	0.000000
 ssd #0  elem #4 Sub-optimal mapping penalty maximum:	0
 ssd #0  elem #4 Sub-optimal mapping penalty distribution
    = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #5 Total Requests handled:	32
-ssd #0  elem #5 Requests per second:   	5.217409
-ssd #0  elem #5 Completely idle time:  	6027.617230   	0.982767
-ssd #0  elem #5 Response time average: 	0.545250
-ssd #0  elem #5 Response time std.dev.:	0.341879
-ssd #0  elem #5 Response time maximum:	1.222400
+ssd #0  elem #5 Total Requests handled:	4
+ssd #0  elem #5 Requests per second:   	0.750003
+ssd #0  elem #5 Completely idle time:  	5332.790600   	0.999902
+ssd #0  elem #5 Response time average: 	0.326500
+ssd #0  elem #5 Response time std.dev.:	0.146015
+ssd #0  elem #5 Response time maximum:	0.522400
 ssd #0  elem #5 Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
+      4       0       0       0       0       0       0       0       0       0 
 ssd #0  elem #5 Overlaps combined:     	0	0.000000
 ssd #0  elem #5 Read overlaps combined:	0	0.000000	0.000000
-ssd #0  elem #5 Number of reads:        16  	0.500000
-ssd #0  elem #5 Number of writes:       16  	0.500000
+ssd #0  elem #5 Number of reads:         8  	1.000000
+ssd #0  elem #5 Number of writes:        0  	0.000000
 ssd #0  elem #5 Sequential reads:        0  	0.000000  	0.000000
 ssd #0  elem #5 Sequential writes:       0  	0.000000  	0.000000
-ssd #0  elem #5 Base SPTF/SDF Different:      0 /     32 	0.000000
+ssd #0  elem #5 Base SPTF/SDF Different:      0 /      5 	0.000000
 ssd #0  elem #5 Timeout SPTF/SDF Different:      0 /      0 	0.000000
 ssd #0  elem #5 Priority SPTF/SDF Different:      0 /      0 	0.000000
-ssd #0  elem #5 runlistlen:              17.448000
-ssd #0  elem #5 runoutstanding:          6.979200
-ssd #0  elem #5 simtime:                 6133.313000
+ssd #0  elem #5 runlistlen:              1.306000
+ssd #0  elem #5 runoutstanding:          0.522400
+ssd #0  elem #5 simtime:                 5333.313000
 ssd #0  elem #5 warmuptime:              0.000000
 ssd #0  elem #5 setsize:                 1
-ssd #0  elem #5 Average # requests:      0.002845
+ssd #0  elem #5 Average # requests:      0.000245
 ssd #0  elem #5 Maximum # requests:      4
-ssd #0  elem #5 End # requests:          0
-ssd #0  elem #5 Average queue length:    0.001707
+ssd #0  elem #5 End # requests:          4
+ssd #0  elem #5 Average queue length:    0.000147
 ssd #0  elem #5 Maximum queue length:    3
-ssd #0  elem #5 End queued requests:     0
-ssd #0  elem #5 Queue time average: 	0.327150
-ssd #0  elem #5 Queue time std.dev.:	0.293694
-ssd #0  elem #5 Queue time maximum:	0.916800
+ssd #0  elem #5 End queued requests:     3
+ssd #0  elem #5 Queue time average: 	0.156720
+ssd #0  elem #5 Queue time std.dev.:	0.152304
+ssd #0  elem #5 Queue time maximum:	0.391800
 ssd #0  elem #5 Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #5 Avg # read requests:     0.000852
+      5       0       0       0       0       0       0       0       0       0 
+ssd #0  elem #5 Avg # read requests:     0.000245
 ssd #0  elem #5 Max # read requests:     4
-ssd #0  elem #5 Avg # write requests:    0.001993
-ssd #0  elem #5 Max # write requests:    4
-ssd #0  elem #5 Physical access time average: 	0.218100
-ssd #0  elem #5 Physical access time std.dev.:	0.087500
-ssd #0  elem #5 Physical access time maximum:	0.305600
+ssd #0  elem #5 Avg # write requests:    0.000000
+ssd #0  elem #5 Max # write requests:    0
+ssd #0  elem #5 Physical access time average: 	0.130600
+ssd #0  elem #5 Physical access time std.dev.:	0.000000
+ssd #0  elem #5 Physical access time maximum:	0.130600
 ssd #0  elem #5 Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -19040,76 +19040,76 @@ ssd #0  elem #5 Physical access time distribution
  0.126  	      0  	0.000000  	0.000000
  0.128  	      0  	0.000000  	0.000000
  0.130  	      0  	0.000000  	0.000000
- 0.132  	     16  	0.500000  	0.500000
- 0.134  	      0  	0.000000  	0.500000
- 0.136  	      0  	0.000000  	0.500000
- 0.138  	      0  	0.000000  	0.500000
- 0.140  	      0  	0.000000  	0.500000
- 0.142  	      0  	0.000000  	0.500000
- 0.144  	      0  	0.000000  	0.500000
- 0.146  	      0  	0.000000  	0.500000
- 0.148  	      0  	0.000000  	0.500000
- 0.150  	      0  	0.000000  	0.500000
- 0.152  	      0  	0.000000  	0.500000
- 0.154  	      0  	0.000000  	0.500000
- 0.156  	      0  	0.000000  	0.500000
- 0.158  	      0  	0.000000  	0.500000
- 0.160  	      0  	0.000000  	0.500000
- 0.162  	      0  	0.000000  	0.500000
- 0.164  	      0  	0.000000  	0.500000
- 0.166  	      0  	0.000000  	0.500000
- 0.168  	      0  	0.000000  	0.500000
- 0.170  	      0  	0.000000  	0.500000
- 0.172  	      0  	0.000000  	0.500000
- 0.174  	      0  	0.000000  	0.500000
- 0.176  	      0  	0.000000  	0.500000
- 0.178  	      0  	0.000000  	0.500000
- 0.180  	      0  	0.000000  	0.500000
- 0.182  	      0  	0.000000  	0.500000
- 0.184  	      0  	0.000000  	0.500000
- 0.186  	      0  	0.000000  	0.500000
- 0.188  	      0  	0.000000  	0.500000
- 0.190  	      0  	0.000000  	0.500000
- 0.192  	      0  	0.000000  	0.500000
- 0.194  	      0  	0.000000  	0.500000
- 0.196  	      0  	0.000000  	0.500000
- 0.198  	      0  	0.000000  	0.500000
- 0.200  	      0  	0.000000  	0.500000
- 0.203  	      0  	0.000000  	0.500000
- 0.206  	      0  	0.000000  	0.500000
- 0.209  	      0  	0.000000  	0.500000
- 0.212  	      0  	0.000000  	0.500000
- 0.215  	      0  	0.000000  	0.500000
- 0.218  	      0  	0.000000  	0.500000
- 0.221  	      0  	0.000000  	0.500000
- 0.224  	      0  	0.000000  	0.500000
- 0.227  	      0  	0.000000  	0.500000
- 0.230  	      0  	0.000000  	0.500000
- 0.233  	      0  	0.000000  	0.500000
- 0.236  	      0  	0.000000  	0.500000
- 0.239  	      0  	0.000000  	0.500000
- 0.242  	      0  	0.000000  	0.500000
- 0.245  	      0  	0.000000  	0.500000
- 0.248  	      0  	0.000000  	0.500000
- 0.251  	      0  	0.000000  	0.500000
- 0.254  	      0  	0.000000  	0.500000
- 0.257  	      0  	0.000000  	0.500000
- 0.260  	      0  	0.000000  	0.500000
- 0.263  	      0  	0.000000  	0.500000
- 0.266  	      0  	0.000000  	0.500000
- 0.269  	      0  	0.000000  	0.500000
- 0.272  	      0  	0.000000  	0.500000
- 0.275  	      0  	0.000000  	0.500000
- 0.278  	      0  	0.000000  	0.500000
- 0.281  	      0  	0.000000  	0.500000
- 0.284  	      0  	0.000000  	0.500000
- 0.287  	      0  	0.000000  	0.500000
- 0.290  	      0  	0.000000  	0.500000
- 0.293  	      0  	0.000000  	0.500000
- 0.296  	      0  	0.000000  	0.500000
- 0.299  	      0  	0.000000  	0.500000
- 0.302  	      0  	0.000000  	0.500000
- 0.306  	     16  	0.500000  	1.000000
+ 0.132  	      4  	1.000000  	1.000000
+ 0.134  	      0  	0.000000  	1.000000
+ 0.136  	      0  	0.000000  	1.000000
+ 0.138  	      0  	0.000000  	1.000000
+ 0.140  	      0  	0.000000  	1.000000
+ 0.142  	      0  	0.000000  	1.000000
+ 0.144  	      0  	0.000000  	1.000000
+ 0.146  	      0  	0.000000  	1.000000
+ 0.148  	      0  	0.000000  	1.000000
+ 0.150  	      0  	0.000000  	1.000000
+ 0.152  	      0  	0.000000  	1.000000
+ 0.154  	      0  	0.000000  	1.000000
+ 0.156  	      0  	0.000000  	1.000000
+ 0.158  	      0  	0.000000  	1.000000
+ 0.160  	      0  	0.000000  	1.000000
+ 0.162  	      0  	0.000000  	1.000000
+ 0.164  	      0  	0.000000  	1.000000
+ 0.166  	      0  	0.000000  	1.000000
+ 0.168  	      0  	0.000000  	1.000000
+ 0.170  	      0  	0.000000  	1.000000
+ 0.172  	      0  	0.000000  	1.000000
+ 0.174  	      0  	0.000000  	1.000000
+ 0.176  	      0  	0.000000  	1.000000
+ 0.178  	      0  	0.000000  	1.000000
+ 0.180  	      0  	0.000000  	1.000000
+ 0.182  	      0  	0.000000  	1.000000
+ 0.184  	      0  	0.000000  	1.000000
+ 0.186  	      0  	0.000000  	1.000000
+ 0.188  	      0  	0.000000  	1.000000
+ 0.190  	      0  	0.000000  	1.000000
+ 0.192  	      0  	0.000000  	1.000000
+ 0.194  	      0  	0.000000  	1.000000
+ 0.196  	      0  	0.000000  	1.000000
+ 0.198  	      0  	0.000000  	1.000000
+ 0.200  	      0  	0.000000  	1.000000
+ 0.203  	      0  	0.000000  	1.000000
+ 0.206  	      0  	0.000000  	1.000000
+ 0.209  	      0  	0.000000  	1.000000
+ 0.212  	      0  	0.000000  	1.000000
+ 0.215  	      0  	0.000000  	1.000000
+ 0.218  	      0  	0.000000  	1.000000
+ 0.221  	      0  	0.000000  	1.000000
+ 0.224  	      0  	0.000000  	1.000000
+ 0.227  	      0  	0.000000  	1.000000
+ 0.230  	      0  	0.000000  	1.000000
+ 0.233  	      0  	0.000000  	1.000000
+ 0.236  	      0  	0.000000  	1.000000
+ 0.239  	      0  	0.000000  	1.000000
+ 0.242  	      0  	0.000000  	1.000000
+ 0.245  	      0  	0.000000  	1.000000
+ 0.248  	      0  	0.000000  	1.000000
+ 0.251  	      0  	0.000000  	1.000000
+ 0.254  	      0  	0.000000  	1.000000
+ 0.257  	      0  	0.000000  	1.000000
+ 0.260  	      0  	0.000000  	1.000000
+ 0.263  	      0  	0.000000  	1.000000
+ 0.266  	      0  	0.000000  	1.000000
+ 0.269  	      0  	0.000000  	1.000000
+ 0.272  	      0  	0.000000  	1.000000
+ 0.275  	      0  	0.000000  	1.000000
+ 0.278  	      0  	0.000000  	1.000000
+ 0.281  	      0  	0.000000  	1.000000
+ 0.284  	      0  	0.000000  	1.000000
+ 0.287  	      0  	0.000000  	1.000000
+ 0.290  	      0  	0.000000  	1.000000
+ 0.293  	      0  	0.000000  	1.000000
+ 0.296  	      0  	0.000000  	1.000000
+ 0.299  	      0  	0.000000  	1.000000
+ 0.302  	      0  	0.000000  	1.000000
+ 0.306  	      0  	0.000000  	1.000000
  0.310  	      0  	0.000000  	1.000000
  0.314  	      0  	0.000000  	1.000000
  0.318  	      0  	0.000000  	1.000000
@@ -20681,60 +20681,60 @@ ssd #0  elem #5 Batch size maximum:	0
 ssd #0  elem #5 Batch size distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #5 Instantaneous queue length average: 	1.750000
-ssd #0  elem #5 Instantaneous queue length std.dev.:	0.829156
+ssd #0  elem #5 Instantaneous queue length average: 	1.600000
+ssd #0  elem #5 Instantaneous queue length std.dev.:	0.800000
 ssd #0  elem #5 Instantaneous queue length maximum:	3
 ssd #0  elem #5 Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     16       8       8       0       0       0       0       0       0       0 
+      3       1       1       0       0       0       0       0       0       0 
 ssd #0  elem #5 Sub-optimal mapping penalty average: 	0.000000
 ssd #0  elem #5 Sub-optimal mapping penalty std.dev.:	0.000000
 ssd #0  elem #5 Sub-optimal mapping penalty maximum:	0
 ssd #0  elem #5 Sub-optimal mapping penalty distribution
    = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #6 Total Requests handled:	32
-ssd #0  elem #6 Requests per second:   	5.217409
-ssd #0  elem #6 Completely idle time:  	6027.617230   	0.982767
-ssd #0  elem #6 Response time average: 	0.545250
-ssd #0  elem #6 Response time std.dev.:	0.341879
-ssd #0  elem #6 Response time maximum:	1.222400
+ssd #0  elem #6 Total Requests handled:	4
+ssd #0  elem #6 Requests per second:   	0.750003
+ssd #0  elem #6 Completely idle time:  	5332.790600   	0.999902
+ssd #0  elem #6 Response time average: 	0.326500
+ssd #0  elem #6 Response time std.dev.:	0.146015
+ssd #0  elem #6 Response time maximum:	0.522400
 ssd #0  elem #6 Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
+      4       0       0       0       0       0       0       0       0       0 
 ssd #0  elem #6 Overlaps combined:     	0	0.000000
 ssd #0  elem #6 Read overlaps combined:	0	0.000000	0.000000
-ssd #0  elem #6 Number of reads:        16  	0.500000
-ssd #0  elem #6 Number of writes:       16  	0.500000
+ssd #0  elem #6 Number of reads:         8  	1.000000
+ssd #0  elem #6 Number of writes:        0  	0.000000
 ssd #0  elem #6 Sequential reads:        0  	0.000000  	0.000000
 ssd #0  elem #6 Sequential writes:       0  	0.000000  	0.000000
-ssd #0  elem #6 Base SPTF/SDF Different:      0 /     32 	0.000000
+ssd #0  elem #6 Base SPTF/SDF Different:      0 /      5 	0.000000
 ssd #0  elem #6 Timeout SPTF/SDF Different:      0 /      0 	0.000000
 ssd #0  elem #6 Priority SPTF/SDF Different:      0 /      0 	0.000000
-ssd #0  elem #6 runlistlen:              17.448000
-ssd #0  elem #6 runoutstanding:          6.979200
-ssd #0  elem #6 simtime:                 6133.313000
+ssd #0  elem #6 runlistlen:              1.306000
+ssd #0  elem #6 runoutstanding:          0.522400
+ssd #0  elem #6 simtime:                 5333.313000
 ssd #0  elem #6 warmuptime:              0.000000
 ssd #0  elem #6 setsize:                 1
-ssd #0  elem #6 Average # requests:      0.002845
+ssd #0  elem #6 Average # requests:      0.000245
 ssd #0  elem #6 Maximum # requests:      4
-ssd #0  elem #6 End # requests:          0
-ssd #0  elem #6 Average queue length:    0.001707
+ssd #0  elem #6 End # requests:          4
+ssd #0  elem #6 Average queue length:    0.000147
 ssd #0  elem #6 Maximum queue length:    3
-ssd #0  elem #6 End queued requests:     0
-ssd #0  elem #6 Queue time average: 	0.327150
-ssd #0  elem #6 Queue time std.dev.:	0.293694
-ssd #0  elem #6 Queue time maximum:	0.916800
+ssd #0  elem #6 End queued requests:     3
+ssd #0  elem #6 Queue time average: 	0.156720
+ssd #0  elem #6 Queue time std.dev.:	0.152304
+ssd #0  elem #6 Queue time maximum:	0.391800
 ssd #0  elem #6 Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #6 Avg # read requests:     0.000852
+      5       0       0       0       0       0       0       0       0       0 
+ssd #0  elem #6 Avg # read requests:     0.000245
 ssd #0  elem #6 Max # read requests:     4
-ssd #0  elem #6 Avg # write requests:    0.001993
-ssd #0  elem #6 Max # write requests:    4
-ssd #0  elem #6 Physical access time average: 	0.218100
-ssd #0  elem #6 Physical access time std.dev.:	0.087500
-ssd #0  elem #6 Physical access time maximum:	0.305600
+ssd #0  elem #6 Avg # write requests:    0.000000
+ssd #0  elem #6 Max # write requests:    0
+ssd #0  elem #6 Physical access time average: 	0.130600
+ssd #0  elem #6 Physical access time std.dev.:	0.000000
+ssd #0  elem #6 Physical access time maximum:	0.130600
 ssd #0  elem #6 Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -20852,76 +20852,76 @@ ssd #0  elem #6 Physical access time distribution
  0.126  	      0  	0.000000  	0.000000
  0.128  	      0  	0.000000  	0.000000
  0.130  	      0  	0.000000  	0.000000
- 0.132  	     16  	0.500000  	0.500000
- 0.134  	      0  	0.000000  	0.500000
- 0.136  	      0  	0.000000  	0.500000
- 0.138  	      0  	0.000000  	0.500000
- 0.140  	      0  	0.000000  	0.500000
- 0.142  	      0  	0.000000  	0.500000
- 0.144  	      0  	0.000000  	0.500000
- 0.146  	      0  	0.000000  	0.500000
- 0.148  	      0  	0.000000  	0.500000
- 0.150  	      0  	0.000000  	0.500000
- 0.152  	      0  	0.000000  	0.500000
- 0.154  	      0  	0.000000  	0.500000
- 0.156  	      0  	0.000000  	0.500000
- 0.158  	      0  	0.000000  	0.500000
- 0.160  	      0  	0.000000  	0.500000
- 0.162  	      0  	0.000000  	0.500000
- 0.164  	      0  	0.000000  	0.500000
- 0.166  	      0  	0.000000  	0.500000
- 0.168  	      0  	0.000000  	0.500000
- 0.170  	      0  	0.000000  	0.500000
- 0.172  	      0  	0.000000  	0.500000
- 0.174  	      0  	0.000000  	0.500000
- 0.176  	      0  	0.000000  	0.500000
- 0.178  	      0  	0.000000  	0.500000
- 0.180  	      0  	0.000000  	0.500000
- 0.182  	      0  	0.000000  	0.500000
- 0.184  	      0  	0.000000  	0.500000
- 0.186  	      0  	0.000000  	0.500000
- 0.188  	      0  	0.000000  	0.500000
- 0.190  	      0  	0.000000  	0.500000
- 0.192  	      0  	0.000000  	0.500000
- 0.194  	      0  	0.000000  	0.500000
- 0.196  	      0  	0.000000  	0.500000
- 0.198  	      0  	0.000000  	0.500000
- 0.200  	      0  	0.000000  	0.500000
- 0.203  	      0  	0.000000  	0.500000
- 0.206  	      0  	0.000000  	0.500000
- 0.209  	      0  	0.000000  	0.500000
- 0.212  	      0  	0.000000  	0.500000
- 0.215  	      0  	0.000000  	0.500000
- 0.218  	      0  	0.000000  	0.500000
- 0.221  	      0  	0.000000  	0.500000
- 0.224  	      0  	0.000000  	0.500000
- 0.227  	      0  	0.000000  	0.500000
- 0.230  	      0  	0.000000  	0.500000
- 0.233  	      0  	0.000000  	0.500000
- 0.236  	      0  	0.000000  	0.500000
- 0.239  	      0  	0.000000  	0.500000
- 0.242  	      0  	0.000000  	0.500000
- 0.245  	      0  	0.000000  	0.500000
- 0.248  	      0  	0.000000  	0.500000
- 0.251  	      0  	0.000000  	0.500000
- 0.254  	      0  	0.000000  	0.500000
- 0.257  	      0  	0.000000  	0.500000
- 0.260  	      0  	0.000000  	0.500000
- 0.263  	      0  	0.000000  	0.500000
- 0.266  	      0  	0.000000  	0.500000
- 0.269  	      0  	0.000000  	0.500000
- 0.272  	      0  	0.000000  	0.500000
- 0.275  	      0  	0.000000  	0.500000
- 0.278  	      0  	0.000000  	0.500000
- 0.281  	      0  	0.000000  	0.500000
- 0.284  	      0  	0.000000  	0.500000
- 0.287  	      0  	0.000000  	0.500000
- 0.290  	      0  	0.000000  	0.500000
- 0.293  	      0  	0.000000  	0.500000
- 0.296  	      0  	0.000000  	0.500000
- 0.299  	      0  	0.000000  	0.500000
- 0.302  	      0  	0.000000  	0.500000
- 0.306  	     16  	0.500000  	1.000000
+ 0.132  	      4  	1.000000  	1.000000
+ 0.134  	      0  	0.000000  	1.000000
+ 0.136  	      0  	0.000000  	1.000000
+ 0.138  	      0  	0.000000  	1.000000
+ 0.140  	      0  	0.000000  	1.000000
+ 0.142  	      0  	0.000000  	1.000000
+ 0.144  	      0  	0.000000  	1.000000
+ 0.146  	      0  	0.000000  	1.000000
+ 0.148  	      0  	0.000000  	1.000000
+ 0.150  	      0  	0.000000  	1.000000
+ 0.152  	      0  	0.000000  	1.000000
+ 0.154  	      0  	0.000000  	1.000000
+ 0.156  	      0  	0.000000  	1.000000
+ 0.158  	      0  	0.000000  	1.000000
+ 0.160  	      0  	0.000000  	1.000000
+ 0.162  	      0  	0.000000  	1.000000
+ 0.164  	      0  	0.000000  	1.000000
+ 0.166  	      0  	0.000000  	1.000000
+ 0.168  	      0  	0.000000  	1.000000
+ 0.170  	      0  	0.000000  	1.000000
+ 0.172  	      0  	0.000000  	1.000000
+ 0.174  	      0  	0.000000  	1.000000
+ 0.176  	      0  	0.000000  	1.000000
+ 0.178  	      0  	0.000000  	1.000000
+ 0.180  	      0  	0.000000  	1.000000
+ 0.182  	      0  	0.000000  	1.000000
+ 0.184  	      0  	0.000000  	1.000000
+ 0.186  	      0  	0.000000  	1.000000
+ 0.188  	      0  	0.000000  	1.000000
+ 0.190  	      0  	0.000000  	1.000000
+ 0.192  	      0  	0.000000  	1.000000
+ 0.194  	      0  	0.000000  	1.000000
+ 0.196  	      0  	0.000000  	1.000000
+ 0.198  	      0  	0.000000  	1.000000
+ 0.200  	      0  	0.000000  	1.000000
+ 0.203  	      0  	0.000000  	1.000000
+ 0.206  	      0  	0.000000  	1.000000
+ 0.209  	      0  	0.000000  	1.000000
+ 0.212  	      0  	0.000000  	1.000000
+ 0.215  	      0  	0.000000  	1.000000
+ 0.218  	      0  	0.000000  	1.000000
+ 0.221  	      0  	0.000000  	1.000000
+ 0.224  	      0  	0.000000  	1.000000
+ 0.227  	      0  	0.000000  	1.000000
+ 0.230  	      0  	0.000000  	1.000000
+ 0.233  	      0  	0.000000  	1.000000
+ 0.236  	      0  	0.000000  	1.000000
+ 0.239  	      0  	0.000000  	1.000000
+ 0.242  	      0  	0.000000  	1.000000
+ 0.245  	      0  	0.000000  	1.000000
+ 0.248  	      0  	0.000000  	1.000000
+ 0.251  	      0  	0.000000  	1.000000
+ 0.254  	      0  	0.000000  	1.000000
+ 0.257  	      0  	0.000000  	1.000000
+ 0.260  	      0  	0.000000  	1.000000
+ 0.263  	      0  	0.000000  	1.000000
+ 0.266  	      0  	0.000000  	1.000000
+ 0.269  	      0  	0.000000  	1.000000
+ 0.272  	      0  	0.000000  	1.000000
+ 0.275  	      0  	0.000000  	1.000000
+ 0.278  	      0  	0.000000  	1.000000
+ 0.281  	      0  	0.000000  	1.000000
+ 0.284  	      0  	0.000000  	1.000000
+ 0.287  	      0  	0.000000  	1.000000
+ 0.290  	      0  	0.000000  	1.000000
+ 0.293  	      0  	0.000000  	1.000000
+ 0.296  	      0  	0.000000  	1.000000
+ 0.299  	      0  	0.000000  	1.000000
+ 0.302  	      0  	0.000000  	1.000000
+ 0.306  	      0  	0.000000  	1.000000
  0.310  	      0  	0.000000  	1.000000
  0.314  	      0  	0.000000  	1.000000
  0.318  	      0  	0.000000  	1.000000
@@ -22493,60 +22493,60 @@ ssd #0  elem #6 Batch size maximum:	0
 ssd #0  elem #6 Batch size distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #6 Instantaneous queue length average: 	1.750000
-ssd #0  elem #6 Instantaneous queue length std.dev.:	0.829156
+ssd #0  elem #6 Instantaneous queue length average: 	1.600000
+ssd #0  elem #6 Instantaneous queue length std.dev.:	0.800000
 ssd #0  elem #6 Instantaneous queue length maximum:	3
 ssd #0  elem #6 Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     16       8       8       0       0       0       0       0       0       0 
+      3       1       1       0       0       0       0       0       0       0 
 ssd #0  elem #6 Sub-optimal mapping penalty average: 	0.000000
 ssd #0  elem #6 Sub-optimal mapping penalty std.dev.:	0.000000
 ssd #0  elem #6 Sub-optimal mapping penalty maximum:	0
 ssd #0  elem #6 Sub-optimal mapping penalty distribution
    = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #7 Total Requests handled:	32
-ssd #0  elem #7 Requests per second:   	5.217409
-ssd #0  elem #7 Completely idle time:  	6027.617230   	0.982767
-ssd #0  elem #7 Response time average: 	0.545250
-ssd #0  elem #7 Response time std.dev.:	0.341879
-ssd #0  elem #7 Response time maximum:	1.222400
+ssd #0  elem #7 Total Requests handled:	4
+ssd #0  elem #7 Requests per second:   	0.750003
+ssd #0  elem #7 Completely idle time:  	5332.790600   	0.999902
+ssd #0  elem #7 Response time average: 	0.326500
+ssd #0  elem #7 Response time std.dev.:	0.146015
+ssd #0  elem #7 Response time maximum:	0.522400
 ssd #0  elem #7 Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
+      4       0       0       0       0       0       0       0       0       0 
 ssd #0  elem #7 Overlaps combined:     	0	0.000000
 ssd #0  elem #7 Read overlaps combined:	0	0.000000	0.000000
-ssd #0  elem #7 Number of reads:        16  	0.500000
-ssd #0  elem #7 Number of writes:       16  	0.500000
+ssd #0  elem #7 Number of reads:         8  	1.000000
+ssd #0  elem #7 Number of writes:        0  	0.000000
 ssd #0  elem #7 Sequential reads:        0  	0.000000  	0.000000
 ssd #0  elem #7 Sequential writes:       0  	0.000000  	0.000000
-ssd #0  elem #7 Base SPTF/SDF Different:      0 /     32 	0.000000
+ssd #0  elem #7 Base SPTF/SDF Different:      0 /      5 	0.000000
 ssd #0  elem #7 Timeout SPTF/SDF Different:      0 /      0 	0.000000
 ssd #0  elem #7 Priority SPTF/SDF Different:      0 /      0 	0.000000
-ssd #0  elem #7 runlistlen:              17.448000
-ssd #0  elem #7 runoutstanding:          6.979200
-ssd #0  elem #7 simtime:                 6133.313000
+ssd #0  elem #7 runlistlen:              1.306000
+ssd #0  elem #7 runoutstanding:          0.522400
+ssd #0  elem #7 simtime:                 5333.313000
 ssd #0  elem #7 warmuptime:              0.000000
 ssd #0  elem #7 setsize:                 1
-ssd #0  elem #7 Average # requests:      0.002845
+ssd #0  elem #7 Average # requests:      0.000245
 ssd #0  elem #7 Maximum # requests:      4
-ssd #0  elem #7 End # requests:          0
-ssd #0  elem #7 Average queue length:    0.001707
+ssd #0  elem #7 End # requests:          4
+ssd #0  elem #7 Average queue length:    0.000147
 ssd #0  elem #7 Maximum queue length:    3
-ssd #0  elem #7 End queued requests:     0
-ssd #0  elem #7 Queue time average: 	0.327150
-ssd #0  elem #7 Queue time std.dev.:	0.293694
-ssd #0  elem #7 Queue time maximum:	0.916800
+ssd #0  elem #7 End queued requests:     3
+ssd #0  elem #7 Queue time average: 	0.156720
+ssd #0  elem #7 Queue time std.dev.:	0.152304
+ssd #0  elem #7 Queue time maximum:	0.391800
 ssd #0  elem #7 Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
-     32       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #7 Avg # read requests:     0.000852
+      5       0       0       0       0       0       0       0       0       0 
+ssd #0  elem #7 Avg # read requests:     0.000245
 ssd #0  elem #7 Max # read requests:     4
-ssd #0  elem #7 Avg # write requests:    0.001993
-ssd #0  elem #7 Max # write requests:    4
-ssd #0  elem #7 Physical access time average: 	0.218100
-ssd #0  elem #7 Physical access time std.dev.:	0.087500
-ssd #0  elem #7 Physical access time maximum:	0.305600
+ssd #0  elem #7 Avg # write requests:    0.000000
+ssd #0  elem #7 Max # write requests:    0
+ssd #0  elem #7 Physical access time average: 	0.130600
+ssd #0  elem #7 Physical access time std.dev.:	0.000000
+ssd #0  elem #7 Physical access time maximum:	0.130600
 ssd #0  elem #7 Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
  0.001  	      0  	0.000000  	0.000000
@@ -22664,76 +22664,76 @@ ssd #0  elem #7 Physical access time distribution
  0.126  	      0  	0.000000  	0.000000
  0.128  	      0  	0.000000  	0.000000
  0.130  	      0  	0.000000  	0.000000
- 0.132  	     16  	0.500000  	0.500000
- 0.134  	      0  	0.000000  	0.500000
- 0.136  	      0  	0.000000  	0.500000
- 0.138  	      0  	0.000000  	0.500000
- 0.140  	      0  	0.000000  	0.500000
- 0.142  	      0  	0.000000  	0.500000
- 0.144  	      0  	0.000000  	0.500000
- 0.146  	      0  	0.000000  	0.500000
- 0.148  	      0  	0.000000  	0.500000
- 0.150  	      0  	0.000000  	0.500000
- 0.152  	      0  	0.000000  	0.500000
- 0.154  	      0  	0.000000  	0.500000
- 0.156  	      0  	0.000000  	0.500000
- 0.158  	      0  	0.000000  	0.500000
- 0.160  	      0  	0.000000  	0.500000
- 0.162  	      0  	0.000000  	0.500000
- 0.164  	      0  	0.000000  	0.500000
- 0.166  	      0  	0.000000  	0.500000
- 0.168  	      0  	0.000000  	0.500000
- 0.170  	      0  	0.000000  	0.500000
- 0.172  	      0  	0.000000  	0.500000
- 0.174  	      0  	0.000000  	0.500000
- 0.176  	      0  	0.000000  	0.500000
- 0.178  	      0  	0.000000  	0.500000
- 0.180  	      0  	0.000000  	0.500000
- 0.182  	      0  	0.000000  	0.500000
- 0.184  	      0  	0.000000  	0.500000
- 0.186  	      0  	0.000000  	0.500000
- 0.188  	      0  	0.000000  	0.500000
- 0.190  	      0  	0.000000  	0.500000
- 0.192  	      0  	0.000000  	0.500000
- 0.194  	      0  	0.000000  	0.500000
- 0.196  	      0  	0.000000  	0.500000
- 0.198  	      0  	0.000000  	0.500000
- 0.200  	      0  	0.000000  	0.500000
- 0.203  	      0  	0.000000  	0.500000
- 0.206  	      0  	0.000000  	0.500000
- 0.209  	      0  	0.000000  	0.500000
- 0.212  	      0  	0.000000  	0.500000
- 0.215  	      0  	0.000000  	0.500000
- 0.218  	      0  	0.000000  	0.500000
- 0.221  	      0  	0.000000  	0.500000
- 0.224  	      0  	0.000000  	0.500000
- 0.227  	      0  	0.000000  	0.500000
- 0.230  	      0  	0.000000  	0.500000
- 0.233  	      0  	0.000000  	0.500000
- 0.236  	      0  	0.000000  	0.500000
- 0.239  	      0  	0.000000  	0.500000
- 0.242  	      0  	0.000000  	0.500000
- 0.245  	      0  	0.000000  	0.500000
- 0.248  	      0  	0.000000  	0.500000
- 0.251  	      0  	0.000000  	0.500000
- 0.254  	      0  	0.000000  	0.500000
- 0.257  	      0  	0.000000  	0.500000
- 0.260  	      0  	0.000000  	0.500000
- 0.263  	      0  	0.000000  	0.500000
- 0.266  	      0  	0.000000  	0.500000
- 0.269  	      0  	0.000000  	0.500000
- 0.272  	      0  	0.000000  	0.500000
- 0.275  	      0  	0.000000  	0.500000
- 0.278  	      0  	0.000000  	0.500000
- 0.281  	      0  	0.000000  	0.500000
- 0.284  	      0  	0.000000  	0.500000
- 0.287  	      0  	0.000000  	0.500000
- 0.290  	      0  	0.000000  	0.500000
- 0.293  	      0  	0.000000  	0.500000
- 0.296  	      0  	0.000000  	0.500000
- 0.299  	      0  	0.000000  	0.500000
- 0.302  	      0  	0.000000  	0.500000
- 0.306  	     16  	0.500000  	1.000000
+ 0.132  	      4  	1.000000  	1.000000
+ 0.134  	      0  	0.000000  	1.000000
+ 0.136  	      0  	0.000000  	1.000000
+ 0.138  	      0  	0.000000  	1.000000
+ 0.140  	      0  	0.000000  	1.000000
+ 0.142  	      0  	0.000000  	1.000000
+ 0.144  	      0  	0.000000  	1.000000
+ 0.146  	      0  	0.000000  	1.000000
+ 0.148  	      0  	0.000000  	1.000000
+ 0.150  	      0  	0.000000  	1.000000
+ 0.152  	      0  	0.000000  	1.000000
+ 0.154  	      0  	0.000000  	1.000000
+ 0.156  	      0  	0.000000  	1.000000
+ 0.158  	      0  	0.000000  	1.000000
+ 0.160  	      0  	0.000000  	1.000000
+ 0.162  	      0  	0.000000  	1.000000
+ 0.164  	      0  	0.000000  	1.000000
+ 0.166  	      0  	0.000000  	1.000000
+ 0.168  	      0  	0.000000  	1.000000
+ 0.170  	      0  	0.000000  	1.000000
+ 0.172  	      0  	0.000000  	1.000000
+ 0.174  	      0  	0.000000  	1.000000
+ 0.176  	      0  	0.000000  	1.000000
+ 0.178  	      0  	0.000000  	1.000000
+ 0.180  	      0  	0.000000  	1.000000
+ 0.182  	      0  	0.000000  	1.000000
+ 0.184  	      0  	0.000000  	1.000000
+ 0.186  	      0  	0.000000  	1.000000
+ 0.188  	      0  	0.000000  	1.000000
+ 0.190  	      0  	0.000000  	1.000000
+ 0.192  	      0  	0.000000  	1.000000
+ 0.194  	      0  	0.000000  	1.000000
+ 0.196  	      0  	0.000000  	1.000000
+ 0.198  	      0  	0.000000  	1.000000
+ 0.200  	      0  	0.000000  	1.000000
+ 0.203  	      0  	0.000000  	1.000000
+ 0.206  	      0  	0.000000  	1.000000
+ 0.209  	      0  	0.000000  	1.000000
+ 0.212  	      0  	0.000000  	1.000000
+ 0.215  	      0  	0.000000  	1.000000
+ 0.218  	      0  	0.000000  	1.000000
+ 0.221  	      0  	0.000000  	1.000000
+ 0.224  	      0  	0.000000  	1.000000
+ 0.227  	      0  	0.000000  	1.000000
+ 0.230  	      0  	0.000000  	1.000000
+ 0.233  	      0  	0.000000  	1.000000
+ 0.236  	      0  	0.000000  	1.000000
+ 0.239  	      0  	0.000000  	1.000000
+ 0.242  	      0  	0.000000  	1.000000
+ 0.245  	      0  	0.000000  	1.000000
+ 0.248  	      0  	0.000000  	1.000000
+ 0.251  	      0  	0.000000  	1.000000
+ 0.254  	      0  	0.000000  	1.000000
+ 0.257  	      0  	0.000000  	1.000000
+ 0.260  	      0  	0.000000  	1.000000
+ 0.263  	      0  	0.000000  	1.000000
+ 0.266  	      0  	0.000000  	1.000000
+ 0.269  	      0  	0.000000  	1.000000
+ 0.272  	      0  	0.000000  	1.000000
+ 0.275  	      0  	0.000000  	1.000000
+ 0.278  	      0  	0.000000  	1.000000
+ 0.281  	      0  	0.000000  	1.000000
+ 0.284  	      0  	0.000000  	1.000000
+ 0.287  	      0  	0.000000  	1.000000
+ 0.290  	      0  	0.000000  	1.000000
+ 0.293  	      0  	0.000000  	1.000000
+ 0.296  	      0  	0.000000  	1.000000
+ 0.299  	      0  	0.000000  	1.000000
+ 0.302  	      0  	0.000000  	1.000000
+ 0.306  	      0  	0.000000  	1.000000
  0.310  	      0  	0.000000  	1.000000
  0.314  	      0  	0.000000  	1.000000
  0.318  	      0  	0.000000  	1.000000
@@ -24305,24 +24305,24 @@ ssd #0  elem #7 Batch size maximum:	0
 ssd #0  elem #7 Batch size distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0  elem #7 Instantaneous queue length average: 	1.750000
-ssd #0  elem #7 Instantaneous queue length std.dev.:	0.829156
+ssd #0  elem #7 Instantaneous queue length average: 	1.600000
+ssd #0  elem #7 Instantaneous queue length std.dev.:	0.800000
 ssd #0  elem #7 Instantaneous queue length maximum:	3
 ssd #0  elem #7 Instantaneous queue length distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
-     16       8       8       0       0       0       0       0       0       0 
+      3       1       1       0       0       0       0       0       0       0 
 ssd #0  elem #7 Sub-optimal mapping penalty average: 	0.000000
 ssd #0  elem #7 Sub-optimal mapping penalty std.dev.:	0.000000
 ssd #0  elem #7 Sub-optimal mapping penalty maximum:	0
 ssd #0  elem #7 Sub-optimal mapping penalty distribution
    = -1    =  0    =  1    =  2    =  3    =  4    < 10    < 20    <  4      4+
       0       0       0       0       0       0       0       0       0       0 
-ssd #0 Access time average: 	0.217228
-ssd #0 Access time std.dev.:	0.087717
-ssd #0 Access time maximum:	0.305600
+ssd #0 Access time average: 	0.129990
+ssd #0 Access time std.dev.:	0.003856
+ssd #0 Access time maximum:	0.130600
 ssd #0 Access time distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
-    258       0       0       0       0       0       0       0       0       0 
+     41       0       0       0       0       0       0       0       0       0 
 ssd #0 Total bus wait time: 0.000000
 ssd #0 Number of bus waits: 0
 
@@ -24340,9 +24340,9 @@ BUS STATISTICS
 
 Bus #0
 Bus #0 Total utilization time: 	0.00   	0.00000
-Bus #0 (bustop) Bus idle period length average: 	6133.313000
-Bus #0 (bustop) Bus idle period length std.dev.:	0.000056
-Bus #0 (bustop) Bus idle period length maximum:	6133.313000
+Bus #0 (bustop) Bus idle period length average: 	5333.313000
+Bus #0 (bustop) Bus idle period length std.dev.:	0.000000
+Bus #0 (bustop) Bus idle period length maximum:	5333.313000
 Bus #0 (bustop) Bus idle period length distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
       0       0       0       0       0       0       0       0       0       1 
@@ -24355,10 +24355,10 @@ Bus #0 (bustop) Arbitration wait time distribution
       0       0       0       0       0       0       0       0       0       0 
 
 Bus #1
-Bus #1 Total utilization time: 	6034.60   	0.98390
-Bus #1 (busHBA0) Bus idle period length average: 	98.716570
-Bus #1 (busHBA0) Bus idle period length std.dev.:	0.000000
-Bus #1 (busHBA0) Bus idle period length maximum:	98.716570
+Bus #1 Total utilization time: 	5222.90   	0.97930
+Bus #1 (busHBA0) Bus idle period length average: 	110.417570
+Bus #1 (busHBA0) Bus idle period length std.dev.:	0.000001
+Bus #1 (busHBA0) Bus idle period length maximum:	110.417570
 Bus #1 (busHBA0) Bus idle period length distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
       0       0       0       0       0       0       0       0       0       1 

@@ -2154,10 +2154,8 @@ void ssd_printstats (void)
     for (i=0; i<MAXDEVICES; i++) {
         ssd_t *currdisk = getssd(i);
         if (currdisk) {
-            for (j=0; j<8; j++) {
                 write_page_sum+=currdisk->stat.write_page_num;
                 write_req_sum+=currdisk->stat.write_req_num;
-            }
         }
     }
     fprintf(outputfile_adv, "Total Write Count : \t%d\n", write_page_sum);
