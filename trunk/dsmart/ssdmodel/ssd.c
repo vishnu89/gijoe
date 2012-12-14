@@ -681,7 +681,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
     /* **** CAREFUL ... HIJACKING tempint2 and tempptr2 fields here **** */
     curr->tempint2 = count;
     
-    adivim_assign_judgement ((void *) currdisk->timing_t, curr);
+    adivim_assign_judgement ((void *) currdisk, curr);
     
     while(count != 0) {
         

@@ -846,45 +846,45 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
             
             adivim_assign_flag_by_blkno (s->timing_t, reqs[i]->blk, &flag);
             point = flag;
-	   // fprintf(stdout, "In the pick - flag : %d\n", point); //for debug ADIVIM
+            // fprintf(stdout, "In the pick - flag : %d\n", point); //for debug ADIVIM
             switch(flag){
                 case 0 : //cold->cold
                 case 3 : //hot->cold
                     lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_capn;
-                    cbn = lpn / s->params.pages_per_block;
+                    cbn = lpn / (s->params.pages_per_block - 1);
                     prev_block = metadata->cold_lba_table[cbn];
                     //ASSERT(prev_block != -1) // because of convert, it can be -1
-		    if(point == 0)
-		    {
-			    ASSERT(prev_block != -1);
-		    }
-
-		    if(prev_block == -1)
-		    {
-			    prev_page = prev_block + (lpn % s->params.pages_per_block);
-			    prev_block  = ((lpn / s->params.pages_per_block) % s->params.pages_per_block);
-		    }
-		    else{
-                    		prev_page = prev_block + (lpn % s->params.pages_per_block);
-		    }
+                    if(point == 0)
+                    {
+                        ASSERT(prev_block != -1);
+                    }
+                    
+                    if(prev_block == -1)
+                    {
+                        prev_page = prev_block + (lpn % s->params.pages_per_block);
+                        prev_block  = ((lpn / s->params.pages_per_block) % s->params.pages_per_block);
+                    }
+                    else{
+                        prev_page = prev_block + (lpn % s->params.pages_per_block);
+                    }
                     break;
                 case 1 ://hot->hot
                 case 2 ://cold->hot
                     lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_hapn;
                     prev_page = metadata->hot_lba_table[lpn];
                     //ASSERT(prev_page != -1);  //because of convert, it can be -1
-		    if(point == 1)
-		    {
-			    ASSERT(prev_page != -1);
-		    }
-
+                    if(point == 1)
+                    {
+                        ASSERT(prev_page != -1);
+                    }
+                    
                     if(prev_page != -1){
-		    	prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
-		    }
-		    else{
-			    prev_block = SSD_PAGE_TO_BLOCK(prev_page, s) + ((lpn / s->params.planes_per_pkg) % s->params.planes_per_pkg);
-		    }
-                        break;
+                        prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
+                    }
+                    else{
+                        prev_block = SSD_PAGE_TO_BLOCK(prev_page, s) + ((lpn / s->params.planes_per_pkg) % s->params.planes_per_pkg);
+                    }
+                    break;
                 default :
                     fprintf(stderr, "Error : Wrong hot/cold type\n");
             }
@@ -900,8 +900,8 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
     
     // if all the reqs are reads, return
     if (filled == total) {
-    //    fprintf(stdout, "escape parunit - read\n"); //debug for ADIVIM
-	return parunits;
+        //    fprintf(stdout, "escape parunit - read\n"); //debug for ADIVIM
+        return parunits;
     }
     
     for (i = 0; i < total; i ++) {
@@ -1298,7 +1298,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
     
     ASSERT(filled == total);
     
-   // fprintf(stdout, "escape parunit\n"); //debug for ADIVIM 
+    // fprintf(stdout, "escape parunit\n"); //debug for ADIVIM
     return parunits;
 }
 
@@ -1396,7 +1396,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 
 void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, int flag, int perform, int e_num, int p_num)
 {
-   // fprintf(stdout, "Hi, in the cold_invalid\n"); //debug for ADIVIM
+    // fprintf(stdout, "Hi, in the cold_invalid\n"); //debug for ADIVIM
     
     //flag 1 : read, 0 : write
     int elem_num;
@@ -1418,7 +1418,7 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
     
     if(perform == 1)
     {
-//	fprintf(stdout, "----------------------WOW , you are main------------------------------\n"); //debug for ADIVIM
+        //	fprintf(stdout, "----------------------WOW , you are main------------------------------\n"); //debug for ADIVIM
         //element unknown.......
         //assuming elem_num.....
         for(i=0; i<=range ; i++)
@@ -1509,7 +1509,7 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
     }
     
     
- //   fprintf(stdout, "escape cold invalid\n"); //for debug ADIVIM
+    //   fprintf(stdout, "escape cold invalid\n"); //for debug ADIVIM
     
 }
 #endif

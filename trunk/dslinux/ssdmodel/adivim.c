@@ -8,8 +8,8 @@
 #define ADIVIM_INIT_TYPE ADIVIM_COLD
 #define ADIVIM_ALLOC_INIT_HAPN(length) (ADIVIM_APN) -1
 #define ADIVIM_ALLOC_INIT_CAPN(length) adivim_alloc_apn(*adivim_free_capn_list, length)
-//#include "disksim_global.h"
 #include <stdbool.h>
+#include <stdlib.h>
 #include "adivim.h"
 #include "ssd_timing.h"
 #include "modules/ssdmodel_ssd_param.h"
@@ -72,6 +72,7 @@ ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section);
  */
 ADIVIM_SECTION adivim_update_section_list (ioreq_event *req);
 
+void adivim_extand_lba_table (ssd_t *s);
 listnode *_adivim_ll_insert_at_head(listnode *start, listnode *toinsert);
 void adivim_ll_apply (listnode *start, bool (*job) (listnode *start, listnode *target, void *arg), void *arg);
 void adivim_free_apn (listnode *start, ADIVIM_APN starting, ADIVIM_APN length);
@@ -95,8 +96,10 @@ struct my_timing_t {
 
 void adivim_assign_judgement (void *t, ioreq_event *req)
 {
-    struct my_timing_t *tt = (struct my_timing_t *) t;
+    ssd_t *s = (ssd_t *) t;
+    struct my_timing_t *tt = (struct my_timing_t *) s->timing_t;
     ADIVIM_SECTION *section = (ADIVIM_SECTION *) malloc (sizeof (ADIVIM_SECTION));
+
     
     section->starting = (req->blkno)/(tt->params->page_size);
     section->length = (req->bcount)/(tt->params->page_size);
@@ -114,6 +117,78 @@ void adivim_assign_judgement (void *t, ioreq_event *req)
     
     adivim_section_job (*adivim_section_list, section);
     adivim_print_section ();
+    adivim_extand_lba_table (s);
+}
+
+void adivim_extand_lba_table (ssd_t *s)
+{
+    int elem, max_hot_lba_size, max_cold_lba_size;
+    ADIVIM_APN max_hapn, max_capn;
+    ADIVIM_APN_ALLOC *apn_list_bound;
+    
+    // check largest hapn and capn is larger than lba table size or not. If so, realloc lba table large enought to afford it's apn.
+    // find largest hot_lba_size and cold_lba_size among elements
+    max_hot_lba_size = 0;
+    max_cold_lba_size = 0;
+    for (elem = 0; elem < s->params.planes_per_pkg; elem++)
+    {
+        if (max_hot_lba_size < s->elements[elem].metadata.hot_lba_size)
+        {
+            max_hot_lba_size = s->elements[elem].metadata.hot_lba_size;
+        }
+        
+        if (max_cold_lba_size < s->elements[elem].metadata.cold_lba_size)
+        {
+            max_cold_lba_size = s->elements[elem].metadata.cold_lba_size;
+        }
+    }
+    
+    //find max hapn and capn
+    max_hapn = 0;
+    max_capn = 0;
+    
+    apn_list_bound = (ADIVIM_APN_ALLOC *) ((ll_get_tail (*adivim_free_hapn_list)));
+    max_hapn = apn_list_bound->starting;
+    
+    apn_list_bound = (ADIVIM_APN_ALLOC *) ((ll_get_tail (*adivim_free_capn_list)));
+    max_capn = apn_list_bound->starting;
+    
+    // check if need to be realloc or not
+    if (max_hot_lba_size < max_hapn)
+    {
+        for (elem = 0; elem < s->params.planes_per_pkg; elem++)
+        {
+            int *new_hot_lba_table = (int *) realloc (s->elements[elem].metadata.hot_lba_table, max_hapn * sizeof(int));
+            
+            if (new_hot_lba_table == NULL)
+            {
+                printf ("adivim_extand_lba_table: realloc fail.");
+                ASSERT (new_hot_lba_table != NULL);
+            }
+            else
+            {
+                s->elements[elem].metadata.hot_lba_table = new_hot_lba_table;
+            }
+        }
+    }
+    
+    if (max_cold_lba_size < max_capn)
+    {
+        for (elem = 0; elem < s->params.planes_per_pkg; elem++)
+        {
+            int *new_cold_lba_table = (int *) realloc (s->elements[elem].metadata.cold_lba_table, max_capn * sizeof(int));
+            
+            if (new_cold_lba_table == NULL)
+            {
+                printf ("adivim_extand_lba_table: realloc fail.");
+                ASSERT (new_cold_lba_table != NULL);
+            }
+            else
+            {
+                s->elements[elem].metadata.cold_lba_table = new_cold_lba_table;
+            }
+        }
+    }
 }
 
 void adivim_assign_flag_by_blkno (void *t, int blkno, int *flag)
