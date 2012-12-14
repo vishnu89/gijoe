@@ -334,7 +334,8 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
             metadata->plane_meta[prev_plane].valid_pages --;
             ssd_assert_valid_pages(prev_plane, metadata, s);
         }
-    } else {
+    } else
+    {
         fprintf(stderr, "Error: This case should not be executed\n");
     }
     
@@ -430,9 +431,9 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
     
     // increment the usage count on the active block
     s->stat.write_page_num++;
-	s->stat.write_req_num++;    //ADIVIM
+    s->stat.write_req_num++;    //ADIVIM
     
-	metadata->block_usage[active_block].page[pagepos_in_block] = lpn;
+    metadata->block_usage[active_block].page[pagepos_in_block] = lpn;
     metadata->block_usage[active_block].num_valid ++;
     metadata->plane_meta[active_plane].valid_pages ++;
     ssd_assert_valid_pages(active_plane, metadata, s);
@@ -476,109 +477,109 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
 #ifdef ADIVIM
 double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_num, int *bucket, int range)
 {
-	double cost = 0;
-	int i, j;
-	//unsigned int temp_lpn;
+    double cost = 0;
+    int i, j;
+    //unsigned int temp_lpn;
     int prev_block;
     int pagepos_in_block;
     int cbn;
     int k;
-	cbn = bucket[0] / (s->params.pages_per_block - 1);
-	
-	for(k = 1 ; k < range ; k++)
-	{
-		ASSERT(cbn == (bucket[k] / (s->params.pages_per_block - 1)));
-	}
-	
-	prev_block = metadata->cold_lba_table[cbn];
+    cbn = bucket[0] / (s->params.pages_per_block - 1);
+    
+    for(k = 1 ; k < range ; k++)
+    {
+        ASSERT(cbn == (bucket[k] / (s->params.pages_per_block - 1)));
+    }
+    
+    prev_block = metadata->cold_lba_table[cbn];
     
     // if this cbn is already written
-	if(prev_block != -1)
-	{
-		int found;
+    if(prev_block != -1)
+    {
+        int found;
         
         // check if there is no content update and totally added or not. If totally added then we don't need to move block. Just insert!
-		for(i = 0; i < range ; i++)
-		{
-			pagepos_in_block = bucket[i] % (s->params.pages_per_block - 1);
+        for(i = 0; i < range ; i++)
+        {
+            pagepos_in_block = bucket[i] % (s->params.pages_per_block - 1);
             
-			if(metadata->block_usage[prev_block].page[pagepos_in_block] != -1)
-			{
-				found = 1;
-				break;
-			}
-		}
+            if(metadata->block_usage[prev_block].page[pagepos_in_block] != -1)
+            {
+                found = 1;
+                break;
+            }
+        }
         
         // Unfortunately need to move block and change mapping
-		if(found == 1)
-		{
+        if(found == 1)
+        {
             // Ohhh. can not write into the previous block. New wine is stored in new wineskins.
             if (prev_block == metadata->cold_active_block)
                 _ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
             
             ASSERT (prev_block != metadata->cold_active_block);
             
-			j = 0;
+            j = 0;
             
-			metadata->block_usage[metadata->cold_active_block].num_valid = 0;
+            metadata->block_usage[metadata->cold_active_block].num_valid = 0;
             
             // for scanning all pages in the block
-			for(i = 0; i < (s->params.pages_per_block - 1) ; i++)
-			{
+            for(i = 0; i < (s->params.pages_per_block - 1) ; i++)
+            {
                 // if likely to be new wine (not certain yet)
-				if(j < range)
-				{
-					pagepos_in_block = bucket[j] % (s->params.pages_per_block - 1);
+                if(j < range)
+                {
+                    pagepos_in_block = bucket[j] % (s->params.pages_per_block - 1);
                     // if new wine
-					if(i == pagepos_in_block)
-					{
-						metadata->block_usage[metadata->cold_active_block].page[i] = bucket[j];
-						metadata->block_usage[metadata->cold_active_block].num_valid++;
-						j++;
-					}
-					else
-					{
+                    if(i == pagepos_in_block)
+                    {
+                        metadata->block_usage[metadata->cold_active_block].page[i] = bucket[j];
+                        metadata->block_usage[metadata->cold_active_block].num_valid++;
+                        j++;
+                    }
+                    else
+                    {
                         // else copy ordinary wine to new wineskin
-						if(metadata->block_usage[prev_block].page[i] != -1)
-						{
-							metadata->block_usage[metadata->cold_active_block].num_valid++;
-						}
+                        if(metadata->block_usage[prev_block].page[i] != -1)
+                        {
+                            metadata->block_usage[metadata->cold_active_block].num_valid++;
+                        }
                         
-						metadata->block_usage[metadata->cold_active_block].page[i] =
+                        metadata->block_usage[metadata->cold_active_block].page[i] =
                         metadata->block_usage[prev_block].page[i];
-					}
-				}
-				else
+                    }
+                }
+                else
                 {
                     // else copy ordinary wine to new wineskin
-					if(metadata->block_usage[prev_block].page[i] != -1)
-					{
-						metadata->block_usage[metadata->cold_active_block].num_valid++;
-					}
+                    if(metadata->block_usage[prev_block].page[i] != -1)
+                    {
+                        metadata->block_usage[metadata->cold_active_block].num_valid++;
+                    }
                     
-					metadata->block_usage[metadata->cold_active_block].page[i] =
+                    metadata->block_usage[metadata->cold_active_block].page[i] =
                     metadata->block_usage[prev_block].page[i];
-				}
+                }
                 
                 // remove old wineskin
-				metadata->block_usage[prev_block].page[i] = -1; //s.s revise -1 to -2 ADIVIM
-			}
+                metadata->block_usage[prev_block].page[i] = -1; //s.s revise -1 to -2 ADIVIM
+            }
             
             // some cost statics
-			cost = s->params.page_write_latency * metadata->block_usage[metadata->cold_active_block].num_valid;
-			s->stat.write_page_num+=metadata->block_usage[metadata->cold_active_block].num_valid;
-			s->stat.write_req_num++;	//ADIVIM
+            cost = s->params.page_write_latency * metadata->block_usage[metadata->cold_active_block].num_valid;
+            s->stat.write_page_num+=metadata->block_usage[metadata->cold_active_block].num_valid;
+            s->stat.write_req_num++;	//ADIVIM
             
-			// invalid prev_block
+            // invalid prev_block
             metadata->block_usage[prev_block].num_valid = 0;
-			metadata->block_usage[prev_block].state = SSD_BLOCK_SEALED;
+            metadata->block_usage[prev_block].state = SSD_BLOCK_SEALED;
             
             // update cold_lba_table
-			metadata->cold_lba_table[cbn] = metadata->cold_active_block;
+            metadata->cold_lba_table[cbn] = metadata->cold_active_block;
             
             // when even the last page in this block is written, seal the block and record summary
             
-			if(metadata->block_usage[metadata->cold_active_block].num_valid == (s->params.pages_per_block - 1))
+            if(metadata->block_usage[metadata->cold_active_block].num_valid == (s->params.pages_per_block - 1))
             {
                 // cost of transferring the summary page data
                 cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
@@ -598,49 +599,49 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
             // allocate new active_block
             _ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
             
-		}
-		else
-		{
+        }
+        else
+        {
             // else just add new content
-			// ASSERT(prev_block == metadata->cold_active_block);
+            // ASSERT(prev_block == metadata->cold_active_block);
             
-			for(i = 0 ; i< range ; i++)
-			{
-				pagepos_in_block = bucket[i] % (s->params.pages_per_block - 1);
-				metadata->block_usage[prev_block].page[pagepos_in_block] = bucket[i];
-				metadata->block_usage[prev_block].num_valid++;
-			}
+            for(i = 0 ; i< range ; i++)
+            {
+                pagepos_in_block = bucket[i] % (s->params.pages_per_block - 1);
+                metadata->block_usage[prev_block].page[pagepos_in_block] = bucket[i];
+                metadata->block_usage[prev_block].num_valid++;
+            }
             
-			cost = s->params.page_write_latency * range;
+            cost = s->params.page_write_latency * range;
             
-			if(metadata->block_usage[prev_block].num_valid == (s->params.pages_per_block - 1)){
+            if(metadata->block_usage[prev_block].num_valid == (s->params.pages_per_block - 1)){
                 // cost of transferring the summary page data
-        		cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
+                cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
                 
-        		// cost of writing the summary page data
-        		cost += s->params.page_write_latency;
+                // cost of writing the summary page data
+                cost += s->params.page_write_latency;
                 
-        		// seal the last summary page. since we use the summary page
-        		// as a metadata, we don't count it as a valid data page.
-        		metadata->block_usage[prev_block].page[s->params.pages_per_block - 1] = -2;
-        		metadata->block_usage[prev_block].state = SSD_BLOCK_SEALED;
-        		//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
+                // seal the last summary page. since we use the summary page
+                // as a metadata, we don't count it as a valid data page.
+                metadata->block_usage[prev_block].page[s->params.pages_per_block - 1] = -2;
+                metadata->block_usage[prev_block].state = SSD_BLOCK_SEALED;
+                //printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
                 
                 _ssd_alloc_active_block(metadata->block_usage[prev_block].plane_num, elem_num, s, 0);
             }
-		}
-	}
-	else
-	{
+        }
+    }
+    else
+    {
         // else this cbn is being written first time
         
         // write into active block
-		for(i = 0; i< range ; i++)
-		{
-			pagepos_in_block = bucket[i] % (s->params.pages_per_block - 1);
-			metadata->block_usage[metadata->cold_active_block].page[pagepos_in_block] = bucket[i];
-			metadata->block_usage[metadata->cold_active_block].num_valid++;
-		}
+        for(i = 0; i< range ; i++)
+        {
+            pagepos_in_block = bucket[i] % (s->params.pages_per_block - 1);
+            metadata->block_usage[metadata->cold_active_block].page[pagepos_in_block] = bucket[i];
+            metadata->block_usage[metadata->cold_active_block].num_valid++;
+        }
         
         // establish mapping
         metadata->cold_lba_table [cbn] = metadata->cold_active_block;
@@ -671,24 +672,24 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
         
         
         // when even the last page in this block is written, seal the block and record summary
-		if(metadata->block_usage[metadata->cold_active_block].num_valid == (s->params.pages_per_block - 1)){
+        if(metadata->block_usage[metadata->cold_active_block].num_valid == (s->params.pages_per_block - 1)){
             // cost of transferring the summary page data
-        	cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
-	    	// cost of writing the summary page data
-        	cost += s->params.page_write_latency;
+            cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
+            // cost of writing the summary page data
+            cost += s->params.page_write_latency;
             
-        	// seal the last summary page. since we use the summary page
-        	// as a metadata, we don't count it as a valid data page.
-        	metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -2; //s.s revise -1 to -2 ADIVIM
-        	metadata->block_usage[metadata->cold_active_block].state = SSD_BLOCK_SEALED;
-        	//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
+            // seal the last summary page. since we use the summary page
+            // as a metadata, we don't count it as a valid data page.
+            metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -2; //s.s revise -1 to -2 ADIVIM
+            metadata->block_usage[metadata->cold_active_block].state = SSD_BLOCK_SEALED;
+            //printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
         }
         
-		// allocate new active_block
+        // allocate new active_block
         _ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
         
         
-	}
+    }
     
     return cost;
 }
@@ -786,14 +787,16 @@ void _ssd_alloc_active_block(int plane_num, int elem_num, ssd_t *s, int flag)
         pm->active_page = active_block * s->params.pages_per_block;
         metadata->active_page = pm->active_page;
 #else
-        if(flag == 1){
+        if(flag == 1)
+        {
             pm->hot_active_page = active_block * s->params.pages_per_block;
-        	metadata->hot_active_page = pm->hot_active_page;
+            metadata->hot_active_page = pm->hot_active_page;
             metadata->block_usage[active_block].type = 1;
         }
-        else{
+        else
+        {
             pm->cold_active_block = active_block;
-        	metadata->cold_active_block = pm->cold_active_block;
+            metadata->cold_active_block = pm->cold_active_block;
             metadata->block_usage[active_block].type = 0;
         }
         
@@ -908,9 +911,21 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     if (judgement.adivim_capn == -1)
                     {
                         // pure hot
-                        prev_page = -1;
-                        prev_block = -1;
-                        prev_bsn = -1;
+                        ADIVIM_APN hapn = judgement.adivim_hapn;
+                        prev_page = metadata->hot_lba_table [hapn];
+                        
+                        // if it is first time writting. Mapping is initilized to -1 all (different from original ssd)
+                        if (prev_page == -1)
+                        {
+                            // there is no prev block and bsn
+                            prev_block = -1;
+                            prev_bsn = -1;
+                        }
+                        else
+                        {
+                            prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
+                            prev_bsn = metadata->block_usage[prev_block].bsn;
+                        }
                     }
                     else
                     {
@@ -926,9 +941,21 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     if (judgement.adivim_hapn == -1)
                     {
                         // pure cold
-                        prev_page = -1;
-                        prev_block = -1;
-                        prev_bsn = -1;
+                        ADIVIM_APN capn = judgement.adivim_capn;
+                        prev_block = metadata->cold_lba_table[capn / (s->params.pages_per_block - 1)];
+                        
+                        // if it is first time writting. Mapping is initilized to -1 all (different from original ssd)
+                        if (prev_block == -1)
+                        {
+                            // there is no prev block and bsn
+                            prev_page = -1;
+                            prev_bsn = -1;
+                        }
+                        else
+                        {
+                            prev_page = prev_block * s->params.pages_per_block + capn % (s->params.pages_per_block - 1);
+                            prev_bsn = metadata->block_usage[prev_block].bsn;
+                        }
                     }
                     else
                     {
@@ -1252,39 +1279,39 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
 #ifdef ADIVIM
 void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int blk, int range, int flag)
 {
-	//flag 1 : read, 0 : write
+    //flag 1 : read, 0 : write
     
-	int elem_num;
-	int i;
-	ssd_element_metadata* temp;
+    int elem_num;
+    int i;
+    ssd_element_metadata* temp;
     //struct section* sect;
-	unsigned int temp_block;
-	unsigned int temp_pos;
-	unsigned int temp_page;
-	int temp_lpn;
-	int temp_blk = blk;
-	int cost = 0;
+    unsigned int temp_block;
+    unsigned int temp_pos;
+    unsigned int temp_page;
+    int temp_lpn;
+    int temp_blk = blk;
+    int cost = 0;
     
-	for(i=0; i < (range + 1) ; i++)
-	{
-		elem_num = (temp_blk/(s->params.element_stride_pages*s->params.page_size)) % s->params.nelements;
-		temp = &(s->elements[elem_num].metadata);
+    for(i=0; i < (range + 1) ; i++)
+    {
+        elem_num = (temp_blk/(s->params.element_stride_pages*s->params.page_size)) % s->params.nelements;
+        temp = &(s->elements[elem_num].metadata);
         //sect = get_from_ADIVIM(temp_blk);
-		temp_lpn = (adivim_get_judgement_by_blkno(s->timing_t, blk)).adivim_hapn;
-		temp_page = temp->hot_lba_table[temp_lpn];
-		temp_block = SSD_PAGE_TO_BLOCK(temp_page, s);
-		temp_pos = temp_page % s->params.pages_per_block;
+        temp_lpn = (adivim_get_judgement_by_blkno(s->timing_t, blk)).adivim_hapn;
+        temp_page = temp->hot_lba_table[temp_lpn];
+        temp_block = SSD_PAGE_TO_BLOCK(temp_page, s);
+        temp_pos = temp_page % s->params.pages_per_block;
         
-		temp->block_usage[temp_block].num_valid--;
-		temp->block_usage[temp_block].page[temp_pos] = -2;
-		temp->hot_lba_table[temp_lpn] = -1; /// doubt.....
+        temp->block_usage[temp_block].num_valid--;
+        temp->block_usage[temp_block].page[temp_pos] = -2;
+        temp->hot_lba_table[temp_lpn] = -1; /// doubt.....
         
-		temp_blk += s->params.page_size;
-		
-	}
+        temp_blk += s->params.page_size;
+        
+    }
     
-	if(flag == 1)
-	{
+    if(flag == 1)
+    {
         //struct section* sect;
         int ii, jj;
         int b_size = 0;
@@ -1294,76 +1321,74 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
         unsigned int *bucket;
         
         //sect = get_from_ADIVIM(blk);
-		save_lpn = (unsigned int*)malloc(sizeof(unsigned int) * (range + 1));
-		ii = 0;
-		iter = 1;
-		b_size = 1;
-		save_lpn[ii] = (adivim_get_judgement_by_blkno(s->timing_t, blk)).adivim_capn;
-		cbn = save_lpn[ii] / (s->params.pages_per_block - 1);
-		
-        
-		for(ii= 1; ii < (range + 1) ; ii++)
-		{
-			//sect = get_from_ADIVIM(blk);
-			save_lpn[ii] = (adivim_get_judgement_by_blkno(s->timing_t, blk)).adivim_capn;
-			if(cbn != (save_lpn[ii] / (s->params.pages_per_block - 1)))
-			{
-				cbn = save_lpn[ii] / (s->params.pages_per_block - 1);
-				iter++;
-				bucket = (unsigned int*)malloc(sizeof(unsigned int) * b_size);
-				for(jj= b_size; jj > 0 ; jj--)
-				{
-					bucket[b_size-jj] = save_lpn[ii-jj];
-				}
-				cost += _ssd_write_block_osr(s, metadata, act_elem_num, (int *) bucket, b_size);
-				free(bucket);
-				b_size = 1;
-			}
-			b_size++;
-			blk += s->params.page_size;
-		}
+        save_lpn = (unsigned int*)malloc(sizeof(unsigned int) * (range + 1));
+        ii = 0;
+        iter = 1;
+        b_size = 1;
+        save_lpn[ii] = (adivim_get_judgement_by_blkno(s->timing_t, blk)).adivim_capn;
+        cbn = save_lpn[ii] / (s->params.pages_per_block - 1);
         
         
-		bucket = (unsigned int*)malloc(sizeof(unsigned int) * b_size);
-		
-		for(jj=b_size ; jj > 0 ; jj--)
-		{
-			bucket[b_size-jj] = save_lpn[ii-jj];
-		}
-		
-		cost += _ssd_write_block_osr(s, metadata, elem_num, (int *) bucket, b_size);
+        for(ii= 1; ii < (range + 1) ; ii++)
+        {
+            //sect = get_from_ADIVIM(blk);
+            save_lpn[ii] = (adivim_get_judgement_by_blkno(s->timing_t, blk)).adivim_capn;
+            if(cbn != (save_lpn[ii] / (s->params.pages_per_block - 1)))
+            {
+                cbn = save_lpn[ii] / (s->params.pages_per_block - 1);
+                iter++;
+                bucket = (unsigned int*)malloc(sizeof(unsigned int) * b_size);
+                for(jj= b_size; jj > 0 ; jj--)
+                {
+                    bucket[b_size-jj] = save_lpn[ii-jj];
+                }
+                cost += _ssd_write_block_osr(s, metadata, act_elem_num, (int *) bucket, b_size);
+                free(bucket);
+                b_size = 1;
+            }
+            b_size++;
+            blk += s->params.page_size;
+        }
         
-		free(bucket);
-		free(save_lpn);
-		
-	}
+        
+        bucket = (unsigned int*)malloc(sizeof(unsigned int) * b_size);
+        
+        for(jj=b_size ; jj > 0 ; jj--)
+        {
+            bucket[b_size-jj] = save_lpn[ii-jj];
+        }
+        
+        cost += _ssd_write_block_osr(s, metadata, elem_num, (int *) bucket, b_size);
+        
+        free(bucket);
+        free(save_lpn);
+        
+    }
     
     adivim_do_not_need_to_keep_both_apn (s->timing_t, blk, range+1);
 }
 
 void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, int flag, int perform, int e_num, int p_num)
 {
-	//flag 1 : read, 0 : write
-	int elem_num;
-	int i;
-	ssd_element_metadata* temp;
-	
-	struct section* sect;
-	
-	unsigned int temp_block;
-	unsigned int temp_pos;
-	unsigned int temp_page;
-	
-	int temp_lpn;
-	int temp_cbn;
-	int temp_blk = blk;
-	int cost = 0;
+    //flag 1 : read, 0 : write
+    int elem_num;
+    int i;
+    ssd_element_metadata* temp;
     
-	int lpn;
+    struct section* sect;
     
-	int plane_num = 0;
+    unsigned int temp_block;
+    unsigned int temp_pos;
+    unsigned int temp_page;
     
-	if(perform == 1)
+    int temp_lpn;
+    int temp_cbn;
+    int temp_blk = blk;
+    int cost = 0;
+    
+    int lpn;
+    
+    if(perform == 1)
     {
         //element unknown.......
         //assuming elem_num.....
@@ -1408,7 +1433,7 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
         
         //	fprintf(stdout, "escape for loop\n"); //for debug ADIVIM
         
-	}
+    }
     
     if(flag == 1)
     {
@@ -1559,6 +1584,7 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
                 //get the request
                 r = (ssd_req *)n->data;
                 int plane_num = r->plane_num;
+                
                 if(r->is_read){
                     switch(r->hc_flag){
                         case 0://cold->cold
@@ -1592,17 +1618,10 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
                             parunit_op_cost[i] = s->params.page_read_latency;
                             break;
                         case 2://cold->hot
-                            
-                            
-                            
                             cold_invalid (s, metadata, r->blk, r->range, 1 , r->perform, elem_num, plane_num);
-                            
-                            
                             parunit_op_cost[i] = s->params.page_read_latency;
                             break;
                         case 3://hot->cold
-                            
-                            
                             hot_invalid(s, metadata, elem_num, r->blk, r->range, 1);
                             
                             //sect = get_from_ADIVIM(r->blk);

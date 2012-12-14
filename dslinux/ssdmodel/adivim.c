@@ -564,8 +564,8 @@ bool _adivim_section_do_not_need_to_keep_both_apn (listnode *start,listnode *tar
                     datajudge->adivim_hapn = -1;
                     break;
             }
+            data->do_not_need_to_keep_both_apn_requested = 0;
         }
-        
         return false;
     }
     
