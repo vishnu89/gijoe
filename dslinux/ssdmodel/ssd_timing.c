@@ -472,9 +472,14 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
     int prev_block;
     int pagepos_in_block;
     int cbn;
-    
+    int k;
 	cbn = bucket[0] / (s->params.pages_per_block - 1);
-    
+	
+	for(k = 1 ; k < range ; k++)
+	{
+		ASSERT(cbn == (bucket[k] / (s->params.pages_per_block - 1)));
+	}
+	
 	prev_block = metadata->cold_lba_table[cbn];
     
     // if this cbn is already written
@@ -483,9 +488,9 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 		int found;
         
         // check if there is no content update and totally added or not. If totally added then we don't need to move block. Just insert!
-		for(i = range ; i > 0 ; i --)
+		for(i = 0; i < range ; i++)
 		{
-			pagepos_in_block = bucket[range-i] % (s->params.pages_per_block - 1);
+			pagepos_in_block = bucket[i] % (s->params.pages_per_block - 1);
             
 			if(metadata->block_usage[prev_block].page[pagepos_in_block] != -1)
 			{
@@ -530,11 +535,11 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 						}
                         
 						metadata->block_usage[metadata->cold_active_block].page[i] =
-                        metadata->block_usage[prev_block].page[i];
+                        				metadata->block_usage[prev_block].page[i];
 					}
 				}
 				else
-                {
+                		{
                     // else copy ordinary wine to new wineskin
 					if(metadata->block_usage[prev_block].page[i] != -1)
 					{
@@ -542,11 +547,11 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 					}
                     
 					metadata->block_usage[metadata->cold_active_block].page[i] =
-                    metadata->block_usage[prev_block].page[i];
+                    			metadata->block_usage[prev_block].page[i];
 				}
                 
                 // remove old wineskin
-				metadata->block_usage[prev_block].page[i] = -1;
+				metadata->block_usage[prev_block].page[i] = -1; //s.s revise -1 to -2 ADIVIM
 			}
             
             // some cost statics
@@ -555,50 +560,53 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 			s->stat.write_req_num++;	//ADIVIM
             
 			// invalid prev_block
-            metadata->block_usage[prev_block].num_valid = 0;
+            		metadata->block_usage[prev_block].num_valid = 0;
 			metadata->block_usage[prev_block].state = SSD_BLOCK_SEALED;
             
             // update cold_lba_table
 			metadata->cold_lba_table[cbn] = metadata->cold_active_block;
             
-            // allocate new active_block
-            _ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
+
             
-            // when even the last page in this block is written, seal the block and record summary
+            		// when even the last page in this block is written, seal the block and record summary
+		
 			if(metadata->block_usage[metadata->cold_active_block].num_valid == (s->params.pages_per_block - 1))
-            {
-                // cost of transferring the summary page data
-        		cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
+            		{
+                		// cost of transferring the summary page data
+        			cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
                 
-        		// cost of writing the summary page data
-        		cost += s->params.page_write_latency;
+        			// cost of writing the summary page data
+        			cost += s->params.page_write_latency;
                 
-        		// seal the last summary page. since we use the summary page
-        		// as a metadata, we don't count it as a valid data page.
-        		metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -1;
-        		metadata->block_usage[metadata->cold_active_block].state = SSD_BLOCK_SEALED;
-        		//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
+        			// seal the last summary page. since we use the summary page
+        			// as a metadata, we don't count it as a valid data page.
+        			metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -2; //s.s revise -1 to -2 ADIVIM
+        			metadata->block_usage[metadata->cold_active_block].state = SSD_BLOCK_SEALED;
+        			//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
                 
-                //_ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
-            }
+                	
+            		}
+
+            		// allocate new active_block
+            		_ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
+
 		}
 		else
 		{
             // else just add new content
 			// ASSERT(prev_block == metadata->cold_active_block);
             
-			for(i = range ; i > 0; i--)
+			for(i = 0 ; i< range ; i++)
 			{
-				pagepos_in_block = bucket[range-i] % (s->params.pages_per_block - 1);
-                
-				metadata->block_usage[prev_block].page[pagepos_in_block] = bucket[range-i];
+				pagepos_in_block = bucket[i] % (s->params.pages_per_block - 1);
+				metadata->block_usage[prev_block].page[pagepos_in_block] = bucket[i];
 				metadata->block_usage[prev_block].num_valid++;
 			}
             
 			cost = s->params.page_write_latency * range;
             
 			if(metadata->block_usage[prev_block].num_valid == (s->params.pages_per_block - 1)){
-                // cost of transferring the summary page data
+                	// cost of transferring the summary page data
         		cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
                 
         		// cost of writing the summary page data
@@ -610,8 +618,8 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
         		metadata->block_usage[prev_block].state = SSD_BLOCK_SEALED;
         		//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
                 
-                //_ssd_alloc_active_block(metadata->block_usage[prev_block].plane_num, elem_num, s, 0);
-            }
+                	_ssd_alloc_active_block(metadata->block_usage[prev_block].plane_num, elem_num, s, 0);
+            		}
 		}
 	}
 	else
@@ -619,16 +627,19 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
         // else this cbn is being written first time
         
         // write into active block
-		for(i = range ; i > 0; i--)
+		for(i = 0; i< range ; i++)
 		{
-			pagepos_in_block = bucket[range-i] % (s->params.pages_per_block - 1);
-			metadata->block_usage[metadata->cold_active_block].page[pagepos_in_block] = bucket[range-i];
+			pagepos_in_block = bucket[i] % (s->params.pages_per_block - 1);
+			metadata->block_usage[metadata->cold_active_block].page[pagepos_in_block] = bucket[i];
 			metadata->block_usage[metadata->cold_active_block].num_valid++;
 		}
         
         // establish mapping
         metadata->cold_lba_table [cbn] = metadata->cold_active_block;
-        
+ 
+ 
+ // s.j code
+ /*       
         // allocate new active_block
         _ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
         
@@ -641,12 +652,34 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
             
         	// seal the last summary page. since we use the summary page
         	// as a metadata, we don't count it as a valid data page.
-        	metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -1;
+        	metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -2;
         	metadata->block_usage[metadata->cold_active_block].state = SSD_BLOCK_SEALED;
         	//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
             
             //_ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
-        }
+        	}
+*/
+  // s.s revise code
+        
+        
+        // when even the last page in this block is written, seal the block and record summary
+		if(metadata->block_usage[metadata->cold_active_block].num_valid == (s->params.pages_per_block - 1)){
+            // cost of transferring the summary page data
+        	cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
+	    	// cost of writing the summary page data
+        	cost += s->params.page_write_latency;
+            
+        	// seal the last summary page. since we use the summary page
+        	// as a metadata, we don't count it as a valid data page.
+        	metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -2; //s.s revise -1 to -2 ADIVIM
+        	metadata->block_usage[metadata->cold_active_block].state = SSD_BLOCK_SEALED;
+        	//printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
+            	}
+
+		// allocate new active_block
+        	_ssd_alloc_active_block(metadata->block_usage[metadata->cold_active_block].plane_num, elem_num, s, 0);
+        	
+
 	}
     
     return cost;

@@ -551,7 +551,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
 				}
                 
                 // remove old wineskin
-				metadata->block_usage[prev_block].page[i] = -2; //s.s revise -1 to -2 ADIVIM
+				metadata->block_usage[prev_block].page[i] = -1; //s.s revise -1 to -2 ADIVIM
 			}
             
             // some cost statics
