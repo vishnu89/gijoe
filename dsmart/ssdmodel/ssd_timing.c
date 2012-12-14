@@ -1316,6 +1316,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
     unsigned int temp_page;
     int temp_lpn;
     int temp_blk = blk;
+    int save_blk = blk;
     int cost = 0;
     
     for(i=0; i < (range + 1) ; i++)
@@ -1391,7 +1392,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
         
     }
     
-    adivim_do_not_need_to_keep_both_apn (s->timing_t, blk, range+1);
+    adivim_do_not_need_to_keep_both_apn (s->timing_t, save_blk, range+1);
 }
 
 void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, int flag, int perform, int e_num, int p_num)
