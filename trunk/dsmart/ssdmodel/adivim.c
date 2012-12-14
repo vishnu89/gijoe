@@ -492,8 +492,8 @@ bool _adivim_section_lookup (listnode *start,listnode *target, void *arg)
         ADIVIM_JUDGEMENT *copy = (ADIVIM_JUDGEMENT *) malloc (sizeof (ADIVIM_JUDGEMENT));
         
         copy->adivim_type = datajudge->adivim_type;
-        copy->adivim_hapn = datajudge->adivim_hapn;
-        copy->adivim_capn = datajudge->adivim_capn;
+        copy->adivim_hapn = datajudge->adivim_hapn + (datajudge->adivim_hapn==-1 ? 0 : (pg - data->starting)); // if hapn == -1, must not add diff
+        copy->adivim_capn = datajudge->adivim_capn + (datajudge->adivim_capn==-1 ? 0 : (pg - data->starting)); // if capn == -1, must not add diff
         
         free (*((ADIVIM_APN **) arg));
         *((ADIVIM_SECTION **) arg) = (void *) copy;
