@@ -143,8 +143,6 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 fprintf(stderr, "Error: unknown plane_block_mapping %d\n", plane_block_mapping);
                 exit(1);
         }
-        
-        metadata->plane_meta[i].active_page = blocks_to_skip*currdisk->params.pages_per_block;
 #else
         switch(plane_block_mapping) {
             case PLANE_BLOCKS_CONCAT:
@@ -176,6 +174,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 exit(1);
         }
 #endif
+        metadata->plane_meta[i].active_page = blocks_to_skip*currdisk->params.pages_per_block;
         metadata->plane_meta[i].free_blocks = reserved_blocks_per_plane;
         metadata->plane_meta[i].valid_pages = 0;
         metadata->plane_meta[i].clean_in_progress = 0;
@@ -273,10 +272,10 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
     }
     metadata->hot_lba_size = (export_size /2);
     
-    for(ii=0; ii < (export_size / 2) ; ii++)
+    /*for(ii=0; ii < (export_size / 2) ; ii++)
     {
         metadata->hot_lba_table[ii] = -1;
-    }
+    }*/
     
     //cold_lba_talbe size if half
     if ((metadata->cold_lba_table = (int *)malloc((usable_blocks / 2) * sizeof(int))) == NULL) {
@@ -287,10 +286,10 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
     
     metadata->cold_lba_size = (usable_blocks / 2);
     
-    for(ii=0; ii < (usable_blocks / 2) ; ii++)
+    /*for(ii=0; ii < (usable_blocks / 2) ; ii++)
     {
 	    metadata->cold_lba_table[ii] = -1;
-    }
+    }*/
     
 #endif
     
@@ -379,9 +378,9 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
         if (ssd_last_page_in_block(ppage, currdisk)) {
             // leave this physical page for summary page and
             // seal the block
-#ifndef ADIVIM
-	    metadata->block_usage[block].state = SSD_BLOCK_SEALED;
-#endif
+//#ifndef ADIVIM
+            metadata->block_usage[block].state = SSD_BLOCK_SEALED;
+//#endif
             // go to next block
             ppage ++;
             block = SSD_PAGE_TO_BLOCK(ppage, currdisk);
@@ -433,6 +432,17 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
         // populate the lba table
 #ifndef ADIVIM
         metadata->lba_table[i] = ppage;
+#else
+        // if i is less then half of export size, map to hot.
+        if (i < export_size / 2)
+        {
+            metadata->hot_lba_table[i] = ppage;
+        }
+        else
+        {
+            // else map in block mapping style
+            metadata->cold_lba_table[(i - export_size/2)/(currdisk->params.pages_per_block - 1)] = block;
+        }
 #endif
         pgnum_in_gang = elem_index * export_size + i;
         g->pg2elem[pgnum_in_gang].e = elem_number;
@@ -442,20 +452,33 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
         // it is enough if we set it once while working on the first phy page.
         // also increment the block sequence number.
         if (pp_index == 0) {
-#ifndef ADIVM
+//#ifndef ADIVM
             bitpos = ssd_block_to_bitpos(currdisk, block);
             ssd_set_bit((unsigned char *) metadata->free_blocks, bitpos);
             metadata->block_usage[block].state = SSD_BLOCK_INUSE;
-#endif
-	    metadata->block_usage[block].bsn = bsn ++;
+//#endif
+            metadata->block_usage[block].bsn = bsn ++;
         }
-#ifndef ADIVIM
+//#ifndef ADIVIM
         // increase the usage count per block
         plane_num = metadata->block_usage[block].plane_num;
+#ifndef ADIVIM
         metadata->block_usage[block].page[pp_index] = i;
+#else
+        if (i < export_size / 2)
+        {
+            metadata->block_usage[block].page[pp_index] = i;
+            metadata->block_usage[block].type = 1;
+        }
+        else
+        {
+            metadata->block_usage[block].page[pp_index] = (i - export_size/2) / (currdisk->params.pages_per_block - 1);
+            metadata->block_usage[block].type = 0;
+        }
+#endif
         metadata->block_usage[block].num_valid ++;
         metadata->plane_meta[plane_num].valid_pages ++;
-#endif
+//#endif
         // go to the next physical page
         ppage ++;
         
@@ -517,7 +540,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 metadata->block_usage[plane_active_block].bsn = bsn ++;
                 metadata->block_usage[plane_active_block].type = 1;
 
-		metadata->tot_free_blocks --;
+                metadata->tot_free_blocks --;
                 metadata->plane_meta[i].free_blocks --;
                 
                 plane_active_block = metadata->plane_meta[i].cold_active_block;
@@ -527,7 +550,7 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
                 metadata->block_usage[plane_active_block].bsn = bsn ++;
                 metadata->block_usage[plane_active_block].type = 0;
 
-		metadata->tot_free_blocks --;
+                metadata->tot_free_blocks --;
                 metadata->plane_meta[i].free_blocks --;
             }
             break;
@@ -542,6 +565,9 @@ void ssd_element_metadata_init(int elem_number, ssd_element_metadata *metadata, 
     // set the bsn for the ssd element
     metadata->bsn = bsn;
     //printf("set the bsn to %d\n", bsn);
+#ifdef ADIVIM
+    currdisk->is_updated = true;
+#endif
 }
 
 void ssd_plane_init(ssd_element *elem, ssd_t *s, int devno)

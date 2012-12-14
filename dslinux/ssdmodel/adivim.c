@@ -8,6 +8,8 @@
 #define ADIVIM_INIT_TYPE ADIVIM_COLD
 #define ADIVIM_ALLOC_INIT_HAPN(length) (ADIVIM_APN) -1
 #define ADIVIM_ALLOC_INIT_CAPN(length) adivim_alloc_apn(*adivim_free_capn_list, length)
+#define ADIVIM_JUDGEMENT_READ_THRESHOLD 0
+#define ADIVIM_JUDGEMENT_WRITE_THRESHOLD 0
 #include <stdbool.h>
 #include <stdlib.h>
 #include "adivim.h"
@@ -241,6 +243,8 @@ void adivim_do_not_need_to_keep_both_apn (void *t, int blkno, ADIVIM_APN length)
 void adivim_init ()
 {
     ADIVIM_SECTION *adivim_empty_section = (ADIVIM_SECTION *) malloc (sizeof (ADIVIM_SECTION));
+    ADIVIM_SECTION *adivim_init_hot_section = (ADIVIM_SECTION *) malloc (sizeof (ADIVIM_SECTION));
+    ADIVIM_SECTION *adivim_init_cold_section = (ADIVIM_SECTION *) malloc (sizeof (ADIVIM_SECTION));
     ADIVIM_APN_ALLOC *adivim_hapn_alloc = (ADIVIM_APN_ALLOC *) malloc (sizeof (ADIVIM_APN_ALLOC));
     ADIVIM_APN_ALLOC *adivim_capn_alloc = (ADIVIM_APN_ALLOC *) malloc (sizeof (ADIVIM_APN_ALLOC));
     
@@ -249,6 +253,7 @@ void adivim_init ()
     adivim_free_capn_list = (listnode **) malloc (sizeof (listnode *));
     
     ll_create (adivim_section_list);
+    // insert infinity
     adivim_empty_section->starting = ADIVIM_APN_INFINITY;
     adivim_empty_section->length = 0;
     adivim_empty_section->adivim_access_log.read_count = -1;
@@ -257,6 +262,24 @@ void adivim_init ()
     adivim_empty_section->adivim_judgement.adivim_hapn = -1;
     adivim_empty_section->adivim_judgement.adivim_capn = -1;
     ll_insert_at_head (*adivim_section_list, adivim_empty_section);
+    /*// insert initial cold section
+    adivim_init_cold_section->starting = 3509856;
+    adivim_init_cold_section->length = 3509856; // actually parameter dependent. but let's go. I'm bussy
+    adivim_init_cold_section->adivim_access_log.read_count = 0;
+    adivim_init_cold_section->adivim_access_log.write_count = 0;
+    adivim_init_cold_section->adivim_judgement.adivim_type = ADIVIM_COLD;
+    adivim_init_cold_section->adivim_judgement.adivim_hapn = -1;
+    adivim_init_cold_section->adivim_judgement.adivim_capn = 0;
+    ll_insert_at_head (*adivim_section_list, adivim_init_cold_section);
+    // insert initial hot section
+    adivim_init_hot_section->starting = 0;
+    adivim_init_hot_section->length = 3509856; // actually parameter dependent. but let's go. I'm bussy
+    adivim_init_hot_section->adivim_access_log.read_count = ADIVIM_JUDGEMENT_READ_THRESHOLD + 1;
+    adivim_init_hot_section->adivim_access_log.write_count = ADIVIM_JUDGEMENT_WRITE_THRESHOLD + 1;
+    adivim_init_hot_section->adivim_judgement.adivim_type = ADIVIM_HOT;
+    adivim_init_hot_section->adivim_judgement.adivim_hapn = 0;
+    adivim_init_hot_section->adivim_judgement.adivim_capn = -1;
+    ll_insert_at_head (*adivim_section_list, adivim_init_hot_section);*/
     
     ll_create (adivim_free_hapn_list);
     adivim_hapn_alloc->starting = 0;
@@ -428,12 +451,18 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
     ADIVIM_SECTION *data = (ADIVIM_SECTION *) target->data;
     ADIVIM_SECTION *toinsert = (ADIVIM_SECTION *) arg;
     
-    if (toinsert->starting < 0 || toinsert->length <= 0)
+    if (toinsert->length == 0)
     {
         return false;
     }
     
-    if (data->starting + data->length < toinsert->starting)
+    if (toinsert->starting < 0 || toinsert->length < 0)
+    {
+        printf ("_adivim_section_job: no such section (%d, %d)", toinsert->starting, toinsert->length);
+        ASSERT (!(toinsert->starting < 0 || toinsert->length < 0));
+    }
+    
+    if (data->starting + data->length <= toinsert->starting)
     {
         return true;
     }
@@ -522,8 +551,8 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
             // modify target
             data->starting += toinsert->length;
             data->length -= toinsert->length;
-            data->adivim_judgement.adivim_hapn += toinsert->length;
-            data->adivim_judgement.adivim_capn += toinsert->length;
+            data->adivim_judgement.adivim_hapn += (data->adivim_judgement.adivim_hapn == -1 ? 0 : toinsert->length);
+            data->adivim_judgement.adivim_capn += (data->adivim_judgement.adivim_capn == -1 ? 0 : toinsert->length);
             
             return false;
         }
@@ -549,8 +578,8 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
         newdata->adivim_access_log.read_count = data->adivim_access_log.read_count;
         newdata->adivim_access_log.write_count = data->adivim_access_log.write_count;
         newdata->adivim_judgement.adivim_type = data->adivim_judgement.adivim_type;
-        newdata->adivim_judgement.adivim_hapn = data->adivim_judgement.adivim_hapn + (toinsert->starting - data->starting);
-        newdata->adivim_judgement.adivim_capn = data->adivim_judgement.adivim_capn + (toinsert->starting - data->starting);
+        newdata->adivim_judgement.adivim_hapn = data->adivim_judgement.adivim_hapn + (data->adivim_judgement.adivim_hapn==-1 ? 0 : (toinsert->starting - data->starting));
+        newdata->adivim_judgement.adivim_capn = data->adivim_judgement.adivim_capn + (data->adivim_judgement.adivim_capn==-1 ? 0 : (toinsert->starting - data->starting));
         
         // modify target
         data->length = toinsert->starting - data->starting;
@@ -661,7 +690,7 @@ void adivim_section_do_not_need_to_keep_both_apn (ADIVIM_APN starting, ADIVIM_AP
 bool _adivim_print_section (listnode *start, listnode *target, void *arg)
 {
     ADIVIM_SECTION *data = (ADIVIM_SECTION *) target->data;
-    printf ("->((%d, %d), (%d, %d), (%d, %d, %d), %d)", data->starting, data->length, data->adivim_access_log.read_count, data->adivim_access_log.write_count, data->adivim_judgement.adivim_type, data->adivim_judgement.adivim_hapn, data->adivim_judgement.adivim_capn, data->do_not_need_to_keep_both_apn_requested);
+    printf ("\n->((%7d, %7d), (%d, %d), (%d, %7d, %7d), %7d)", data->starting, data->length, data->adivim_access_log.read_count, data->adivim_access_log.write_count, data->adivim_judgement.adivim_type, data->adivim_judgement.adivim_hapn, data->adivim_judgement.adivim_capn, data->do_not_need_to_keep_both_apn_requested);
     
     return true;
 }
@@ -675,7 +704,7 @@ void adivim_print_section ()
 
 ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section)
 {
-    if (section->adivim_access_log.read_count > 0 && section->adivim_access_log.write_count > 0) // Section will be hot
+    if (section->adivim_access_log.read_count > ADIVIM_JUDGEMENT_READ_THRESHOLD && section->adivim_access_log.write_count > ADIVIM_JUDGEMENT_WRITE_THRESHOLD) // Section will be hot
     {
         // Assign ADIVIM_TYPE and allocation ADIVIM_APNs
         switch (section->adivim_judgement.adivim_type)

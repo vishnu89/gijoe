@@ -31,6 +31,7 @@ static void ssd_media_access_request(ioreq_event *curr);
 
 #ifdef ADIVIM
 void print (char c, int n);
+static ssd_t *prev_ssd;
 #endif
 
 struct ssd *getssd (int devno)
@@ -1672,8 +1673,9 @@ void ssd_event_arrive (ioreq_event *curr)
     
     currdisk = getssd (curr->devno);
 #ifdef ADIVIM
-    adivim_ssd_print_image (currdisk);
-    switch (curr->type) {
+    /*adivim_ssd_print_image (currdisk);
+
+     switch (curr->type) {
             
         case IO_ACCESS_ARRIVE:
             printf ("ssd_event_arrive: IO_ACCESS_ARRIVE\n");
@@ -1696,7 +1698,7 @@ void ssd_event_arrive (ioreq_event *curr)
             break;
             
         case IO_QLEN_MAXCHECK:
-            /* Used only at initialization time to set up queue stuff */
+            // Used only at initialization time to set up queue stuff
             printf ("ssd_event_arrive: IO_QLEN_MAXCHECK\n");
             break;
             
@@ -1708,6 +1710,7 @@ void ssd_event_arrive (ioreq_event *curr)
             printf ("ssd_event_arrive: SSD_CLEAN_ELEMENT\n");
             break;
     }
+     */
 #endif
     
     switch (curr->type) {
@@ -1906,12 +1909,26 @@ struct ssd *ssdmodel_ssd_loadparams(struct lp_block *b, int *num)
 
 struct ssd *ssd_copy(struct ssd *orig) {
     int i;
+#ifdef ADIVIM
+    int elem, block;
+#endif
     struct ssd *result = malloc(sizeof(struct ssd));
     bzero(result, sizeof(struct ssd));
     memcpy(result, orig, sizeof(struct ssd));
     result->queue = ioqueue_copy(orig->queue);
     for (i=0;i<orig->params.nelements;i++)
         result->elements[i].queue = ioqueue_copy(orig->elements[i].queue);
+#ifdef ADIVIM
+    for (elem = 0; elem < orig->params.nelements; elem++)
+    {
+        result->elements[elem].metadata.block_usage = (block_metadata *) malloc (orig->params.blocks_per_element * sizeof (block_metadata));
+        for (block = 0; block < orig->params.blocks_per_element; block++)
+        {
+            result->elements[elem].metadata.block_usage[block].page = (int *) malloc (orig->params.pages_per_block * sizeof (int));
+            memcpy (result->elements[elem].metadata.block_usage[block].page, orig->elements[elem].metadata.block_usage[block].page, orig->params.pages_per_block * sizeof (int));
+        }
+    }
+#endif
     return result;
 }
 
@@ -2352,9 +2369,17 @@ void adivim_ssd_print_image (ssd_t *s)
      e1
      ...
      */
-    int elem, block, page, blockno, pageno, mapped_lpn, column, columnwidth=153;
+    int elem, block, page, blockno, pageno, mapped_lpn, prev_mapped_lpn, column, columnwidth=153;
     bool skip, starting_line_printed = false;
     
+    bool elem_and_plane_header_printed, block_header_printed, this_line_is_skipable;
+    
+    // if it is first time to print, don't print. because printing the whole mapping is inefficient. we will print only difference
+    if (prev_ssd == NULL)
+    {
+        prev_ssd = ssd_copy (s);
+        return;
+    }
     // print only if mapping is modified.
     if (!s->is_updated)
     {
@@ -2364,12 +2389,152 @@ void adivim_ssd_print_image (ssd_t *s)
     // now... shall we go?
     s->is_updated = false;
     
+    // Gangnam style!
+    for (elem = 0; elem < s->params.nelements; elem++)
+    {
+        elem_and_plane_header_printed = false;
+        for (block = 0; block < s->params.blocks_per_plane; block++)
+        {
+            bool is_ommiting_going_on[s->params.planes_per_pkg], is_ommiting_just_started[s->params.planes_per_pkg];
+            
+            for (column = 0; column < s->params.planes_per_pkg; column++)
+            {
+                is_ommiting_going_on[column] = false;
+                is_ommiting_just_started[column] = false;
+            }
+            block_header_printed = false;
+            for (page = 0; page < s->params.pages_per_block; page++)
+            {
+                this_line_is_skipable = true;
+                for (column = 0; column < s->params.planes_per_pkg; column++)
+                {
+                    blockno = block * s->params.planes_per_pkg + column;
+                    pageno = blockno * s->params.pages_per_block + page;
+                    mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
+                    prev_mapped_lpn = prev_ssd->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
+                    
+                    if((pageno > 0) && (pageno < s->params.planes_per_pkg - 2))
+                    {
+                        int upper_mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[(pageno-1) % s->params.pages_per_block];
+                        int lower_mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[(pageno+1) % s->params.pages_per_block];
+                        
+                        if ((mapped_lpn - upper_mapped_lpn == 1 && lower_mapped_lpn - mapped_lpn == 1) || (mapped_lpn == upper_mapped_lpn && lower_mapped_lpn == mapped_lpn))
+                        {
+                            if (!is_ommiting_going_on[column])
+                            {
+                                is_ommiting_just_started[column] = true;
+                            }
+                            
+                            is_ommiting_going_on[column] = true;
+                        }
+                        else
+                        {
+                            is_ommiting_going_on[column] = false;
+                        }
+                    }
+                    
+                    if (prev_mapped_lpn != mapped_lpn && !skippable (mapped_lpn) && !is_ommiting_going_on[column])
+                    {
+                        this_line_is_skipable = false;
+                    }
+                }
+                
+                if (!this_line_is_skipable)
+                {
+                    if (!elem_and_plane_header_printed)
+                    {
+                        printf ("e%d\n", elem);
+                        print ('=', columnwidth); printf ("\n");
+                        for (column = 0; column < s->params.planes_per_pkg; column++)
+                        {
+                            if (column == 0) printf("|");
+                            print (' ', 6);
+                            printf ("%d plane", column);
+                            print (' ', 5);
+                            printf ("|");
+                        }
+                        printf ("\n");
+                        
+                        elem_and_plane_header_printed = true;
+                    }
+                    
+                    if (!block_header_printed)
+                    {
+                        print ('-', columnwidth); printf ("\n");
+                        for (column = 0; column < s->params.planes_per_pkg; column++)
+                        {
+                            if (column == 0) printf("|");
+                            
+                            blockno = block * s->params.planes_per_pkg + column;
+                            printf (" %5d block", blockno);
+                            if (s->elements[elem].metadata.block_usage[blockno].type == 0)
+                            {
+                                printf (" COLD |");
+                            }
+                            else
+                            {
+                                printf (" HOT  |");
+                            }
+                        }
+                        printf ("\n");
+                        
+                        block_header_printed = true;
+                    }
+                    
+                    //print page
+                    for (column = 0; column < s->params.planes_per_pkg; column++)
+                    {
+                        blockno = block * s->params.planes_per_pkg + column;
+                        pageno = blockno * s->params.pages_per_block + page;
+                        mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
+                        
+                        if (column == 0) printf("|");
+                        
+                        if (is_ommiting_just_started[column])
+                        {
+                            print (' ', 8);
+                            printf ("...");
+                            print (' ', 7);
+                            printf ("|");
+                            
+                            is_ommiting_just_started[column] = false;
+                        }
+                        else if (is_ommiting_going_on[column])
+                        {
+                            print (' ', 18);
+                            printf ("|");
+                        }
+                        if (!skippable (mapped_lpn))
+                        {
+                            printf (" %7d->%7d |", pageno, mapped_lpn);
+                        }
+                        else
+                        {
+                            print (' ', 18);
+                            printf ("|");
+                        }
+                    }
+                    printf ("\n");
+                    
+                }
+            }
+        }
+        
+        if (elem_and_plane_header_printed)
+        {
+            print ('=', columnwidth); printf ("\n");
+        }
+    }
+    
+    
+    /* old style
     for (elem = 0; elem < s->params.nelements; elem++)
     {
         // skip check
         skip = true;
         for (block = 0; block < s->params.blocks_per_plane; block++)
         {
+            // skip invalidated mapping
             for (page = 0; page < s->params.pages_per_block; page++)
             {
                 for (column = 0; column < s->params.planes_per_pkg; column++)
@@ -2471,7 +2636,7 @@ void adivim_ssd_print_image (ssd_t *s)
                     }
                     printf ("\n");
                     
-                    /* to ommit rest of mapping when page mapping is contineous */
+                    // to ommit rest of mapping when page mapping is contineous
                     ADIVIM_APN diff;
                     bool ommiting_dot_printing[s->params.planes_per_pkg];
                     int ommiting_dot_num[s->params.planes_per_pkg];
@@ -2498,7 +2663,7 @@ void adivim_ssd_print_image (ssd_t *s)
                             mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
                             diff = ((page>(s->params.pages_per_block - 2)) ? -1 : s->elements[elem].metadata.block_usage[blockno].page[(pageno+1) % s->params.pages_per_block]) - mapped_lpn;
                             
-                            if (!skippable (mapped_lpn) && (diff == 1))
+                            if (!skippable (mapped_lpn) && (diff == 1 || diff == 0))
                             {
                                 // if the very beginning of ommition, we need to print the starting line.
                                 if (ommiting_dot_num[column] == 0)
@@ -2572,5 +2737,17 @@ void adivim_ssd_print_image (ssd_t *s)
             print ('=', columnwidth); printf ("\n\n");
         }
     }
+     */
+    
+    for (elem = 0; elem < s->params.nelements; elem++)
+    {
+        for (block = 0; block < s->params.blocks_per_element; block++)
+        {
+            free (prev_ssd->elements[elem].metadata.block_usage[block].page);
+        }
+        free (prev_ssd->elements[elem].metadata.block_usage);
+    }
+    free (prev_ssd);
+    prev_ssd = ssd_copy (s);
 }
 #endif

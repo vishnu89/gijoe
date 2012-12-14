@@ -104,7 +104,7 @@
 #include "disksim_logorg.h"
 #include "modules/modules.h"
 
-#define MAX_QUEUE_LENGTH 10000
+#define MAX_QUEUE_LENGTH 10000000
 
 
 /* read-only globals used during readparams phase */
