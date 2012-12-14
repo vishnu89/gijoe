@@ -1595,6 +1595,11 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
                 else{
                     int plane_num = r->plane_num;
                     
+                    // issue the write to the current active page.
+                    // we need to transfer the data across the serial pins for write.
+                    metadata->hot_active_page = metadata->plane_meta[plane_num].hot_active_page;
+                    metadata->cold_active_block = metadata->plane_meta[plane_num].cold_active_block;
+                    
                     switch(r->hc_flag){
                         case 0://cold->cold
                             //sect = get_from_ADIVIM(r->blk);
