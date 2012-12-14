@@ -1469,8 +1469,7 @@ static void ssd_access_complete_element(ioreq_event *curr)
 		break;
 	    case 1 : // hot -> hot
 	    case 2 : // cold->hot
-            apn = adivim_get_judgement_by_blkno(currdisk->timing_t, curr->blkno).adivim_hapn;
-            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, apn);
+            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, curr->blkno);
 	   	break;
 	    default :
             fprintf(stderr, "Wrong hot/cold type\n");
