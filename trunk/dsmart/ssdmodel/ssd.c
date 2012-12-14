@@ -29,6 +29,10 @@
 static void ssd_request_complete(ioreq_event *curr);
 static void ssd_media_access_request(ioreq_event *curr);
 
+#ifdef ADIVIM
+void print (char c, int n);
+#endif
+
 struct ssd *getssd (int devno)
 {
     struct ssd *s;
@@ -1611,7 +1615,6 @@ static void ssd_interrupt_complete (ioreq_event *curr)
     }
 }
 
-
 void ssd_event_arrive (ioreq_event *curr)
 {
     ssd_t *currdisk;
@@ -2304,7 +2307,7 @@ void adivim_ssd_print_image (ssd_t *s)
      ...
      */
     int elem, block, page, blockno, pageno, mapped_lpn, column, columnwidth=153;
-    bool skip;
+    bool skip, starting_line_printed = false;
     
     // print only if mapping is modified.
     if (!s->is_updated)
@@ -2339,6 +2342,13 @@ void adivim_ssd_print_image (ssd_t *s)
         
         if (!skip)
         {
+            if (!starting_line_printed)
+            {
+                print ('\n', 10);
+                printf ("\n");
+                starting_line_printed = true;
+            }
+            
             // print element header
             printf ("e%d\n", elem);
             print ('=', columnwidth); printf ("\n");
