@@ -389,8 +389,14 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
     unsigned int pagepos_in_block = active_page % s->params.pages_per_block;
     unsigned int active_plane = metadata->block_usage[active_block].plane_num;
     
+    //  fprintf(stdout, "-------------------------------\n"); //for debug ADIVIM
+    // fprintf(stdout, "In the write_page_osr\n"); //for debug ADIVIM
+    
+    
     // see if this logical page no is already mapped.
     if (metadata->hot_lba_table[lpn] != -1) {
+        
+        //	fprintf(stdout, "this lpn %d is alread writen\n", lpn); //for debug ADIVIM
         
         // since the lpn is going to be written to a new location,
         // its previous copy is invalid now. therefore reduce the block
@@ -415,6 +421,9 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
             ssd_assert_valid_pages(prev_plane, metadata, s);
         }
     }
+    
+    //   fprintf(stdout, "h_lpn : %d\n", lpn); //for debug ADIVIM
+    //  fprintf(stdout, "active page : %d\n", active_page); //for debug ADIVIM
     
     // add the entry to the lba table
     metadata->hot_lba_table[lpn] = active_page;
@@ -459,6 +468,7 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
         //printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
     }
     
+    //  fprintf(stdout, "escase write page osr\n---------------------------------\n"); //for debug ADIVIM
     return cost;
 }
 #endif
@@ -1327,6 +1337,8 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
 		free(save_lpn);
 		
 	}
+    
+    adivim_do_not_need_to_keep_both_apn (s->timing_t, blk, range+1);
 }
 
 void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, int flag, int perform, int e_num, int p_num)
@@ -1352,18 +1364,30 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
 	int plane_num = 0;
     
 	if(perform == 1)
-    	{
+    {
         //element unknown.......
         //assuming elem_num.....
         for(i=0; i<=range ; i++)
         {
+            //    fprintf(stdout, "------------------------------\n"); //for debug ADIVIM
             
             //sect = get_from_ADIVIM(blk);
             temp_lpn = (adivim_get_judgement_by_blkno (s->timing_t, temp_blk)).adivim_capn;
+            
+            //  fprintf(stdout, "temp_blk : %d\ntemp_lpn : %d\n", temp_blk, temp_lpn); //for debug ADIVIM
+            
             temp_cbn = temp_lpn / (s->params.pages_per_block -1);
+            
+            // fprintf(stdout, "temp_cbn : %d\n", temp_cbn); //for debug ADIVIM
+            
             elem_num = ssd_choose_element(s->timing_t, temp_cbn);
+            
+            // fprintf(stdout, "elem_num : %d\n", elem_num); //for debug ADIVIM
+            
             temp = &(s->elements[elem_num].metadata);
             temp_block = temp->cold_lba_table[temp_cbn];
+            
+            // fprintf(stdout, "temp_block : %d\nnum_valid : %d\n", temp_block, temp->block_usage[temp_block].num_valid); //for debug ADIVIM
             
             ASSERT(temp_block != -1);
             
@@ -1379,45 +1403,59 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
                 temp->cold_lba_table[temp_cbn] = -1;
             }
             
+            temp_blk += s->params.page_size;
         }
-
-	}
         
-        if(flag == 1)
-        {
-            cost = 0;
-            // for(ii=0; ii <= range ; ii++){
-            
-            //elem_num = (blk/(s->params.element_stride_pages*s->params.page_size)) % s->params.nelements;
-            //temp = &(s->elements[elem_num].metadata);
-            
-            //sect = get_from_ADIVIM(blk);
-            lpn = (adivim_get_judgement_by_blkno (s->timing_t, temp_blk)).adivim_hapn;
-            
-            //	for(plane_num = 0; plane_num < s->params.planes_per_pkg ; plane_num ++)
-            //	{
-            //		if(metadata->hot_active_page == metadata->plane_meta[palne_num].hot_active_pge)
-            //		{
-            //			break;
-            //		}
-            //	}
-            //
-            //		ASSERT(plane_num < 8);
-            
-            // if this is the last page on the block, allocate a new block
-            if (ssd_last_page_in_block(metadata->plane_meta[p_num].hot_active_page, s)) {
-                _ssd_alloc_active_block(p_num, e_num, s, 1);
-            }
-            
-            // issue the write to the current active page.
-            // we need to transfer the data across the serial pins for write.
-            metadata->hot_active_page = metadata->plane_meta[p_num].hot_active_page;
-            //printf("elem %d plane %d ", elem_num, plane_num);
-            cost += _ssd_write_page_osr(s, metadata, lpn);
-            
-            //	blk += s->params.page_size;
-            // }
+        //	fprintf(stdout, "escape for loop\n"); //for debug ADIVIM
+        
+	}
+    
+    if(flag == 1)
+    {
+        //	    fprintf(stdout, "In to cold invalid - read\n"); //for debug ADIVIM
+        
+        cost = 0;
+        // for(ii=0; ii <= range ; ii++){
+        
+        //elem_num = (blk/(s->params.element_stride_pages*s->params.page_size)) % s->params.nelements;
+        //temp = &(s->elements[elem_num].metadata);
+        
+        //sect = get_from_ADIVIM(blk);
+        lpn = (adivim_get_judgement_by_blkno (s->timing_t, blk)).adivim_hapn;
+        
+        //	    fprintf(stdout, "------------------------------------\n"); //for debug ADIVIM
+        //	    fprintf(stdout, "h_apn : %d\n", lpn); // for debug ADIVIM
+        //	    fprintf(stdout, "plane : %d\nelem : %d\n", p_num, e_num); //for debug ADIVIM
+        //	    fprintf(stdout, "------------------------------------\n"); //for debug ADIVIM
+        //
+        //	for(plane_num = 0; plane_num < s->params.planes_per_pkg ; plane_num ++)
+        //	{
+        //		if(metadata->hot_active_page == metadata->plane_meta[palne_num].hot_active_pge)
+        //		{
+        //			break;
+        //		}
+        //	}
+        //
+        //		ASSERT(plane_num < 8);
+        
+        // if this is the last page on the block, allocate a new block
+        if (ssd_last_page_in_block(metadata->plane_meta[p_num].hot_active_page, s)) {
+            _ssd_alloc_active_block(p_num, e_num, s, 1);
         }
+        
+        // issue the write to the current active page.
+        // we need to transfer the data across the serial pins for write.
+        metadata->hot_active_page = metadata->plane_meta[p_num].hot_active_page;
+        //printf("elem %d plane %d ", elem_num, plane_num);
+        cost += _ssd_write_page_osr(s, metadata, lpn);
+        
+        //	blk += s->params.page_size;
+        // }
+    }
+    
+    adivim_do_not_need_to_keep_both_apn (s->timing_t, blk, range+1);
+    
+    //	fprintf(stdout, "escape cold invalid\n"); //for debug ADIVIM
     
 }
 #endif
@@ -1555,9 +1593,9 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
                             break;
                         case 2://cold->hot
                             
-                      
-
-			    cold_invalid (s, metadata, r->blk, r->range, 1 , r->perform, elem_num, plane_num);
+                            
+                            
+                            cold_invalid (s, metadata, r->blk, r->range, 1 , r->perform, elem_num, plane_num);
                             
                             
                             parunit_op_cost[i] = s->params.page_read_latency;
@@ -1596,7 +1634,8 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
                             fprintf (stderr, "Error : Wrong hot/cold type\n");
                     }
                 }
-                else{
+                else
+                {
                     int plane_num = r->plane_num;
                     
                     // issue the write to the current active page.
@@ -1731,7 +1770,6 @@ static double ssd_issue_overlapped_ios(ssd_req **reqs, int total, int elem_num, 
                         default :
                             fprintf (stderr, "Error : Wrong hot/cold type\n");
                     }
-                    
                 }
 #endif
                 ASSERT(r->count <= s->params.page_size);
