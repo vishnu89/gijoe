@@ -2372,24 +2372,62 @@ void adivim_ssd_print_image (ssd_t *s)
                     }
                     printf ("\n");
                     
+                    /* to ommit rest of mapping when page mapping is contineous */
+                    ADIVIM_APN diff;
+                    bool ommiting_dot_printing[s->params.planes_per_pkg];
+                    int ommiting_dot_num[s->params.planes_per_pkg];
+                    const int ommiting_dot_max = 4;
+                    bool ommitable;
+                    
+                    // initialize ommiting stuff.
+                    for (column = 0; column < s->params.planes_per_pkg; column++)
+                    {
+                        ommiting_dot_printing[column] = false;
+                        ommiting_dot_num[column] = 0;
+                    }
+                    
                     // print page
                     for (page = 0; page < s->params.pages_per_block; page++)
                     {
-                        /* to ommit rest of mapping when page mapping is contineous */
-                        //ADIVIM_APN diff;
-                        //int ommit_dot_num[s->params.planes_per_pkg];
-                        //const int ommit_dot_max = 3;
-                        
                         // skip check
                         skip = true;
+                        ommitable = true;
                         for (column = 0; column < s->params.planes_per_pkg; column++)
                         {
                             blockno = block * s->params.planes_per_pkg + column;
                             pageno = blockno * s->params.pages_per_block + page;
                             mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
-                            //diff = ((page==0 || (page>(s->params.pages_per_block - 2))) ? -1 : s->elements[elem].metadata.block_usage[blockno].page[(pageno+1) % s->params.pages_per_block]) - mapped_lpn;
+                            diff = ((page>(s->params.pages_per_block - 2)) ? -1 : s->elements[elem].metadata.block_usage[blockno].page[(pageno+1) % s->params.pages_per_block]) - mapped_lpn;
                             
-                            if (!skippable (mapped_lpn) /*&& (diff != 1)*/)
+                            if (diff == 1)
+                            {
+                                // if the very beginning of ommition, we need to print the starting line.
+                                if (ommiting_dot_num[column] == 0)
+                                {
+                                    ommitable = false;
+                                    ommiting_dot_printing[column] = false;
+                                    ommiting_dot_num[column]++;
+                                }
+                                else if (ommiting_dot_num[column] < ommiting_dot_max)
+                                {
+                                    // not yet. we need to print omming_dot.
+                                    ommitable = false;
+                                    ommiting_dot_printing[column] = true;
+                                    ommiting_dot_num[column]++;
+                                }
+                                else
+                                {
+                                    ommiting_dot_printing[column] = false;
+                                }
+                            }
+                            else
+                            {
+                                // init ommiting stuf
+                                ommiting_dot_printing[column] = false;
+                                ommiting_dot_num[column] = 0;
+                            }
+                            
+                            if (!ommitable || !skippable (mapped_lpn))
                             {
                                 skip = false;
                             }
@@ -2405,7 +2443,15 @@ void adivim_ssd_print_image (ssd_t *s)
                                 mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
                                 //diff = ((page==0 || (page>(s->params.pages_per_block - 2))) ? -1 : s->elements[elem].metadata.block_usage[blockno].page[(pageno+1) % s->params.pages_per_block]) - mapped_lpn;
                                 
-                                if (!skippable (mapped_lpn) /*&& (diff != 1)*/)
+                                // print ommiting dot
+                                if (ommiting_dot_printing[column])
+                                {
+                                    print (' ', 9);
+                                    printf (".");
+                                    print (' ', 8);
+                                    printf ("|");
+                                }
+                                else if (!skippable (mapped_lpn))
                                 {
                                     printf (" %7d->%7d |", pageno, mapped_lpn);
                                 }
