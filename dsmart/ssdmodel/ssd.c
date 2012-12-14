@@ -677,6 +677,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
     int perform = 1;
     unsigned int cbn;
     int temp_flag;
+    int temp_range;
     /* **** CAREFUL ... HIJACKING tempint2 and tempptr2 fields here **** */
     curr->tempint2 = count;
     
@@ -701,7 +702,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                             break;
                         case 2 :
                             //cold_invalid();
-                            
+                            temp_range = range;
+
                             while (range >= 0) {
                                 
                                 // find the element (package) to direct the request
@@ -718,6 +720,17 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 
                                 tmp->hc_flag = prev_flag;
                                 
+
+				if(range == 0)
+				{
+					tmp->perform = 1;
+					tmp->range = temp_range;
+				}
+				else
+				{
+					tmp->perform = 0;
+				}
+				/*
                                 if(perform == 1)
                                 {
                                     tmp->perform = 1;
@@ -727,7 +740,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 else{
                                     tmp->perform = 0;
                                 }
-                                
+                                */
+
                                 tmp->tempptr2 = curr;
                                 save += tmp->bcount;
                                 range --;
@@ -737,7 +751,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 // add the request to the corresponding element's queue
                                 ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
                                 ssd_activate_elem(currdisk, elem_num);
-			       			}
+			    }
                             
                             start = 1;
                             perform = 1;
@@ -862,7 +876,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 
             case 1 : //hot -> hot
                 
-                //fprintf(stdout, "Case 1 : hot -> hot\n"); //for debug ADIVIM
+               // fprintf(stdout, "Case 1 : hot -> hot\n"); //for debug ADIVIM
                 
                 if(prev_flag != 1){ //accumulate treat process
                     switch(prev_flag) {
@@ -898,6 +912,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case 2 :
                             //cold_invalid();
                             
+			    temp_range = range;
+
                             while (range >= 0) {
                                 
                                 // find the element (package) to direct the request
@@ -914,6 +930,16 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 
                                 tmp->hc_flag = prev_flag;
                                 
+				if(range == 0)
+				{
+					tmp->perform = 1;
+					tmp->range = temp_range;
+				}
+				else
+				{
+					tmp->perform = 0;
+				}
+				/*
                                 if(perform == 1)
                                 {
                                     tmp->perform = 1;
@@ -923,7 +949,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 else{
                                     tmp->perform = 0;
                                 }
-                                
+                                */
                                 tmp->tempptr2 = curr;
                                 save += tmp->bcount;
                                 range --;
@@ -933,7 +959,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 // add the request to the corresponding element's queue
                                 ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
                                 ssd_activate_elem(currdisk, elem_num);
-			       			}
+			    }
                             
                             start = 1;
                             perform = 0;
@@ -1088,7 +1114,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 if(count == 0){
                     //cold_invalid();
                     //fprintf(stdout, "range : %d\n", range); //for debug ADIVIM
-                    
+                    temp_range = range;
+
                     while (range >= 0) {
                         //	    fprintf(stdout, "blkno : %d\n", save); //for debug ADIVIM
                         
@@ -1109,6 +1136,17 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         
                         //	fprintf(stdout, "perform : %d\n", perform); //for debug ADIVIM
                         
+
+			if(range == 0)
+			{
+				tmp->perform = 1;
+				tmp->range = temp_range;
+			}
+			else
+			{
+				tmp->perform = 0;
+			}
+			/*
                         if(perform == 1)
                         {
                             tmp->perform = 1;
@@ -1118,7 +1156,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         else{
                             tmp->perform = 0;
                         }
-                        
+                        */
 			       		tmp->tempptr2 = curr;
 			       		save += currdisk->params.page_size;
 			       		range --;
@@ -1133,7 +1171,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 break;
             case 3 : //hot -> cold
                 
-                fprintf(stdout,"Case 3 : hot -> cold\n"); // hot -> cold
+              //  fprintf(stdout,"Case 3 : hot -> cold\n"); // for debug ADIVIM
                 
                 if(prev_flag != 3){
                     switch(prev_flag){
@@ -1171,7 +1209,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                             break;
                         case 2 :
                             //cold_invalid();
-                            
+                            temp_range = range;
                             while (range >= 0) {
                                 
                                 // find the element (package) to direct the request
@@ -1188,6 +1226,16 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 
                                 tmp->hc_flag = prev_flag;
                                 
+				if(range == 0)
+				{
+					tmp->perform = 1;
+					tmp->range = temp_range;
+				}
+				else
+				{
+					tmp->perform = 0;
+				}
+				/*
                                 if(perform == 1)
                                 {
                                     tmp->perform = 1;
@@ -1197,7 +1245,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 else{
                                     tmp->perform = 0;
                                 }
-                                
+                                */
                                 tmp->tempptr2 = curr;
                                 save += tmp->bcount;
                                 range --;
