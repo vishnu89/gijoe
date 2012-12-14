@@ -2264,6 +2264,10 @@ void print (char c, int n)
         printf ("%c", c);
     }
 }
+bool skippable (int mapped_lpn)
+{
+    return mapped_lpn == -1 || mapped_lpn == -2;
+}
 void adivim_ssd_print_image (ssd_t *s)
 {
     /*
@@ -2306,7 +2310,7 @@ void adivim_ssd_print_image (ssd_t *s)
                     pageno = blockno * s->params.pages_per_block + page;
                     mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
                     
-                    if (mapped_lpn != -1)
+                    if (!skippable (mapped_lpn))
                     {
                         skip = false;
                     }
@@ -2341,7 +2345,7 @@ void adivim_ssd_print_image (ssd_t *s)
                         pageno = blockno * s->params.pages_per_block + page;
                         mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
                         
-                        if (mapped_lpn != -1)
+                        if (!skippable (mapped_lpn))
                         {
                             skip = false;
                         }
@@ -2379,7 +2383,7 @@ void adivim_ssd_print_image (ssd_t *s)
                             pageno = blockno * s->params.pages_per_block + page;
                             mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
                             
-                            if (mapped_lpn != -1)
+                            if (!skippable (mapped_lpn))
                             {
                                 skip = false;
                             }
@@ -2394,7 +2398,7 @@ void adivim_ssd_print_image (ssd_t *s)
                                 pageno = blockno * s->params.pages_per_block + page;
                                 mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
                                 
-                                if (mapped_lpn != -1)
+                                if (!skippable (mapped_lpn))
                                 {
                                     printf (" %7d->%7d |", pageno, mapped_lpn);
                                 }
