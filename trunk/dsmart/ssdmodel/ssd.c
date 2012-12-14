@@ -2399,7 +2399,7 @@ void adivim_ssd_print_image (ssd_t *s)
                             mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
                             diff = ((page>(s->params.pages_per_block - 2)) ? -1 : s->elements[elem].metadata.block_usage[blockno].page[(pageno+1) % s->params.pages_per_block]) - mapped_lpn;
                             
-                            if (diff == 1)
+                            if (!skippable (mapped_lpn) && (diff == 1))
                             {
                                 // if the very beginning of ommition, we need to print the starting line.
                                 if (ommiting_dot_num[column] == 0)
@@ -2420,14 +2420,15 @@ void adivim_ssd_print_image (ssd_t *s)
                                     ommiting_dot_printing[column] = false;
                                 }
                             }
-                            else
+                            else if (!skippable (mapped_lpn))
                             {
                                 // init ommiting stuf
+                                ommitable = false;
                                 ommiting_dot_printing[column] = false;
                                 ommiting_dot_num[column] = 0;
                             }
                             
-                            if (!ommitable || !skippable (mapped_lpn))
+                            if (!ommitable && !skippable (mapped_lpn))
                             {
                                 skip = false;
                             }
