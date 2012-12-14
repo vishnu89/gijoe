@@ -389,9 +389,15 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
     unsigned int pagepos_in_block = active_page % s->params.pages_per_block;
     unsigned int active_plane = metadata->block_usage[active_block].plane_num;
     
+  //  fprintf(stdout, "-------------------------------\n"); //for debug ADIVIM
+   // fprintf(stdout, "In the write_page_osr\n"); //for debug ADIVIM
+    
+    
     // see if this logical page no is already mapped.
     if (metadata->hot_lba_table[lpn] != -1) {
         
+//	fprintf(stdout, "this lpn %d is alread writen\n", lpn); //for debug ADIVIM
+
         // since the lpn is going to be written to a new location,
         // its previous copy is invalid now. therefore reduce the block
         // usage of the previous copy's block.
@@ -416,6 +422,9 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
         }
     }
     
+ //   fprintf(stdout, "h_lpn : %d\n", lpn); //for debug ADIVIM
+  //  fprintf(stdout, "active page : %d\n", active_page); //for debug ADIVIM
+     
     // add the entry to the lba table
     metadata->hot_lba_table[lpn] = active_page;
     
@@ -459,6 +468,7 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
         //printf("SUMMARY: lpn %d active pg %d\n", lpn, active_page);
     }
     
+  //  fprintf(stdout, "escase write page osr\n---------------------------------\n"); //for debug ADIVIM
     return cost;
 }
 #endif
@@ -1357,14 +1367,26 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
         //assuming elem_num.....
         for(i=0; i<=range ; i++)
         {
-            
+        //    fprintf(stdout, "------------------------------\n"); //for debug ADIVIM
+
             //sect = get_from_ADIVIM(blk);
             temp_lpn = (adivim_get_judgement_by_blkno (s->timing_t, temp_blk)).adivim_capn;
-            temp_cbn = temp_lpn / (s->params.pages_per_block -1);
+            
+	  //  fprintf(stdout, "temp_blk : %d\ntemp_lpn : %d\n", temp_blk, temp_lpn); //for debug ADIVIM
+	    
+	    temp_cbn = temp_lpn / (s->params.pages_per_block -1);
+
+	   // fprintf(stdout, "temp_cbn : %d\n", temp_cbn); //for debug ADIVIM
+
             elem_num = ssd_choose_element(s->timing_t, temp_cbn);
+
+	   // fprintf(stdout, "elem_num : %d\n", elem_num); //for debug ADIVIM
+
             temp = &(s->elements[elem_num].metadata);
             temp_block = temp->cold_lba_table[temp_cbn];
             
+	   // fprintf(stdout, "temp_block : %d\nnum_valid : %d\n", temp_block, temp->block_usage[temp_block].num_valid); //for debug ADIVIM
+
             ASSERT(temp_block != -1);
             
             temp_pos = temp_lpn % (s->params.pages_per_block - 1);
@@ -1379,12 +1401,17 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
                 temp->cold_lba_table[temp_cbn] = -1;
             }
             
+	    temp_blk += s->params.page_size;
         }
+	
+//	fprintf(stdout, "escape for loop\n"); //for debug ADIVIM
 
 	}
         
         if(flag == 1)
         {
+//	    fprintf(stdout, "In to cold invalid - read\n"); //for debug ADIVIM
+
             cost = 0;
             // for(ii=0; ii <= range ; ii++){
             
@@ -1392,8 +1419,13 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
             //temp = &(s->elements[elem_num].metadata);
             
             //sect = get_from_ADIVIM(blk);
-            lpn = (adivim_get_judgement_by_blkno (s->timing_t, temp_blk)).adivim_hapn;
+            lpn = (adivim_get_judgement_by_blkno (s->timing_t, blk)).adivim_hapn;
             
+//	    fprintf(stdout, "------------------------------------\n"); //for debug ADIVIM
+//	    fprintf(stdout, "h_apn : %d\n", lpn); // for debug ADIVIM
+//	    fprintf(stdout, "plane : %d\nelem : %d\n", p_num, e_num); //for debug ADIVIM
+//	    fprintf(stdout, "------------------------------------\n"); //for debug ADIVIM
+//
             //	for(plane_num = 0; plane_num < s->params.planes_per_pkg ; plane_num ++)
             //	{
             //		if(metadata->hot_active_page == metadata->plane_meta[palne_num].hot_active_pge)
@@ -1418,6 +1450,8 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
             //	blk += s->params.page_size;
             // }
         }
+
+//	fprintf(stdout, "escape cold invalid\n"); //for debug ADIVIM
     
 }
 #endif
