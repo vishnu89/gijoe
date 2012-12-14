@@ -2,7 +2,8 @@
 ADIVIM STATISTICS
 -------------------
 
-Total Write Count : 	0
-Total Write Req : 	0
-Response time average: 	0.000000
+Total Write Count : 	32
+Total Write Req : 	24
+Write Amplification Factor : 	1.333333
+Response time average: 	0.134414
 Average Lifetime : 	50
