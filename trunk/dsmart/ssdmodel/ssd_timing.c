@@ -30,6 +30,18 @@ int ssd_choose_aligned_count(int page_size, int blkno, int count)
     return res;
 }
 
+#ifdef ADIVIM
+ADIVIM_APN adivim_hapn_to_lpn (ssd_t *s, ADIVIM_APN hapn)
+{
+    return (hapn / s->params.nelements);
+}
+
+ADIVIM_APN adivim_capn_to_lbn (ssd_t *s, ADIVIM_APN capn)
+{
+    ADIVIM_APN cabn = capn / (s->params.pages_per_block - 1);
+    return (cabn / s->params.nelements);
+}
+#endif
 //////////////////////////////////////////////////////////////////////////////
 //                Simple algorithm for writing and cleaning flash
 //////////////////////////////////////////////////////////////////////////////
@@ -393,6 +405,8 @@ double _ssd_write_page_osr(ssd_t *s, ssd_element_metadata *metadata, int lpn)
     //  fprintf(stdout, "-------------------------------\n"); //for debug ADIVIM
     // fprintf(stdout, "In the write_page_osr\n"); //for debug ADIVIM
     
+    // apn to lpn
+    lpn = adivim_hapn_to_lpn(s, lpn);
     
     // see if this logical page no is already mapped.
     if (metadata->hot_lba_table[lpn] != -1) {
@@ -484,11 +498,16 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
     int pagepos_in_block;
     int cbn;
     int k;
-    cbn = bucket[0] / (s->params.pages_per_block - 1);
+    ADIVIM_APN cabn;
+    
+    // capn to lbn
+    //cbn = bucket[0] / (s->params.pages_per_block - 1);
+    cbn = adivim_capn_to_lbn (s, bucket[0]);
     
     for(k = 1 ; k < range ; k++)
     {
-        ASSERT(cbn == (bucket[k] / (s->params.pages_per_block - 1)));
+        //ASSERT(cbn == (bucket[k] / (s->params.pages_per_block - 1)));
+        ASSERT(cbn == adivim_capn_to_lbn (s, bucket[k]));
     }
     
     prev_block = metadata->cold_lba_table[cbn];
@@ -533,7 +552,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
                     // if new wine
                     if(i == pagepos_in_block)
                     {
-                        metadata->block_usage[metadata->cold_active_block].page[i] = bucket[j];
+                        metadata->block_usage[metadata->cold_active_block].page[i] = adivim_capn_to_lbn (s, bucket[j]); //bucket[j];
                         metadata->block_usage[metadata->cold_active_block].num_valid++;
                         j++;
                     }
@@ -608,7 +627,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
             for(i = 0 ; i< range ; i++)
             {
                 pagepos_in_block = bucket[i] % (s->params.pages_per_block - 1);
-                metadata->block_usage[prev_block].page[pagepos_in_block] = bucket[i];
+                metadata->block_usage[prev_block].page[pagepos_in_block] = adivim_capn_to_lbn (s, bucket[i]);
                 metadata->block_usage[prev_block].num_valid++;
             }
             
@@ -639,7 +658,8 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
         for(i = 0; i< range ; i++)
         {
             pagepos_in_block = bucket[i] % (s->params.pages_per_block - 1);
-            metadata->block_usage[metadata->cold_active_block].page[pagepos_in_block] = bucket[i];
+            //metadata->block_usage[metadata->cold_active_block].page[pagepos_in_block] = bucket[i];
+            metadata->block_usage[metadata->cold_active_block].page[pagepos_in_block] = adivim_capn_to_lbn (s, bucket[i]);
             metadata->block_usage[metadata->cold_active_block].num_valid++;
         }
         
@@ -851,7 +871,8 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                 case 0 : //cold->cold
                 case 3 : //hot->cold
                     lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_capn;
-                    cbn = lpn / (s->params.pages_per_block - 1);
+                    //cbn = lpn / (s->params.pages_per_block - 1);
+                    cbn = adivim_capn_to_lbn (s, lpn);
                     prev_block = metadata->cold_lba_table[cbn];
                     //ASSERT(prev_block != -1) // because of convert, it can be -1
                     if(point == 0)
@@ -871,6 +892,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                 case 1 ://hot->hot
                 case 2 ://cold->hot
                     lpn = (adivim_get_judgement_by_blkno (s->timing_t, reqs[i]->blk)).adivim_hapn;
+                    lpn = adivim_hapn_to_lpn(s, lpn);
                     prev_page = metadata->hot_lba_table[lpn];
                     //ASSERT(prev_page != -1);  //because of convert, it can be -1
                     if(point == 1)
@@ -937,7 +959,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     {
                         // pure hot
                         ADIVIM_APN hapn = judgement.adivim_hapn;
-                        prev_page = metadata->hot_lba_table [hapn];
+                        prev_page = metadata->hot_lba_table [adivim_hapn_to_lpn(s, hapn)];
                         
                         // if it is first time writting. Mapping is initilized to -1 all (different from original ssd)
                         if (prev_page == -1)
@@ -956,7 +978,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     {
                         // cold to hot
                         ADIVIM_APN capn = judgement.adivim_capn;
-                        prev_block = metadata->cold_lba_table[capn / (s->params.pages_per_block - 1)];
+                        prev_block = metadata->cold_lba_table[adivim_capn_to_lbn (s, capn)];
                         ASSERT(prev_block != -1);
                         prev_page = prev_block * s->params.pages_per_block + capn % (s->params.pages_per_block - 1);
                         prev_bsn = metadata->block_usage[prev_block].bsn;
@@ -967,7 +989,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     {
                         // pure cold
                         ADIVIM_APN capn = judgement.adivim_capn;
-                        prev_block = metadata->cold_lba_table[capn / (s->params.pages_per_block - 1)];
+                        prev_block = metadata->cold_lba_table[adivim_capn_to_lbn (s, capn)];
                         
                         // if it is first time writting. Mapping is initilized to -1 all (different from original ssd)
                         if (prev_block == -1)
@@ -986,7 +1008,7 @@ listnode **ssd_pick_parunits(ssd_req **reqs, int total, int elem_num, ssd_elemen
                     {
                         // hot to cold
                         ADIVIM_APN hapn = judgement.adivim_hapn;
-                        prev_page = metadata->hot_lba_table [hapn];
+                        prev_page = metadata->hot_lba_table [adivim_hapn_to_lpn(s, hapn)];
                         ASSERT(prev_page != -1);
                         prev_block = SSD_PAGE_TO_BLOCK(prev_page, s);
                         prev_bsn = metadata->block_usage[prev_block].bsn;
@@ -1325,6 +1347,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
         temp = &(s->elements[elem_num].metadata);
         //sect = get_from_ADIVIM(temp_blk);
         temp_lpn = (adivim_get_judgement_by_blkno(s->timing_t, blk)).adivim_hapn;
+        temp_lpn = adivim_hapn_to_lpn(s, temp_lpn);
         temp_page = temp->hot_lba_table[temp_lpn];
         temp_block = SSD_PAGE_TO_BLOCK(temp_page, s);
         temp_pos = temp_page % s->params.pages_per_block;
@@ -1431,7 +1454,8 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
             
             //  fprintf(stdout, "temp_blk : %d\ntemp_lpn : %d\n", temp_blk, temp_lpn); //for debug ADIVIM
             
-            temp_cbn = temp_lpn / (s->params.pages_per_block -1);
+            //temp_cbn = temp_lpn / (s->params.pages_per_block -1);
+            temp_cbn = adivim_capn_to_lbn (s, temp_lpn);
             
             // fprintf(stdout, "temp_cbn : %d\n", temp_cbn); //for debug ADIVIM
             
