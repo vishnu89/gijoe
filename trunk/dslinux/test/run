@@ -6,17 +6,17 @@ do
     case "$i"
     in
         -g)
-           echo "gdb --args ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0";
-           echo "
+            echo "gdb --args ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii" echo $3 echo " 0";
+            echo "
 *********
 GDB open.
 *********
-";
-           gdb --args ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0;
-           break;;
+            ";
+            gdb --args ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii $3 0;
+            break;;
         --)
-           echo "../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0 > out.txt";
-           ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii study.trace 0 > out.txt;
-           break;;
+            echo "../src/disksim ssd-iozone.parv ssd-iozone.outv ascii" echo $2 echo " 0 > out.txt";
+            ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii $2 0 > out.txt;
+            break;;
     esac
 done
