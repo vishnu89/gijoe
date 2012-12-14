@@ -19,6 +19,7 @@ void adivim_init ();
 void adivim_assign_judgement (void *t, ioreq_event *req);
 void adivim_assign_flag_by_blkno (void *t, int blkno, int *flag);
 ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (void *t, int blkno);
+void adivim_do_not_need_to_keep_both_apn (void *t, int blkno, ADIVIM_APN length);
 
 /*
  * Access log as part of section information.
@@ -35,12 +36,11 @@ typedef struct _access_log {
  * Section infomation for ADIVIM.
  */
 typedef struct _adivim_section {
-    int blkno; // Starting sector no. from host
-    int bcount; // Length of request in sector from host
-    ADIVIM_APN starting;
+    ADIVIM_APN starting; // starting point of section in apn
     ADIVIM_APN length; // Length of section in apn
     ADIVIM_ACCESS_LOG adivim_access_log;
     ADIVIM_JUDGEMENT adivim_judgement;
+    ADIVIM_APN do_not_need_to_keep_both_apn_requested; // for _adivim_do_not_need_to_keep_both_apn
 } ADIVIM_SECTION;
 
 /*
@@ -81,6 +81,8 @@ void adivim_section_job (listnode *start, ADIVIM_SECTION *arg);
 bool _adivim_alloc_apn (listnode *start, listnode *target, void *arg);
 ADIVIM_APN adivim_alloc_apn (listnode *start, ADIVIM_APN size);
 bool _adivim_section_lookup (listnode *start,listnode *target, void *arg);
+bool _adivim_section_do_not_need_to_keep_both_apn (listnode *start,listnode *target, void *arg);
+void adivim_section_do_not_need_to_keep_both_apn (ADIVIM_APN starting, ADIVIM_APN length);
 bool _adivim_print_section (listnode *start, listnode *target, void *arg);
 void adivim_print_section ();
 ADIVIM_JUDGEMENT adivim_section_lookup (listnode *start, ADIVIM_APN pg);
@@ -151,6 +153,14 @@ ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (void *t, int blkno)
     ADIVIM_APN pg = blkno/(tt->params->page_size);
     
     return adivim_section_lookup (*adivim_section_list, pg);
+}
+
+void adivim_do_not_need_to_keep_both_apn (void *t, int blkno, ADIVIM_APN length)
+{
+    struct my_timing_t *tt = (struct my_timing_t *) t;
+    ADIVIM_APN starting = blkno/(tt->params->page_size);
+    
+    adivim_section_do_not_need_to_keep_both_apn (starting, length);
 }
 
 void adivim_init ()
@@ -526,17 +536,64 @@ ADIVIM_JUDGEMENT adivim_section_lookup (listnode *start, ADIVIM_APN pg)
     return ret;
 }
 
+bool _adivim_section_do_not_need_to_keep_both_apn (listnode *start,listnode *target, void *arg)
+{
+    ADIVIM_SECTION *data = (ADIVIM_SECTION *) target->data;
+    ADIVIM_SECTION *tomodify = (ADIVIM_SECTION *) arg;
+    
+    if (data->starting == ADIVIM_APN_INFINITY)
+    {
+        printf ("_adivim_section_do_not_need_to_keep_both_apn: fail. no such section (%d, %d).", tomodify->starting, tomodify->length);
+        ASSERT (data->starting != ADIVIM_APN_INFINITY);
+    }
+    
+    if ((data->starting <= tomodify->starting) && (tomodify->starting + tomodify->length <= data->starting + data->length))
+    {
+        data->do_not_need_to_keep_both_apn_requested += tomodify->length;
+        
+        if (data->do_not_need_to_keep_both_apn_requested >= data->length)
+        {
+            ADIVIM_JUDGEMENT *datajudge = &(data->adivim_judgement);
+            
+            switch (datajudge->adivim_type)
+            {
+                case ADIVIM_HOT:
+                    datajudge->adivim_capn = -1;
+                    break;
+                case ADIVIM_COLD:
+                    datajudge->adivim_hapn = -1;
+                    break;
+            }
+        }
+        
+        return false;
+    }
+    
+    return true;
+}
+
+void adivim_section_do_not_need_to_keep_both_apn (ADIVIM_APN starting, ADIVIM_APN length)
+{
+    ADIVIM_SECTION *arg = (ADIVIM_SECTION *) malloc (sizeof (ADIVIM_SECTION));
+    arg->starting = starting;
+    arg->length = length;
+    
+    adivim_ll_apply (*adivim_section_list, _adivim_section_do_not_need_to_keep_both_apn, (void *) arg);
+    
+    free (arg);
+}
+
 bool _adivim_print_section (listnode *start, listnode *target, void *arg)
 {
     ADIVIM_SECTION *data = (ADIVIM_SECTION *) target->data;
-    printf ("->((%d, %d), (%d, %d), (%d, %d, %d))", data->starting, data->length, data->adivim_access_log.read_count, data->adivim_access_log.write_count, data->adivim_judgement.adivim_type, data->adivim_judgement.adivim_hapn, data->adivim_judgement.adivim_capn);
+    printf ("->((%d, %d), (%d, %d), (%d, %d, %d), %d)", data->starting, data->length, data->adivim_access_log.read_count, data->adivim_access_log.write_count, data->adivim_judgement.adivim_type, data->adivim_judgement.adivim_hapn, data->adivim_judgement.adivim_capn, data->do_not_need_to_keep_both_apn_requested);
     
     return true;
 }
 
 void adivim_print_section ()
 {
-    printf ("section list((starting, length), (rcount, wcount), (type, hapn, capn)): |");
+    printf ("section list((starting, length), (rcount, wcount), (type, hapn, capn), DNKBA): |");
     adivim_ll_apply (*adivim_section_list, _adivim_print_section, NULL);
     printf ("\n");
 }
@@ -552,7 +609,8 @@ ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section)
             case ADIVIM_COLD :
                 section->adivim_judgement.adivim_type = ADIVIM_HOT;
                 section->adivim_judgement.adivim_hapn = adivim_alloc_apn (*adivim_free_hapn_list, section->length);
-                adivim_free_apn (*adivim_free_capn_list, section->starting, section->length);
+                adivim_free_apn (*adivim_free_capn_list, section->adivim_judgement.adivim_capn, section->length);
+                section->do_not_need_to_keep_both_apn_requested = 0;
                 break;
         };
     }
@@ -563,7 +621,8 @@ ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section)
             case ADIVIM_HOT :
                 section->adivim_judgement.adivim_type = ADIVIM_COLD;
                 section->adivim_judgement.adivim_capn = adivim_alloc_apn (*adivim_free_capn_list, section->length);
-                adivim_free_apn (*adivim_free_hapn_list, section->starting, section->length);
+                adivim_free_apn (*adivim_free_hapn_list, section->adivim_judgement.adivim_hapn, section->length);
+                section->do_not_need_to_keep_both_apn_requested = 0;
                 break;
             case ADIVIM_COLD :break;
         };
