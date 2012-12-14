@@ -684,6 +684,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
         
         switch(flag) {
             case 0 : //cold -> cold
+	    	//fprintf(stdout, "Case 0 : cold -> cold \n"); //for debug ADIVIM
+
                 if(prev_flag != 0){
                     switch(prev_flag) {
                         case (-1) :
@@ -851,6 +853,9 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 break;
                 
             case 1 : //hot -> hot
+	        
+		//fprintf(stdout, "Case 1 : hot -> hot\n"); //for debug ADIVIM
+
                 if(prev_flag != 1){ //accumulate treat process
                     switch(prev_flag) {
                         case (-1) :
@@ -990,7 +995,9 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 break;
                 
             case 2 : //cold -> hot
-                if(prev_flag != 2){
+                //fprintf(stdout, "Case 2 : cold -> hot\n"); //for debug ADIVIM
+		
+		if(prev_flag != 2){
                     switch(prev_flag){
                         case (-1):
                             break;
@@ -1072,10 +1079,14 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 
                 if(count == 0){
                     //cold_invalid();
+		    //fprintf(stdout, "range : %d\n", range); //for debug ADIVIM
+
                     while (range >= 0) {
+		//	    fprintf(stdout, "blkno : %d\n", save); //for debug ADIVIM
                         
  			      		// find the element (package) to direct the request
  			      		elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, save);
+		//	    fprintf(stdout, "selected elem_num : %d\n", elem_num); //for debug ADIVIM
  			      		ssd_element *elem = &currdisk->elements[elem_num];
                         
                         // create a new sub-request for the element
@@ -1087,6 +1098,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
 			       		tmp->bcount = currdisk->params.page_size;
 			       		
                         tmp->hc_flag = flag;
+
+		//	fprintf(stdout, "perform : %d\n", perform); //for debug ADIVIM
                         
                         if(perform == 1)
                         {
@@ -1099,7 +1112,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         }
                         
 			       		tmp->tempptr2 = curr;
-			       		save += tmp->bcount;
+			       		save += currdisk->params.page_size;
 			       		range --;
                         
 			       		elem->metadata.reqs_waiting ++;
@@ -1111,6 +1124,9 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 }
                 break;
             case 3 : //hot -> cold
+
+	    	fprintf(stdout,"Case 3 : hot -> cold\n"); // hot -> cold
+
                 if(prev_flag != 3){
                     switch(prev_flag){
                         case (-1):
