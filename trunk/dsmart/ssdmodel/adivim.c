@@ -5,11 +5,23 @@
 #include "disksim_global.h"
 
 #ifdef ADIVIM
-#define ADIVIM_INIT_TYPE ADIVIM_COLD
-#define ADIVIM_ALLOC_INIT_HAPN(length) (ADIVIM_APN) -1
-#define ADIVIM_ALLOC_INIT_CAPN(length) adivim_alloc_apn(*adivim_free_capn_list, length)
+#define SEPARATION_BY_ADIVIM
+
+#ifdef SEPARATION_BY_ADIVIM
 #define ADIVIM_JUDGEMENT_READ_THRESHOLD 0
 #define ADIVIM_JUDGEMENT_WRITE_THRESHOLD 0
+#define ADIVIM_INIT_TYPE(section) ADIVIM_COLD
+#define ADIVIM_ALLOC_INIT_HAPN(section) (ADIVIM_APN) -1
+#define ADIVIM_ALLOC_INIT_CAPN(section) adivim_alloc_apn(*adivim_free_capn_list, section->length)
+#endif
+
+#ifdef SEPARATION_BY_SIZE
+#define ADIVIM_JUDGEMENT_LENGTH_THRESHOLD 32
+#define ADIVIM_INIT_TYPE(section) ((section->length < ADIVIM_JUDGEMENT_LENGTH_THRESHOLD) ?  ADIVIM_HOT : ADIVIM_COLD)
+#define ADIVIM_ALLOC_INIT_HAPN(section) ((section->length < ADIVIM_JUDGEMENT_LENGTH_THRESHOLD) ? adivim_alloc_apn(*adivim_free_hapn_list, section->length) : (ADIVIM_APN) -1)
+#define ADIVIM_ALLOC_INIT_CAPN(section) ((section->length < ADIVIM_JUDGEMENT_LENGTH_THRESHOLD) ? (ADIVIM_APN) -1 : adivim_alloc_apn(*adivim_free_capn_list, section->length))
+#endif
+
 #include <stdbool.h>
 #include <stdlib.h>
 #include "adivim.h"
@@ -490,9 +502,9 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
         {
             // Really newbe
             newdata->length = toinsert->length;
-            newdata->adivim_judgement.adivim_type = ADIVIM_INIT_TYPE;
-            newdata->adivim_judgement.adivim_hapn = ADIVIM_ALLOC_INIT_HAPN(newdata->length);
-            newdata->adivim_judgement.adivim_capn = ADIVIM_ALLOC_INIT_CAPN(newdata->length);
+            newdata->adivim_judgement.adivim_type = ADIVIM_INIT_TYPE(newdata);
+            newdata->adivim_judgement.adivim_hapn = ADIVIM_ALLOC_INIT_HAPN(newdata);
+            newdata->adivim_judgement.adivim_capn = ADIVIM_ALLOC_INIT_CAPN(newdata);
             
             return false;
         }
@@ -500,9 +512,9 @@ bool _adivim_section_job (listnode *start, listnode *target, void *arg)
         {
             // divide section occur. that will be devided in follwing code.
             newdata->length = data->starting - toinsert->starting;
-            newdata->adivim_judgement.adivim_type = ADIVIM_INIT_TYPE;
-            newdata->adivim_judgement.adivim_hapn = ADIVIM_ALLOC_INIT_HAPN(newdata->length);
-            newdata->adivim_judgement.adivim_capn = ADIVIM_ALLOC_INIT_CAPN(newdata->length);
+            newdata->adivim_judgement.adivim_type = ADIVIM_INIT_TYPE(newdata);
+            newdata->adivim_judgement.adivim_hapn = ADIVIM_ALLOC_INIT_HAPN(newdata);
+            newdata->adivim_judgement.adivim_capn = ADIVIM_ALLOC_INIT_CAPN(newdata);
             
             toinsert->length = toinsert->starting + toinsert->length - data->starting;
             toinsert->starting = data->starting;
@@ -704,6 +716,7 @@ void adivim_print_section ()
 
 ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section)
 {
+#ifdef SEPARATION_BY_ADIVIM
     if (section->adivim_access_log.read_count > ADIVIM_JUDGEMENT_READ_THRESHOLD && section->adivim_access_log.write_count > ADIVIM_JUDGEMENT_WRITE_THRESHOLD) // Section will be hot
     {
         // Assign ADIVIM_TYPE and allocation ADIVIM_APNs
@@ -733,5 +746,37 @@ ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section)
     }
     
     return section;
+#endif
+#ifdef SEPARATION_BY_SIZE
+    if (section->length < ADIVIM_JUDGEMENT_LENGTH_THRESHOLD) // Section will be hot
+    {
+        // Assign ADIVIM_TYPE and allocation ADIVIM_APNs
+        switch (section->adivim_judgement.adivim_type)
+        {
+            case ADIVIM_HOT : break;
+            case ADIVIM_COLD :
+                section->adivim_judgement.adivim_type = ADIVIM_HOT;
+                section->adivim_judgement.adivim_hapn = adivim_alloc_apn (*adivim_free_hapn_list, section->length);
+                adivim_free_apn (*adivim_free_capn_list, section->adivim_judgement.adivim_capn, section->length);
+                section->do_not_need_to_keep_both_apn_requested = 0;
+                break;
+        };
+    }
+    else // Section will be cold
+    {
+        switch (section->adivim_judgement.adivim_type)
+        {
+            case ADIVIM_HOT :
+                section->adivim_judgement.adivim_type = ADIVIM_COLD;
+                section->adivim_judgement.adivim_capn = adivim_alloc_apn (*adivim_free_capn_list, section->length);
+                adivim_free_apn (*adivim_free_hapn_list, section->adivim_judgement.adivim_hapn, section->length);
+                section->do_not_need_to_keep_both_apn_requested = 0;
+                break;
+            case ADIVIM_COLD :break;
+        };
+    }
+    
+    return section;
+#endif
 }
 #endif
