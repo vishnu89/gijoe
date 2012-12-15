@@ -704,7 +704,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case 2 :
                             //cold_invalid();
                             temp_range = range;
-
+                            
                             while (range >= 0) {
                                 
                                 // find the element (package) to direct the request
@@ -721,28 +721,28 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 
                                 tmp->hc_flag = prev_flag;
                                 
-
-				if(range == 0)
-				{
-					tmp->perform = 1;
-					tmp->range = temp_range;
-				}
-				else
-				{
-					tmp->perform = 0;
-				}
-				/*
-                                if(perform == 1)
+                                
+                                if(range == 0)
                                 {
                                     tmp->perform = 1;
-                                    tmp->range = range;
-                                    perform = 0;
+                                    tmp->range = temp_range;
                                 }
-                                else{
+                                else
+                                {
                                     tmp->perform = 0;
                                 }
-                                */
-
+                                /*
+                                 if(perform == 1)
+                                 {
+                                 tmp->perform = 1;
+                                 tmp->range = range;
+                                 perform = 0;
+                                 }
+                                 else{
+                                 tmp->perform = 0;
+                                 }
+                                 */
+                                
                                 tmp->tempptr2 = curr;
                                 save += tmp->bcount;
                                 range --;
@@ -752,7 +752,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 // add the request to the corresponding element's queue
                                 ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
                                 ssd_activate_elem(currdisk, elem_num);
-			    }
+                            }
                             
                             start = 1;
                             perform = 1;
@@ -760,7 +760,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case 3 :
                             //hot_invalid();
                             
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn * currdisk->params.page_size);
                             
        						elem = &currdisk->elements[elem_num];
                             
@@ -814,7 +814,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         
                         if(cbn != ((adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_capn / (currdisk->params.pages_per_block -1)))
                         {
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn * currdisk->params.page_size);
                             
                             elem = &currdisk->elements[elem_num];
                             
@@ -848,7 +848,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 }
                 else
                 {
-                   	elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                   	elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn * currdisk->params.page_size);
                     
                     elem = &currdisk->elements[elem_num];
                     
@@ -877,14 +877,14 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 
             case 1 : //hot -> hot
                 
-               // fprintf(stdout, "Case 1 : hot -> hot\n"); //for debug ADIVIM
+                // fprintf(stdout, "Case 1 : hot -> hot\n"); //for debug ADIVIM
                 
                 if(prev_flag != 1){ //accumulate treat process
                     switch(prev_flag) {
                         case (-1) :
                             break;
                         case 0 :
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn * currdisk->params.page_size);
                             
                             elem = &currdisk->elements[elem_num];
                             
@@ -913,8 +913,8 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case 2 :
                             //cold_invalid();
                             
-			    temp_range = range;
-
+                            temp_range = range;
+                            
                             while (range >= 0) {
                                 
                                 // find the element (package) to direct the request
@@ -931,26 +931,26 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 
                                 tmp->hc_flag = prev_flag;
                                 
-				if(range == 0)
-				{
-					tmp->perform = 1;
-					tmp->range = temp_range;
-				}
-				else
-				{
-					tmp->perform = 0;
-				}
-				/*
-                                if(perform == 1)
+                                if(range == 0)
                                 {
                                     tmp->perform = 1;
-                                    perform = 0;
-                                    tmp->range = range;
+                                    tmp->range = temp_range;
                                 }
-                                else{
+                                else
+                                {
                                     tmp->perform = 0;
                                 }
-                                */
+                                /*
+                                 if(perform == 1)
+                                 {
+                                 tmp->perform = 1;
+                                 perform = 0;
+                                 tmp->range = range;
+                                 }
+                                 else{
+                                 tmp->perform = 0;
+                                 }
+                                 */
                                 tmp->tempptr2 = curr;
                                 save += tmp->bcount;
                                 range --;
@@ -960,7 +960,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 // add the request to the corresponding element's queue
                                 ioqueue_add_new_request(elem->queue, (ioreq_event *)tmp);
                                 ssd_activate_elem(currdisk, elem_num);
-			    }
+                            }
                             
                             start = 1;
                             perform = 0;
@@ -969,7 +969,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case 3 :
                             //hot_invalid();
                             
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn * currdisk->params.page_size);
                             
        						elem = &currdisk->elements[elem_num];
                             
@@ -1037,7 +1037,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case (-1):
                             break;
                         case 0 :
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn * currdisk->params.page_size);
                             
                             elem = &currdisk->elements[elem_num];
                             
@@ -1068,7 +1068,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         case 3 :
                             //hot_invalid();
                             
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn * currdisk->params.page_size);
                             
        						elem = &currdisk->elements[elem_num];
                             
@@ -1116,7 +1116,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                     //cold_invalid();
                     //fprintf(stdout, "range : %d\n", range); //for debug ADIVIM
                     temp_range = range;
-
+                    
                     while (range >= 0) {
                         //	    fprintf(stdout, "blkno : %d\n", save); //for debug ADIVIM
                         
@@ -1137,27 +1137,27 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         
                         //	fprintf(stdout, "perform : %d\n", perform); //for debug ADIVIM
                         
-
-			if(range == 0)
-			{
-				tmp->perform = 1;
-				tmp->range = temp_range;
-			}
-			else
-			{
-				tmp->perform = 0;
-			}
-			/*
-                        if(perform == 1)
+                        
+                        if(range == 0)
                         {
                             tmp->perform = 1;
-                            tmp->range = range;
-                            perform = 0;
+                            tmp->range = temp_range;
                         }
-                        else{
+                        else
+                        {
                             tmp->perform = 0;
                         }
-                        */
+                        /*
+                         if(perform == 1)
+                         {
+                         tmp->perform = 1;
+                         tmp->range = range;
+                         perform = 0;
+                         }
+                         else{
+                         tmp->perform = 0;
+                         }
+                         */
 			       		tmp->tempptr2 = curr;
 			       		save += currdisk->params.page_size;
 			       		range --;
@@ -1172,14 +1172,14 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 break;
             case 3 : //hot -> cold
                 
-              //  fprintf(stdout,"Case 3 : hot -> cold\n"); // for debug ADIVIM
+                //  fprintf(stdout,"Case 3 : hot -> cold\n"); // for debug ADIVIM
                 
                 if(prev_flag != 3){
                     switch(prev_flag){
                         case (-1):
                             break;
                         case 0 :
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn * currdisk->params.page_size);
                             
        						elem = &currdisk->elements[elem_num];
                             
@@ -1227,26 +1227,26 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                                 
                                 tmp->hc_flag = prev_flag;
                                 
-				if(range == 0)
-				{
-					tmp->perform = 1;
-					tmp->range = temp_range;
-				}
-				else
-				{
-					tmp->perform = 0;
-				}
-				/*
-                                if(perform == 1)
+                                if(range == 0)
                                 {
                                     tmp->perform = 1;
-                                    tmp->range = range;
-                                    perform = 0;
+                                    tmp->range = temp_range;
                                 }
-                                else{
+                                else
+                                {
                                     tmp->perform = 0;
                                 }
-                                */
+                                /*
+                                 if(perform == 1)
+                                 {
+                                 tmp->perform = 1;
+                                 tmp->range = range;
+                                 perform = 0;
+                                 }
+                                 else{
+                                 tmp->perform = 0;
+                                 }
+                                 */
                                 tmp->tempptr2 = curr;
                                 save += tmp->bcount;
                                 range --;
@@ -1289,7 +1289,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                         
                         if(cbn != ((adivim_get_judgement_by_blkno (currdisk->timing_t, blkno)).adivim_capn / (currdisk->params.pages_per_block -1)))
                         {
-                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn * currdisk->params.page_size);
                             
                             elem = &currdisk->elements[elem_num];
                             
@@ -1323,7 +1323,7 @@ static void ssd_media_access_request_element (ioreq_event *curr)
                 }
                 else
                 {
-                   	elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+                   	elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn * currdisk->params.page_size);
                     
                     elem = &currdisk->elements[elem_num];
                     
@@ -1536,8 +1536,8 @@ static void ssd_access_complete_element(ioreq_event *curr)
 	    case 0 : //cold -> cold
 	    case 3 : //hot -> cold
             apn = adivim_get_judgement_by_blkno(currdisk->timing_t, curr->blkno).adivim_capn;
-            cbn = apn / (currdisk->params.pages_per_block -1);
-            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn);
+            cbn = (apn / (currdisk->params.pages_per_block -1));
+            elem_num = currdisk->timing_t->choose_element(currdisk->timing_t, cbn * currdisk->params.page_size);
             
             break;
 	    case 1 : // hot -> hot
@@ -1559,7 +1559,7 @@ static void ssd_access_complete_element(ioreq_event *curr)
     {
 	    fprintf(stderr, "curr->blkno : %d\n", curr->blkno);
 	    fprintf(stderr, "elem_num : %d\ncurr->ssd_elem_num : %d\n", elem_num, curr->ssd_elem_num);
-	    exit(1);
+	    ASSERT(elem_num == curr->ssd_elem_num);
     }
 #endif
     
@@ -1673,44 +1673,44 @@ void ssd_event_arrive (ioreq_event *curr)
     
     currdisk = getssd (curr->devno);
 #ifdef ADIVIM
-    /*adivim_ssd_print_image (currdisk);
-
+    adivim_ssd_print_image (currdisk);
+     
      switch (curr->type) {
-            
-        case IO_ACCESS_ARRIVE:
-            printf ("ssd_event_arrive: IO_ACCESS_ARRIVE\n");
-            break;
-            
-        case DEVICE_OVERHEAD_COMPLETE:
-            printf ("ssd_event_arrive: DEVICE_OVERHEAD_COMPLETE\n");
-            break;
-            
-        case DEVICE_ACCESS_COMPLETE:
-            printf ("ssd_event_arrive: DEVICE_ACCESS_COMPLETE\n");
-            break;
-            
-        case DEVICE_DATA_TRANSFER_COMPLETE:
-            printf ("ssd_event_arrive: DEVICE_DATA_TRANSFER_COMPLETE\n");
-            break;
-            
-        case IO_INTERRUPT_COMPLETE:
-            printf ("ssd_event_arrive: IO_INTERRUPT_COMPLETE\n");
-            break;
-            
-        case IO_QLEN_MAXCHECK:
-            // Used only at initialization time to set up queue stuff
-            printf ("ssd_event_arrive: IO_QLEN_MAXCHECK\n");
-            break;
-            
-        case SSD_CLEAN_GANG:
-            printf ("ssd_event_arrive: SSD_CLEAN_GANG\n");
-            break;
-            
-        case SSD_CLEAN_ELEMENT:
-            printf ("ssd_event_arrive: SSD_CLEAN_ELEMENT\n");
-            break;
-    }
-     */
+     
+     case IO_ACCESS_ARRIVE:
+     printf ("ssd_event_arrive: IO_ACCESS_ARRIVE\n");
+     break;
+     
+     case DEVICE_OVERHEAD_COMPLETE:
+     printf ("ssd_event_arrive: DEVICE_OVERHEAD_COMPLETE\n");
+     break;
+     
+     case DEVICE_ACCESS_COMPLETE:
+     printf ("ssd_event_arrive: DEVICE_ACCESS_COMPLETE\n");
+     break;
+     
+     case DEVICE_DATA_TRANSFER_COMPLETE:
+     printf ("ssd_event_arrive: DEVICE_DATA_TRANSFER_COMPLETE\n");
+     break;
+     
+     case IO_INTERRUPT_COMPLETE:
+     printf ("ssd_event_arrive: IO_INTERRUPT_COMPLETE\n");
+     break;
+     
+     case IO_QLEN_MAXCHECK:
+     // Used only at initialization time to set up queue stuff
+     printf ("ssd_event_arrive: IO_QLEN_MAXCHECK\n");
+     break;
+     
+     case SSD_CLEAN_GANG:
+     printf ("ssd_event_arrive: SSD_CLEAN_GANG\n");
+     break;
+     
+     case SSD_CLEAN_ELEMENT:
+     printf ("ssd_event_arrive: SSD_CLEAN_ELEMENT\n");
+     break;
+     }
+     
 #endif
     
     switch (curr->type) {
@@ -2219,8 +2219,8 @@ void ssd_printstats (void)
     for (i=0; i<MAXDEVICES; i++) {
         ssd_t *currdisk = getssd(i);
         if (currdisk) {
-                write_page_sum+=currdisk->stat.write_page_num;
-                write_req_sum+=currdisk->stat.write_req_num;
+            write_page_sum+=currdisk->stat.write_page_num;
+            write_req_sum+=currdisk->stat.write_req_num;
         }
     }
     fprintf(outputfile_adv, "Total Write Count : \t%d\n", write_page_sum);
@@ -2528,215 +2528,215 @@ void adivim_ssd_print_image (ssd_t *s)
     
     
     /* old style
-    for (elem = 0; elem < s->params.nelements; elem++)
-    {
-        // skip check
-        skip = true;
-        for (block = 0; block < s->params.blocks_per_plane; block++)
-        {
-            // skip invalidated mapping
-            for (page = 0; page < s->params.pages_per_block; page++)
-            {
-                for (column = 0; column < s->params.planes_per_pkg; column++)
-                {
-                    blockno = block * s->params.planes_per_pkg + column;
-                    pageno = blockno * s->params.pages_per_block + page;
-                    mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
-                    
-                    if (!skippable (mapped_lpn))
-                    {
-                        skip = false;
-                    }
-                }
-            }
-        }
-        
-        if (!skip)
-        {
-            if (!starting_line_printed)
-            {
-                print ('\n', 10);
-                printf ("\n");
-                starting_line_printed = true;
-            }
-            
-            // print element header
-            printf ("e%d\n", elem);
-            print ('=', columnwidth); printf ("\n");
-            for (column = 0; column < s->params.planes_per_pkg; column++)
-            {
-                if (column == 0) printf("|");
-                print (' ', 6);
-                printf ("%d plane", column);
-                print (' ', 5);
-                printf ("|");
-            }
-            printf ("\n");
-            
-            // print block
-            for (block = 0; block < s->params.blocks_per_plane; block++)
-            {
-                // want to skip printing block header when whole block can be skippable
-                bool skip_block_header[s->params.planes_per_pkg];
-                
-                // initialize skip_block_header
-                for (column = 0; column < s->params.planes_per_pkg; column++)
-                {
-                    skip_block_header[column] = true;
-                }
-                
-                // skip check
-                skip = true;
-                for (column = 0; column < s->params.planes_per_pkg; column++)
-                {
-                    for (page = 0; page < s->params.pages_per_block; page++)
-                    {
-                        blockno = block * s->params.planes_per_pkg + column;
-                        pageno = blockno * s->params.pages_per_block + page;
-                        mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
-                        
-                        if (!skippable (mapped_lpn))
-                        {
-                            skip = false;
-                            skip_block_header[column] = false;
-                        }
-                    }
-                }
-                
-                // print block
-                if (!skip)
-                {
-                    // print block header
-                    print ('-', columnwidth); printf ("\n");
-                    for (column = 0; column < s->params.planes_per_pkg; column++)
-                    {
-                        if (column == 0) printf("|");
-                        
-                        // print block header
-                        if (!skip_block_header[column])
-                        {
-                            blockno = block * s->params.planes_per_pkg + column;
-                            printf (" %5d block", blockno);
-                            if (s->elements[elem].metadata.block_usage[blockno].type == 0)
-                            {
-                                printf (" COLD |");
-                            }
-                            else
-                            {
-                                printf (" HOT  |");
-                            }
-                        }
-                        // skip
-                        else
-                        {
-                            print (' ', 18);
-                            printf ("|");
-                        }
-                        
-                    }
-                    printf ("\n");
-                    
-                    // to ommit rest of mapping when page mapping is contineous
-                    ADIVIM_APN diff;
-                    bool ommiting_dot_printing[s->params.planes_per_pkg];
-                    int ommiting_dot_num[s->params.planes_per_pkg];
-                    const int ommiting_dot_max = 4;
-                    bool ommitable;
-                    
-                    // initialize ommiting stuff.
-                    for (column = 0; column < s->params.planes_per_pkg; column++)
-                    {
-                        ommiting_dot_printing[column] = false;
-                        ommiting_dot_num[column] = 0;
-                    }
-                    
-                    // print page
-                    for (page = 0; page < s->params.pages_per_block; page++)
-                    {
-                        // skip check
-                        skip = true;
-                        ommitable = true;
-                        for (column = 0; column < s->params.planes_per_pkg; column++)
-                        {
-                            blockno = block * s->params.planes_per_pkg + column;
-                            pageno = blockno * s->params.pages_per_block + page;
-                            mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
-                            diff = ((page>(s->params.pages_per_block - 2)) ? -1 : s->elements[elem].metadata.block_usage[blockno].page[(pageno+1) % s->params.pages_per_block]) - mapped_lpn;
-                            
-                            if (!skippable (mapped_lpn) && (diff == 1 || diff == 0))
-                            {
-                                // if the very beginning of ommition, we need to print the starting line.
-                                if (ommiting_dot_num[column] == 0)
-                                {
-                                    ommitable = false;
-                                    ommiting_dot_printing[column] = false;
-                                    ommiting_dot_num[column]++;
-                                }
-                                else if (ommiting_dot_num[column] < ommiting_dot_max)
-                                {
-                                    // not yet. we need to print omming_dot.
-                                    ommitable = false;
-                                    ommiting_dot_printing[column] = true;
-                                    ommiting_dot_num[column]++;
-                                }
-                                else
-                                {
-                                    ommiting_dot_printing[column] = false;
-                                }
-                            }
-                            else if (!skippable (mapped_lpn))
-                            {
-                                // init ommiting stuf
-                                ommitable = false;
-                                ommiting_dot_printing[column] = false;
-                                ommiting_dot_num[column] = 0;
-                            }
-                            
-                            if (!ommitable && !skippable (mapped_lpn))
-                            {
-                                skip = false;
-                            }
-                        }
-                        
-                        // print
-                        if (!skip)
-                        {
-                            for (column = 0; column < s->params.planes_per_pkg; column++)
-                            {
-                                blockno = block * s->params.planes_per_pkg + column;
-                                pageno = blockno * s->params.pages_per_block + page;
-                                mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
-                                //diff = ((page==0 || (page>(s->params.pages_per_block - 2))) ? -1 : s->elements[elem].metadata.block_usage[blockno].page[(pageno+1) % s->params.pages_per_block]) - mapped_lpn;
-                                
-                                if (column == 0) printf("|");
-                                
-                                // print ommiting dot
-                                if (ommiting_dot_printing[column])
-                                {
-                                    print (' ', 8);
-                                    printf ("...");
-                                    print (' ', 7);
-                                    printf ("|");
-                                }
-                                else if (!skippable (mapped_lpn))
-                                {
-                                    printf (" %7d->%7d |", pageno, mapped_lpn);
-                                }
-                                else
-                                {
-                                    print (' ', 18);
-                                    printf ("|");
-                                }
-                            }
-                            printf ("\n");
-                        }
-                    }
-                }
-            }
-            
-            print ('=', columnwidth); printf ("\n\n");
-        }
-    }
+     for (elem = 0; elem < s->params.nelements; elem++)
+     {
+     // skip check
+     skip = true;
+     for (block = 0; block < s->params.blocks_per_plane; block++)
+     {
+     // skip invalidated mapping
+     for (page = 0; page < s->params.pages_per_block; page++)
+     {
+     for (column = 0; column < s->params.planes_per_pkg; column++)
+     {
+     blockno = block * s->params.planes_per_pkg + column;
+     pageno = blockno * s->params.pages_per_block + page;
+     mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
+     
+     if (!skippable (mapped_lpn))
+     {
+     skip = false;
+     }
+     }
+     }
+     }
+     
+     if (!skip)
+     {
+     if (!starting_line_printed)
+     {
+     print ('\n', 10);
+     printf ("\n");
+     starting_line_printed = true;
+     }
+     
+     // print element header
+     printf ("e%d\n", elem);
+     print ('=', columnwidth); printf ("\n");
+     for (column = 0; column < s->params.planes_per_pkg; column++)
+     {
+     if (column == 0) printf("|");
+     print (' ', 6);
+     printf ("%d plane", column);
+     print (' ', 5);
+     printf ("|");
+     }
+     printf ("\n");
+     
+     // print block
+     for (block = 0; block < s->params.blocks_per_plane; block++)
+     {
+     // want to skip printing block header when whole block can be skippable
+     bool skip_block_header[s->params.planes_per_pkg];
+     
+     // initialize skip_block_header
+     for (column = 0; column < s->params.planes_per_pkg; column++)
+     {
+     skip_block_header[column] = true;
+     }
+     
+     // skip check
+     skip = true;
+     for (column = 0; column < s->params.planes_per_pkg; column++)
+     {
+     for (page = 0; page < s->params.pages_per_block; page++)
+     {
+     blockno = block * s->params.planes_per_pkg + column;
+     pageno = blockno * s->params.pages_per_block + page;
+     mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
+     
+     if (!skippable (mapped_lpn))
+     {
+     skip = false;
+     skip_block_header[column] = false;
+     }
+     }
+     }
+     
+     // print block
+     if (!skip)
+     {
+     // print block header
+     print ('-', columnwidth); printf ("\n");
+     for (column = 0; column < s->params.planes_per_pkg; column++)
+     {
+     if (column == 0) printf("|");
+     
+     // print block header
+     if (!skip_block_header[column])
+     {
+     blockno = block * s->params.planes_per_pkg + column;
+     printf (" %5d block", blockno);
+     if (s->elements[elem].metadata.block_usage[blockno].type == 0)
+     {
+     printf (" COLD |");
+     }
+     else
+     {
+     printf (" HOT  |");
+     }
+     }
+     // skip
+     else
+     {
+     print (' ', 18);
+     printf ("|");
+     }
+     
+     }
+     printf ("\n");
+     
+     // to ommit rest of mapping when page mapping is contineous
+     ADIVIM_APN diff;
+     bool ommiting_dot_printing[s->params.planes_per_pkg];
+     int ommiting_dot_num[s->params.planes_per_pkg];
+     const int ommiting_dot_max = 4;
+     bool ommitable;
+     
+     // initialize ommiting stuff.
+     for (column = 0; column < s->params.planes_per_pkg; column++)
+     {
+     ommiting_dot_printing[column] = false;
+     ommiting_dot_num[column] = 0;
+     }
+     
+     // print page
+     for (page = 0; page < s->params.pages_per_block; page++)
+     {
+     // skip check
+     skip = true;
+     ommitable = true;
+     for (column = 0; column < s->params.planes_per_pkg; column++)
+     {
+     blockno = block * s->params.planes_per_pkg + column;
+     pageno = blockno * s->params.pages_per_block + page;
+     mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
+     diff = ((page>(s->params.pages_per_block - 2)) ? -1 : s->elements[elem].metadata.block_usage[blockno].page[(pageno+1) % s->params.pages_per_block]) - mapped_lpn;
+     
+     if (!skippable (mapped_lpn) && (diff == 1 || diff == 0))
+     {
+     // if the very beginning of ommition, we need to print the starting line.
+     if (ommiting_dot_num[column] == 0)
+     {
+     ommitable = false;
+     ommiting_dot_printing[column] = false;
+     ommiting_dot_num[column]++;
+     }
+     else if (ommiting_dot_num[column] < ommiting_dot_max)
+     {
+     // not yet. we need to print omming_dot.
+     ommitable = false;
+     ommiting_dot_printing[column] = true;
+     ommiting_dot_num[column]++;
+     }
+     else
+     {
+     ommiting_dot_printing[column] = false;
+     }
+     }
+     else if (!skippable (mapped_lpn))
+     {
+     // init ommiting stuf
+     ommitable = false;
+     ommiting_dot_printing[column] = false;
+     ommiting_dot_num[column] = 0;
+     }
+     
+     if (!ommitable && !skippable (mapped_lpn))
+     {
+     skip = false;
+     }
+     }
+     
+     // print
+     if (!skip)
+     {
+     for (column = 0; column < s->params.planes_per_pkg; column++)
+     {
+     blockno = block * s->params.planes_per_pkg + column;
+     pageno = blockno * s->params.pages_per_block + page;
+     mapped_lpn = s->elements[elem].metadata.block_usage[blockno].page[pageno % s->params.pages_per_block];
+     //diff = ((page==0 || (page>(s->params.pages_per_block - 2))) ? -1 : s->elements[elem].metadata.block_usage[blockno].page[(pageno+1) % s->params.pages_per_block]) - mapped_lpn;
+     
+     if (column == 0) printf("|");
+     
+     // print ommiting dot
+     if (ommiting_dot_printing[column])
+     {
+     print (' ', 8);
+     printf ("...");
+     print (' ', 7);
+     printf ("|");
+     }
+     else if (!skippable (mapped_lpn))
+     {
+     printf (" %7d->%7d |", pageno, mapped_lpn);
+     }
+     else
+     {
+     print (' ', 18);
+     printf ("|");
+     }
+     }
+     printf ("\n");
+     }
+     }
+     }
+     }
+     
+     print ('=', columnwidth); printf ("\n\n");
+     }
+     }
      */
     
     for (elem = 0; elem < s->params.nelements; elem++)
