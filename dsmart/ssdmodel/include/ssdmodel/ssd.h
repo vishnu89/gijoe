@@ -38,6 +38,7 @@ typedef struct {
 	int write_page_num;
 	int write_req_num;
 	int avg_lifetime;
+	int clean_page_num;
 #endif
 
 } ssd_stat_t;
@@ -148,15 +149,7 @@ typedef struct _parunit {
 typedef struct _ssd_element_metadata {
     int *lba_table;                 // a table mapping the lba to the physical pages
     // on the chip.
-#ifdef ADIVIM
-    int *hot_lba_table;		    // a table mapping the hot lpn to the physical pages
-    // on the chip.
-    int hot_lba_size;
-    
-    int *cold_lba_table;	    // a table mapping the cold lbn to the physical blocks
-    // on the chip.
-    int cold_lba_size;
-#endif
+
     
     char *free_blocks;              // each bit indicates whether a block in the
     // ssd_element is free or in use. number of bits
@@ -168,15 +161,7 @@ typedef struct _ssd_element_metadata {
     // computed from the above free_blocks list.
     
     unsigned int active_page;       // this points to the next page to write inside an
-    // active block.
-    
-#ifdef ADIVIM
-    unsigned int hot_active_page;   // this points to the next hot page to write inside an
-    // hot active block
-    
-    unsigned int cold_active_block; // this points to the next cold page to write inside an
-    // cold active block
-#endif
+    // active block
     
     plane_metadata plane_meta[SSD_MAX_PLANES_PER_ELEM];
     
@@ -197,6 +182,24 @@ typedef struct _ssd_element_metadata {
     int tot_migrations;             //
     int tot_pgs_migrated;           //
     double mig_cost;                //
+    
+#ifdef ADIVIM
+    int *hot_lba_table;		    // a table mapping the hot lpn to the physical pages
+    // on the chip.
+    int hot_lba_size;
+    
+    int *cold_lba_table;	    // a table mapping the cold lbn to the physical blocks
+    // on the chip.
+    int cold_lba_size;
+#endif
+    
+#ifdef ADIVIM
+    unsigned int hot_active_page;   // this points to the next hot page to write inside an
+    // hot active block
+    
+    unsigned int cold_active_block; // this points to the next cold page to write inside an
+    // cold active block
+#endif
 } ssd_element_metadata;
 
 /*

@@ -2082,7 +2082,7 @@ void ssd_printcleanstats(int *set, int setsize, char *sourcestr)
 				sum_lifetime+= avg_lifetime;
 				if (j+1==s->params.nelements) {
 					s->stat.avg_lifetime = sum_lifetime/(s->params.nelements);
-					fprintf(outputfile_adv, "Average Lifetime : \t%d\n", s->stat.avg_lifetime);
+					fprintf(outputfile_adv, "Average Lifetime : \t%d times remaining out of 50\n", s->stat.avg_lifetime);
 				}
 #endif
                 
@@ -2216,17 +2216,19 @@ void ssd_printstats (void)
     
     int write_page_sum=0;
     int write_req_sum=0;
+	int clean_page_sum=0;
     for (i=0; i<MAXDEVICES; i++) {
         ssd_t *currdisk = getssd(i);
         if (currdisk) {
             write_page_sum+=currdisk->stat.write_page_num;
             write_req_sum+=currdisk->stat.write_req_num;
+			clean_page_sum+=currdisk->stat.clean_page_num;
         }
     }
-    fprintf(outputfile_adv, "Total Write Count : \t%d\n", write_page_sum);
-    fprintf(outputfile_adv, "Total Write Req : \t%d\n", write_req_sum);
+    fprintf(outputfile_adv, "Total Write Count : \t%d times\n", write_page_sum);
+    fprintf(outputfile_adv, "Total Write Req : \t%d times\n", write_req_sum);
     if (write_req_sum != 0) fprintf(outputfile_adv, "Write Amplification Factor : \t%f\n", (float) write_page_sum/ (float) write_req_sum);
-    
+   	fprintf(outputfile_adv, "Total Clean Count : \t%d times\n", clean_page_sum); 
 #endif
     
     sprintf_s3(prefix, 80, "ssd ");

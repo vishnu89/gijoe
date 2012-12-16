@@ -94,6 +94,7 @@ static double ssd_clean_one_page
 
 #ifdef ADIVIM
     s->stat.write_page_num++;
+	s->stat.clean_page_num++;
 #endif
 
     // if the write is within the same plane, then the data need
