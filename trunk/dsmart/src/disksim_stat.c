@@ -333,7 +333,7 @@ void stat_print_set (statgen **statset, int statcnt, char *identstr)
    fprintf(outputfile, "%s%s average: \t%f\n", identstr, statdesc, avg);
 #ifdef ADIVIM
    if (!strcmp(identstr, "ssd ") && !strcmp(statdesc, "Response time")) {
-	   fprintf(outputfile_adv, "%s average: \t%f\n", statdesc, avg);
+	   fprintf(outputfile_adv, "%s average: \t%f ms\n", statdesc, avg);
    }
 #endif
 
