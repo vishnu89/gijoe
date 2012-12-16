@@ -667,7 +667,8 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
         
         // establish mapping
         metadata->cold_lba_table [cbn] = metadata->cold_active_block;
-        s->stat.write_page_num+=range;
+        cost = s->params.page_write_latency * range;
+	s->stat.write_page_num+=range;
 		s->stat.write_req_num+=range;
         
         // s.j code
