@@ -935,7 +935,7 @@ void disksim_setup_disksim (int argc, char **argv)
   
 
 #ifdef ADIVIM
-	if ((outputfile_adv = fopen("adivim.out","w")) == NULL) {
+	if ((outputfile_adv = fopen("adivim.txt","w")) == NULL) {
 		fprintf(stderr, "adivim outputfile cannot be opened\n");
 		exit(1);
 	}

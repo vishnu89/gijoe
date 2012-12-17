@@ -1673,7 +1673,7 @@ void ssd_event_arrive (ioreq_event *curr)
     // fprintf (outputfile, " - devno %d, blkno %d, type %d, cause %d, read = %d\n", curr->devno, curr->blkno, curr->type, curr->cause, curr->flags & READ);
     
     currdisk = getssd (curr->devno);
-#ifndef ADIVIM
+#ifdef ADIVIM
     adivim_ssd_print_image (currdisk);
      
      switch (curr->type) {

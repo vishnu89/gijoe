@@ -5,10 +5,10 @@
 #include "disksim_global.h"
 
 #ifdef ADIVIM
-#define SEPARATION_BY_ADIVIM
+#define SEPARATION_BY_SIZE_PLUS_ADIVIM
 
 #ifdef SEPARATION_BY_ADIVIM
-#define ADIVIM_JUDGEMENT_READ_THRESHOLD 1
+#define ADIVIM_JUDGEMENT_READ_THRESHOLD 0
 #define ADIVIM_JUDGEMENT_WRITE_THRESHOLD 1
 #define ADIVIM_INIT_TYPE(section) ADIVIM_COLD
 #define ADIVIM_ALLOC_INIT_HAPN(section) (ADIVIM_APN) -1
@@ -23,9 +23,9 @@
 #endif
 
 #ifdef SEPARATION_BY_SIZE_PLUS_ADIVIM
-#define ADIVIM_JUDGEMENT_FIRST_LENGTH_THRESHOLD 1
+#define ADIVIM_JUDGEMENT_FIRST_LENGTH_THRESHOLD 2
 #define ADIVIM_JUDGEMENT_SECOND_READ_THRESHOLD 0
-#define ADIVIM_JUDGEMENT_SECOND_WRITE_THRESHOLD 4
+#define ADIVIM_JUDGEMENT_SECOND_WRITE_THRESHOLD 0
 #define ADIVIM_INIT_TYPE(section) ((section->length < ADIVIM_JUDGEMENT_FIRST_LENGTH_THRESHOLD) ?  ADIVIM_HOT : ADIVIM_COLD)
 #define ADIVIM_ALLOC_INIT_HAPN(section) ((section->length < ADIVIM_JUDGEMENT_FIRST_LENGTH_THRESHOLD) ? adivim_alloc_apn(*adivim_free_hapn_list, section->length) : (ADIVIM_APN) -1)
 #define ADIVIM_ALLOC_INIT_CAPN(section) ((section->length < ADIVIM_JUDGEMENT_FIRST_LENGTH_THRESHOLD) ? (ADIVIM_APN) -1 : adivim_alloc_apn(*adivim_free_capn_list, section->length))
@@ -112,6 +112,7 @@ bool _adivim_section_do_not_need_to_keep_both_apn (listnode *start,listnode *tar
 void adivim_section_do_not_need_to_keep_both_apn (ADIVIM_APN starting, ADIVIM_APN length);
 bool _adivim_print_section (listnode *start, listnode *target, void *arg);
 void adivim_print_section ();
+void adivim_print_apn_list (listnode *free_apn_list);
 ADIVIM_JUDGEMENT adivim_section_lookup (listnode *start, ADIVIM_APN pg);
 void adivim_make_hot (ADIVIM_SECTION *section);
 void adivim_make_cold (ADIVIM_SECTION *section);
@@ -145,6 +146,10 @@ void adivim_assign_judgement (void *t, ioreq_event *req)
     
     adivim_section_job (*adivim_section_list, section);
     adivim_print_section ();
+    printf ("free_hapn_list: ");
+    adivim_print_apn_list (*adivim_free_hapn_list);
+    printf ("free_capn_list: ");
+    adivim_print_apn_list (*adivim_free_capn_list);
     adivim_extand_lba_table (s);
 }
 
@@ -268,6 +273,16 @@ void adivim_do_not_need_to_keep_both_apn (void *t, int blkno, ADIVIM_APN length)
 
 void adivim_print_threshold (FILE *output)
 {
+    
+    ADIVIM_APN_ALLOC *apn_list_bound;
+    ADIVIM_APN max_hapn, max_capn;
+    
+    apn_list_bound = (ADIVIM_APN_ALLOC *) ((ll_get_tail (*adivim_free_hapn_list)));
+    max_hapn = apn_list_bound->starting;
+    
+    apn_list_bound = (ADIVIM_APN_ALLOC *) ((ll_get_tail (*adivim_free_capn_list)));
+    max_capn = apn_list_bound->starting;
+    
     fprintf (output, "ADIVIM threshold\n----------------\n");
 #ifdef SEPARATION_BY_ADIVIM
     fprintf (output, "SEPARATION_BY_ADIVIM\n");
@@ -284,8 +299,11 @@ void adivim_print_threshold (FILE *output)
     fprintf (output, "ADIVIM_JUDGEMENT_SECOND_READ_THRESHOLD: %d\n", ADIVIM_JUDGEMENT_SECOND_READ_THRESHOLD);
     fprintf (output, "ADIVIM_JUDGEMENT_SECOND_WRITE_THRESHOLD: %d\n", ADIVIM_JUDGEMENT_SECOND_WRITE_THRESHOLD);
 #endif
+    fprintf (output, "(hot_to_cold, cold_to_hot) = (%d, %d)\n", hot_to_cold_count, cold_to_hot_count);
+    fprintf (output, "(max_hapn, max_capn) = (%d, %d)\n", max_hapn, max_capn);
     fprintf (output, "\n");
 }
+
 
 void adivim_init ()
 {
@@ -750,7 +768,21 @@ void adivim_print_section ()
     printf ("section list((starting, length), (rcount, wcount), (type, hapn, capn), DNKBA): |");
     adivim_ll_apply (*adivim_section_list, _adivim_print_section, NULL);
     printf ("\n");
-    printf ("(hot_to_cold, cold_to_hot) = (%d, %d)\n", hot_to_cold_count, cold_to_hot_count);
+}
+
+bool _adivim_print_apn_list (listnode *start, listnode *target, void *arg)
+{
+    ADIVIM_APN_ALLOC *data = (ADIVIM_APN_ALLOC *) target->data;
+    printf ("\n->(%10d, %3d)", data->starting, data->length);
+    
+    return true;
+}
+
+void adivim_print_apn_list (listnode *free_apn_list)
+{
+    printf ("free apn list(starting, length): |");
+    adivim_ll_apply (free_apn_list, _adivim_print_apn_list, NULL);
+    printf ("\n");
 }
 
 void adivim_make_hot (ADIVIM_SECTION *section)
