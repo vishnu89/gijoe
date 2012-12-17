@@ -5,21 +5,30 @@
 #include "disksim_global.h"
 
 #ifdef ADIVIM
-#define SEPARATION_BY_ADIVIM
+#define SEPARATION_BY_SIZE
 
 #ifdef SEPARATION_BY_ADIVIM
-#define ADIVIM_JUDGEMENT_READ_THRESHOLD 0
-#define ADIVIM_JUDGEMENT_WRITE_THRESHOLD 0
+#define ADIVIM_JUDGEMENT_READ_THRESHOLD 1
+#define ADIVIM_JUDGEMENT_WRITE_THRESHOLD 1
 #define ADIVIM_INIT_TYPE(section) ADIVIM_COLD
 #define ADIVIM_ALLOC_INIT_HAPN(section) (ADIVIM_APN) -1
 #define ADIVIM_ALLOC_INIT_CAPN(section) adivim_alloc_apn(*adivim_free_capn_list, section->length)
 #endif
 
 #ifdef SEPARATION_BY_SIZE
-#define ADIVIM_JUDGEMENT_LENGTH_THRESHOLD 32
+#define ADIVIM_JUDGEMENT_LENGTH_THRESHOLD 1
 #define ADIVIM_INIT_TYPE(section) ((section->length < ADIVIM_JUDGEMENT_LENGTH_THRESHOLD) ?  ADIVIM_HOT : ADIVIM_COLD)
 #define ADIVIM_ALLOC_INIT_HAPN(section) ((section->length < ADIVIM_JUDGEMENT_LENGTH_THRESHOLD) ? adivim_alloc_apn(*adivim_free_hapn_list, section->length) : (ADIVIM_APN) -1)
 #define ADIVIM_ALLOC_INIT_CAPN(section) ((section->length < ADIVIM_JUDGEMENT_LENGTH_THRESHOLD) ? (ADIVIM_APN) -1 : adivim_alloc_apn(*adivim_free_capn_list, section->length))
+#endif
+
+#ifdef SEPARATION_BY_SIZE_PLUS_ADIVIM
+#define ADIVIM_JUDGEMENT_FIRST_LENGTH_THRESHOLD 1
+#define ADIVIM_JUDGEMENT_SECOND_READ_THRESHOLD 0
+#define ADIVIM_JUDGEMENT_SECOND_WRITE_THRESHOLD 4
+#define ADIVIM_INIT_TYPE(section) ((section->length < ADIVIM_JUDGEMENT_FIRST_LENGTH_THRESHOLD) ?  ADIVIM_HOT : ADIVIM_COLD)
+#define ADIVIM_ALLOC_INIT_HAPN(section) ((section->length < ADIVIM_JUDGEMENT_FIRST_LENGTH_THRESHOLD) ? adivim_alloc_apn(*adivim_free_hapn_list, section->length) : (ADIVIM_APN) -1)
+#define ADIVIM_ALLOC_INIT_CAPN(section) ((section->length < ADIVIM_JUDGEMENT_FIRST_LENGTH_THRESHOLD) ? (ADIVIM_APN) -1 : adivim_alloc_apn(*adivim_free_capn_list, section->length))
 #endif
 
 #include <stdbool.h>
@@ -68,6 +77,8 @@ typedef struct _adivim_apn_alloc {
 static listnode **adivim_section_list; // Section list.
 static listnode **adivim_free_hapn_list; // Free hot apn list.
 static listnode **adivim_free_capn_list; // Free cold apn list.
+static unsigned int hot_to_cold_count;
+static unsigned int cold_to_hot_count;
 
 /*
  * Init lists for ADIVIM
@@ -302,6 +313,9 @@ void adivim_init ()
     adivim_capn_alloc->starting = 0;
     adivim_capn_alloc->length = ADIVIM_APN_INFINITY;
     ll_insert_at_head (*adivim_free_capn_list, adivim_capn_alloc);
+    
+    hot_to_cold_count = 0;
+    cold_to_hot_count = 0;
 }
 
 /*
@@ -712,6 +726,7 @@ void adivim_print_section ()
     printf ("section list((starting, length), (rcount, wcount), (type, hapn, capn), DNKBA): |");
     adivim_ll_apply (*adivim_section_list, _adivim_print_section, NULL);
     printf ("\n");
+    printf ("(hot_to_cold, cold_to_hot) = (%d, %d)\n", hot_to_cold_count, cold_to_hot_count);
 }
 
 ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section)
@@ -771,6 +786,39 @@ ADIVIM_SECTION *adivim_judge (ADIVIM_SECTION *section)
                 section->adivim_judgement.adivim_capn = adivim_alloc_apn (*adivim_free_capn_list, section->length);
                 adivim_free_apn (*adivim_free_hapn_list, section->adivim_judgement.adivim_hapn, section->length);
                 section->do_not_need_to_keep_both_apn_requested = 0;
+                break;
+            case ADIVIM_COLD :break;
+        };
+    }
+    
+    return section;
+#endif
+#ifdef SEPARATION_BY_SIZE_PLUS_ADIVIM
+    if ((section->length < ADIVIM_JUDGEMENT_FIRST_LENGTH_THRESHOLD) || (section->adivim_access_log.read_count > ADIVIM_JUDGEMENT_SECOND_READ_THRESHOLD && section->adivim_access_log.write_count > ADIVIM_JUDGEMENT_SECOND_WRITE_THRESHOLD)) // Section will be hot
+    {
+        // Assign ADIVIM_TYPE and allocation ADIVIM_APNs
+        switch (section->adivim_judgement.adivim_type)
+        {
+            case ADIVIM_HOT : break;
+            case ADIVIM_COLD :
+                section->adivim_judgement.adivim_type = ADIVIM_HOT;
+                section->adivim_judgement.adivim_hapn = adivim_alloc_apn (*adivim_free_hapn_list, section->length);
+                adivim_free_apn (*adivim_free_capn_list, section->adivim_judgement.adivim_capn, section->length);
+                section->do_not_need_to_keep_both_apn_requested = 0;
+                cold_to_hot_count++;
+                break;
+        };
+    }
+    else // Section will be cold
+    {
+        switch (section->adivim_judgement.adivim_type)
+        {
+            case ADIVIM_HOT :
+                section->adivim_judgement.adivim_type = ADIVIM_COLD;
+                section->adivim_judgement.adivim_capn = adivim_alloc_apn (*adivim_free_capn_list, section->length);
+                adivim_free_apn (*adivim_free_hapn_list, section->adivim_judgement.adivim_hapn, section->length);
+                section->do_not_need_to_keep_both_apn_requested = 0;
+                hot_to_cold_count++;
                 break;
             case ADIVIM_COLD :break;
         };

@@ -38,6 +38,7 @@ typedef struct {
 	int write_page_num;
 	int write_req_num;
 	int avg_lifetime;
+	int clean_page_num;
 #endif
 
 } ssd_stat_t;

@@ -587,7 +587,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
             // some cost statics
             cost = s->params.page_write_latency * metadata->block_usage[metadata->cold_active_block].num_valid;
             s->stat.write_page_num+=metadata->block_usage[metadata->cold_active_block].num_valid;
-            s->stat.write_req_num++;	//ADIVIM
+            s->stat.write_req_num+=range;	//ADIVIM
             
             // invalid prev_block
             metadata->block_usage[prev_block].num_valid = 0;
@@ -606,7 +606,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
                 // cost of writing the summary page data
                 cost += s->params.page_write_latency;
                 
-                // seal the last summary page. since we use the summary page
+				// seal the last summary page. since we use the summary page
                 // as a metadata, we don't count it as a valid data page.
                 metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -2; //s.s revise -1 to -2 ADIVIM
                 metadata->block_usage[metadata->cold_active_block].state = SSD_BLOCK_SEALED;
@@ -632,14 +632,16 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
             }
             
             cost = s->params.page_write_latency * range;
-            
+            s->stat.write_page_num+=range;
+		    s->stat.write_req_num+=range;
+
             if(metadata->block_usage[prev_block].num_valid == (s->params.pages_per_block - 1)){
                 // cost of transferring the summary page data
                 cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
                 
                 // cost of writing the summary page data
                 cost += s->params.page_write_latency;
-                
+
                 // seal the last summary page. since we use the summary page
                 // as a metadata, we don't count it as a valid data page.
                 metadata->block_usage[prev_block].page[s->params.pages_per_block - 1] = -2;
@@ -665,7 +667,9 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
         
         // establish mapping
         metadata->cold_lba_table [cbn] = metadata->cold_active_block;
-        
+        cost = s->params.page_write_latency * range;
+	s->stat.write_page_num+=range;
+		s->stat.write_req_num+=range;
         
         // s.j code
         /*
@@ -697,7 +701,7 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
             cost += ssd_data_transfer_cost(s, SSD_SECTORS_PER_SUMMARY_PAGE);
             // cost of writing the summary page data
             cost += s->params.page_write_latency;
-            
+
             // seal the last summary page. since we use the summary page
             // as a metadata, we don't count it as a valid data page.
             metadata->block_usage[metadata->cold_active_block].page[s->params.pages_per_block - 1] = -2; //s.s revise -1 to -2 ADIVIM
