@@ -16,7 +16,7 @@
 #endif
 
 #ifdef SEPARATION_BY_SIZE
-#define ADIVIM_JUDGEMENT_LENGTH_THRESHOLD 1
+#define ADIVIM_JUDGEMENT_LENGTH_THRESHOLD 2
 #define ADIVIM_INIT_TYPE(section) ((section->length < ADIVIM_JUDGEMENT_LENGTH_THRESHOLD) ?  ADIVIM_HOT : ADIVIM_COLD)
 #define ADIVIM_ALLOC_INIT_HAPN(section) ((section->length < ADIVIM_JUDGEMENT_LENGTH_THRESHOLD) ? adivim_alloc_apn(*adivim_free_hapn_list, section->length) : (ADIVIM_APN) -1)
 #define ADIVIM_ALLOC_INIT_CAPN(section) ((section->length < ADIVIM_JUDGEMENT_LENGTH_THRESHOLD) ? (ADIVIM_APN) -1 : adivim_alloc_apn(*adivim_free_capn_list, section->length))
