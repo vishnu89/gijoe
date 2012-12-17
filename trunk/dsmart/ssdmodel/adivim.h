@@ -24,4 +24,5 @@ ADIVIM_JUDGEMENT adivim_get_judgement_by_blkno (void *t, int blkno);
  */
 void adivim_do_not_need_to_keep_both_apn (void *t, int blkno, ADIVIM_APN length);
 
+void adivim_print_threshold (FILE *output);
 #endif

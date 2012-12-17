@@ -1559,11 +1559,12 @@ static void ssd_access_complete_element(ioreq_event *curr)
     {
 	    fprintf(stderr, "curr->blkno : %d\n", curr->blkno);
 	    fprintf(stderr, "elem_num : %d\ncurr->ssd_elem_num : %d\n", elem_num, curr->ssd_elem_num);
-	    ASSERT(elem_num == curr->ssd_elem_num);
+	    //ASSERT(elem_num == curr->ssd_elem_num);
+        //curr->ssd_elem_num = elem_num;
     }
 #endif
     
-    elem = &currdisk->elements[elem_num];
+    elem = &currdisk->elements[/*elem_num*/curr->ssd_elem_num];
     
     if ((x = ioqueue_physical_access_done(elem->queue,curr)) == NULL) {
         fprintf(stderr, "ssd_access_complete:  ioreq_event not found by ioqueue_physical_access_done call\n");
@@ -1672,7 +1673,7 @@ void ssd_event_arrive (ioreq_event *curr)
     // fprintf (outputfile, " - devno %d, blkno %d, type %d, cause %d, read = %d\n", curr->devno, curr->blkno, curr->type, curr->cause, curr->flags & READ);
     
     currdisk = getssd (curr->devno);
-#ifdef ADIVIM
+#ifndef ADIVIM
     adivim_ssd_print_image (currdisk);
      
      switch (curr->type) {
@@ -2212,7 +2213,8 @@ void ssd_printstats (void)
     fprintf(outputfile, "\nSSD STATISTICS\n");
     fprintf(outputfile, "---------------------\n\n");
 #ifdef ADIVIM
-    fprintf(outputfile_adv, "\nADIVIM STATISTICS\n-------------------\n\n");
+    fprintf(outputfile_adv, "\n-------------------\nADIVIM STATISTICS\n-------------------\n\n");
+    adivim_print_threshold (outputfile_adv);
     
     int write_page_sum=0;
     int write_req_sum=0;
