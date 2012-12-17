@@ -21,7 +21,9 @@ cp $1/test/diskmon_desktop.log $2/test/diskmon_desktop.log
 cp $1/test/explorer_1.log $2/test/explorer_1.log
 cp $1/test/iozone_all.log $2/test/iozone_all.log
 cp $1/test/jpeg_copy_2gb_ntfs.log $2/test/jpeg_copy_2gb_ntfs.log
-cp $1/test/office2007_install_ntfs.log $2/test/office2007_install_ntfs.log
+cp $1/test/powerpack.trace $2/test/powerpack.trace
+cp $1/test/block_to_page.trace $2/test/block_to_page.trace
+cp $1/test/block_mapping.trace $2/test/block_mapping.trace
 
 cd $2
 clear; clear; make | grep error
