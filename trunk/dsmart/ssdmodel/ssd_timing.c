@@ -1397,6 +1397,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
                     bucket[b_size-jj] = save_lpn[ii-jj];
                 }
                 cost += _ssd_write_block_osr(s, metadata, act_elem_num, (int *) bucket, b_size);
+				s->stat.write_req_num-=b_size;
                 free(bucket);
                 b_size = 1;
             }
@@ -1413,7 +1414,7 @@ void hot_invalid(ssd_t *s, ssd_element_metadata *metadata, int act_elem_num, int
         }
         
         cost += _ssd_write_block_osr(s, metadata, elem_num, (int *) bucket, b_size);
-        
+     	s->stat.write_req_num-=b_size;   
         free(bucket);
         free(save_lpn);
         
@@ -1532,7 +1533,8 @@ void cold_invalid(ssd_t *s, ssd_element_metadata *metadata, int blk, int range, 
         metadata->hot_active_page = metadata->plane_meta[p_num].hot_active_page;
         //printf("elem %d plane %d ", elem_num, plane_num);
         cost += _ssd_write_page_osr(s, metadata, lpn);
-        
+        s->stat.write_req_num--;
+
         //	blk += s->params.page_size;
         // }
     }
