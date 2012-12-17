@@ -6,7 +6,7 @@ do
     case "$i"
     in
         -g)
-            echo "gdb --args ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii" echo $3 echo " 0";
+            echo "gdb --args ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii" $3 "0";
             echo "
 *********
 GDB open.
@@ -15,7 +15,7 @@ GDB open.
             gdb --args ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii $3 0;
             break;;
         --)
-            echo "../src/disksim ssd-iozone.parv ssd-iozone.outv ascii" echo $2 echo " 0 > out.txt";
+            echo "../src/disksim ssd-iozone.parv ssd-iozone.outv ascii" $2 "0 > out.txt";
             ../src/disksim ssd-iozone.parv ssd-iozone.outv ascii $2 0 > out.txt;
             break;;
     esac
