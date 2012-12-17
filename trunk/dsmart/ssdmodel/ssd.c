@@ -624,7 +624,10 @@ static void ssd_activate_elem(ssd_t *currdisk, int elem_num)
         
         // statistics
         tot_reqs_issued = read_total + write_total;
-        ASSERT(tot_reqs_issued > 0);
+#ifdef ADIVIM
+        currdisk->stat.w_req_n += write_total;
+#endif
+	ASSERT(tot_reqs_issued > 0);
         currdisk->elements[elem_num].stat.tot_reqs_issued += tot_reqs_issued;
         currdisk->elements[elem_num].stat.tot_time_taken += max_time_taken;
     }
@@ -2219,17 +2222,22 @@ void ssd_printstats (void)
     int write_page_sum=0;
     int write_req_sum=0;
 	int clean_page_sum=0;
+	int w_req_sum = 0;
     for (i=0; i<MAXDEVICES; i++) {
         ssd_t *currdisk = getssd(i);
         if (currdisk) {
             write_page_sum+=currdisk->stat.write_page_num;
             write_req_sum+=currdisk->stat.write_req_num;
 			clean_page_sum+=currdisk->stat.clean_page_num;
+	    w_req_sum += currdisk->stat.w_req_n;
         }
     }
     fprintf(outputfile_adv, "Total Write Count : \t%d times\n", write_page_sum);
     fprintf(outputfile_adv, "Total Write Req : \t%d times\n", write_req_sum);
+    fprintf(outputfile_adv, "Total Write Req by s.s : \t%d times\n", w_req_sum);
     if (write_req_sum != 0) fprintf(outputfile_adv, "Write Amplification Factor : \t%f\n", (float) write_page_sum/ (float) write_req_sum);
+    if (w_req_sum != 0) fprintf(outputfile_adv, "Write Amplification Factor by s.s : \t%f\n", (float) write_page_sum/ (float) w_req_sum);
+
    	fprintf(outputfile_adv, "Total Clean Count : \t%d times\n", clean_page_sum); 
 #endif
     

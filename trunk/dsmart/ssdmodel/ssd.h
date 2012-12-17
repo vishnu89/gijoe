@@ -37,6 +37,7 @@ typedef struct {
 #ifdef ADIVIM
 	int write_page_num;
 	int write_req_num;
+	int w_req_n;
 	int avg_lifetime;
 	int clean_page_num;
 #endif

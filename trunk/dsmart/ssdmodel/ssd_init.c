@@ -28,6 +28,7 @@ static void ssd_statinit (int devno, int firsttime)
 #ifdef ADIVIM
 	currdisk->stat.write_page_num = 0;
 	currdisk->stat.write_req_num = 0;
+	currdisk->stat.w_req_n = 0;
 	currdisk->stat.avg_lifetime = 0;
 	currdisk->stat.clean_page_num =0;
 #endif

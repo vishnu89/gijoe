@@ -586,8 +586,9 @@ double _ssd_write_block_osr(ssd_t *s, ssd_element_metadata *metadata, int elem_n
             
             // some cost statics
             cost = s->params.page_write_latency * metadata->block_usage[metadata->cold_active_block].num_valid;
-            s->stat.write_page_num+=metadata->block_usage[metadata->cold_active_block].num_valid;
-            s->stat.write_req_num+=range;	//ADIVIM
+           // s->stat.write_page_num+=metadata->block_usage[metadata->cold_active_block].num_valid;
+            s->stat.write_page_num+=range;
+	    s->stat.write_req_num+=range;	//ADIVIM
             
             // invalid prev_block
             metadata->block_usage[prev_block].num_valid = 0;
